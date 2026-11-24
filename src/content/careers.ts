@@ -6,7 +6,7 @@ export const CAREERS = {
     line2: "Has No",
     line3: "Edges",
     brief:
-      "Research the problem, try it with AI, prototype it, write the code, ship it. At HumanX, the work goes as far as you take it.",
+      "New tools, shifting roles, the same way of thinking. Shape the question, put it in people’s hands, see what it changes. Design here was never confined to a screen.",
     primaryCta: "See Open Roles",
     secondaryCta: "Find Your X",
     location: "HumanX — Mumbai",

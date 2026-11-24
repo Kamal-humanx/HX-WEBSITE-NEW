@@ -14,9 +14,14 @@ const AI_LINKS = [
  * Manifesto (24px), Let’s talk + email, Ask AI for Summary, socials, copyright, wordmark + glow.
  * The footer nav list is an addition required by the brief (not in Figma).
  */
-export function Footer() {
+/** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
+export function Footer({ variant }: { variant?: "careers" } = {}) {
   return (
-    <footer className="relative isolate overflow-hidden bg-night text-white" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+    <footer
+      className={`relative isolate overflow-hidden bg-night text-white${variant === "careers" ? " hxc-footer" : ""}`}
+      data-hxc-footer={variant === "careers" ? "" : undefined}
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
       {/* Glow — Ellipse 1801 */}
       <Image
         src="/images/brand/footer-glow.svg"

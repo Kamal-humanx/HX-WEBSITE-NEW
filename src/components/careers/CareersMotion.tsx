@@ -19,7 +19,16 @@ export function CareersMotion() {
     const sync = () => wrap.toggleAttribute("data-motion", !mq.matches);
     sync();
     mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    /* Pinned scenes keep easing (and change colour) after the last scroll event; the shared header
+       re-reads the ground on scroll, so nudge it every 400ms while on Careers (as the reference
+       header does with its own interval). Careers only; stops when you leave the page. */
+    const nudge = window.setInterval(() => {
+      if (wrap.hasAttribute("data-motion")) window.dispatchEvent(new Event("scroll"));
+    }, 400);
+    return () => {
+      mq.removeEventListener("change", sync);
+      clearInterval(nudge);
+    };
   }, []);
   return null;
 }

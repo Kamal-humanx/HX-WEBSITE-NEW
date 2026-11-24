@@ -107,3 +107,18 @@ Breakpoints (mobile-first): `xs 375`, `sm 600`, `md 768`, `lg 1024`, `xl 1280`, 
 - JSON-LD: Organization + WebSite (all pages), WebPage/AboutPage/ContactPage/CollectionPage + BreadcrumbList,
   ItemList of CreativeWork (Works), JobPosting ×5 (Careers), FAQPage (only the one answered FAQ) + ProfessionalService (Contact).
 - `robots.txt` allows GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User, PerplexityBot, Google-Extended, Googlebot, Bingbot; `sitemap.xml`; `llms.txt` generated from the frozen copy.
+
+## Careers page interactions
+
+The Careers page runs the approved interactions reference (`humanx-careers-page`, see the handoff
+`CAREERS-INTERACTIONS-HANDOFF.md`): canvas hero, pinned manifesto with three timed drawings, the
+Mutant Gene builder with its 3D helix, and the Openings list washing into the footer.
+
+- Components + logic: `src/components/careers/ref/` (ported as-is; the motion gate is `.hxc[data-motion]`
+  instead of `html.js`, set by `CareersMotion` and an inline pre-paint script; reduced motion = static).
+- Styles: `src/app/careers/careers-ref.css` is **generated** from the reference's `src/index.css` by
+  `node scripts/scope-careers-css.mjs <path-to-reference>/src/index.css` — every selector is scoped to
+  `.hxc` and keyframes are renamed `hxc-*`, so nothing reaches other pages. Small overrides live in
+  `src/app/careers/careers.css`.
+- Assets: `public/careers-ref/`.
+- The header is the site-wide one; the footer is the site-wide one with `variant="careers"` (full-screen).

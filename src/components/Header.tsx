@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
 import { HeaderTheme } from "./HeaderTheme";
-import { CareersHeader } from "./careers/CareersHeader";
 import { NAV } from "@/lib/site";
 
 export type HeaderTheme = "light" | "dark" | "overlay";
@@ -14,17 +13,7 @@ export type HeaderTheme = "light" | "dark" | "overlay";
  * Uncut Sans Semibold 15.5px) with a ~40px gap. Colour follows the section underneath.
  * `overlay` = the page's first section is dark and starts under the header (Homepage hero).
  */
-export function Header({
-  current,
-  theme = "light",
-  variant = "default",
-}: {
-  current: string;
-  theme?: HeaderTheme;
-  /** "careers": the Careers page's own interactive header (Careers only). */
-  variant?: "default" | "careers";
-}) {
-  if (variant === "careers") return <CareersHeader current={current} />;
+export function Header({ current, theme = "light" }: { current: string; theme?: HeaderTheme }) {
   const initial = theme === "light" ? "light" : "dark";
 
   return (
