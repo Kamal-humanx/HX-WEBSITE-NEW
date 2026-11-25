@@ -49,6 +49,15 @@ export default function Manifesto() {
     const onPointer = (e: PointerEvent) => e.pointerType === 'mouse' && pinned && live.pointer(e.clientX, e.clientY, e.type !== 'pointerleave')
     liveCanvas.addEventListener('pointermove', onPointer)
     liveCanvas.addEventListener('pointerleave', onPointer)
+    /* phones: the finger is that input. Touch events keep arriving while the page scrolls under the
+       finger (pointer events are cancelled the moment a scroll starts), and they are passive, so the
+       drawing answers the touch without ever holding the scroll back */
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0] ?? e.changedTouches[0]
+      if (t && pinned) live.pointer(t.clientX, t.clientY, e.touches.length > 0)
+    }
+    const TOUCH = ['touchstart', 'touchmove', 'touchend', 'touchcancel'] as const
+    TOUCH.forEach((n) => liveCanvas.addEventListener(n, onTouch, { passive: true }))
 
     /* pinned: one stage holds while the scroll rearranges the field and swaps the copy in place.
        Phones pin too, stacked: the drawing above, the principle beneath. Without script (or with
@@ -231,7 +240,9 @@ export default function Manifesto() {
     /* the hand-off's length, in screens: long on desktop, where the gene is laid over it; short on
        phones, where the gene simply follows on */
     const narrow = matchMedia('(max-width: 760px)')
-    const exitLen = () => (narrow.matches ? 0.2 : 1.1)
+    /* phones: the gene is laid over the stage's last screen and rises across it as a dark sheet while
+       the principle dissolves beneath, so there is never an empty dark screen between the two */
+    const exitLen = () => (narrow.matches ? 1 : 1.1)
     const side = stage.querySelector<HTMLElement>('.mf-side')!, draw = stage.querySelector<HTMLElement>('.mf-draw')!
     const rail = stage.querySelector<HTMLElement>('.mf-rail')!
     let exitWas = -1
@@ -377,6 +388,7 @@ export default function Manifesto() {
       wide.removeEventListener('change', onWide)
       liveCanvas.removeEventListener('pointermove', onPointer)
       liveCanvas.removeEventListener('pointerleave', onPointer)
+      TOUCH.forEach((n) => liveCanvas.removeEventListener(n, onTouch))
       live.destroy()
       held.forEach((f) => f.destroy())
     }

@@ -1262,3 +1262,11 @@
 /* the four set lines only where their column is wide enough (from about 1400px, so every MacBook);
    narrower desktops let the line wrap on its own rather than spill past its column */
 @media (min-width:1101px) and (max-width:1399px){.hxc .lede .ln{display:inline;white-space:normal}}
+
+/* phones: the gene rises over the principles' last screen instead of following an emptied, darkened
+   one (that left a whole blank dark screen to scroll through). The track is lengthened by the
+   overlap, so each principle keeps its share of the scroll */
+@media (max-width:760px){
+  .hxc[data-motion] .mf.mf-pinned .mf-principles{height:400svh}
+  .hxc[data-motion] .mf.mf-pinned + .gn{margin-top:-100svh}
+}
