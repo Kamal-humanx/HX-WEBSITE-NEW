@@ -8,11 +8,12 @@ import { useLayoutEffect, useRef, type ReactNode } from "react";
  * front sweeps through it letter by letter (one 2.4s pass, played once). Letters ink in (orange for
  * the keywords), each word rises a touch and sharpens out of a blur as the front passes.
  *
- * The icons are held back: the text arrives first with a gap where each icon belongs. As the last
- * line finishes inking, the icons fly in one after another — each from its own direction and with its
- * own character (the cube tumbles down, the X spins in, the two circles squash on landing, the share
- * mark swings up, the bolt strikes) — overshoot, settle, and give their keyword a small hop as they
- * land. Afterwards, hovering a keyword makes its icon hop again.
+ * Each icon travels with its own keyword: the moment the front reaches a keyword and it starts to
+ * turn orange, that keyword's icon takes off and flies into the gap beside it — each from its own
+ * direction and with its own character (the cube tumbles down, the X spins in, the two circles
+ * squash on landing, the share mark swings up, the bolt strikes) — overshoots, settles, and gives the
+ * keyword a small hop as it lands. So the icons arrive line by line with the text, not after it.
+ * Afterwards, hovering a keyword makes its icon hop again.
  * Same family as the Careers reveals (soft-edged front). Reduced motion (or no script) = the static text.
  */
 
@@ -84,9 +85,10 @@ const mix = (a: number[], b: number[], t: number) =>
 /* ---------- icon fly-ins ----------
    Offsets are in em, so each flight scales with the type size. Every icon starts small, blurred and
    transparent well away from its slot, overshoots it, and settles. */
-const FLIGHT_MS = 1050;
-const FLIGHT_GAP_MS = 190; // one icon after another, in reading order
-const LAUNCH_AT = 0.8; // share of the text pass after which the first icon takes off
+const FLIGHT_MS = 950;
+/* An icon takes off when the front is this many letters short of the end of its keyword — early
+   enough that it lands just as the keyword finishes turning orange. */
+const LEAD_LETTERS = 6;
 const FLIGHT_EASE = "cubic-bezier(0.3, 0.7, 0.2, 1)";
 const far = (transform: string): Keyframe => ({ opacity: 0, filter: "blur(4px)", transform, offset: 0 });
 const FLIGHTS: Record<Kind, Keyframe[]> = {
@@ -146,7 +148,7 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
     type Item = { el: HTMLElement; at: number; accent: boolean; last: number };
     const chars: Item[] = [];
     const words: { el: HTMLElement; mid: number; last: number }[] = [];
-    const icons: { el: HTMLElement; at: number }[] = [];
+    const icons: { el: HTMLElement; at: number; launched: boolean }[] = [];
     const anims: Animation[] = [];
     let n = 0;
     const walk = (node: Element) => {
@@ -158,7 +160,7 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
           words.push({ el, mid: (start + n - 1) / 2, last: -1 });
           n += 1; // the space after a word
         } else if (el.classList.contains("pr-i")) {
-          icons.push({ el, at: n });
+          icons.push({ el, at: n, launched: false });
           n += 4;
         } else walk(el);
       }
@@ -188,28 +190,24 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
           w.el.style.filter = v <= 0 ? "blur(5px)" : `blur(${(5 * (1 - v)).toFixed(2)}px)`;
         }
       }
+      for (const ic of icons) if (!ic.launched && started && F >= ic.at - LEAD_LETTERS) launchIcon(ic);
     };
+    let started = false; // false while the statement is still waiting off screen as a ghost
 
-    /* the icons wait out of sight while the text arrives, then fly in one after another */
+    /* each icon waits out of sight until the front reaches its keyword, then flies in */
     const hideIcons = () => icons.forEach((ic) => (ic.el.style.opacity = "0"));
     const showIcons = () => icons.forEach((ic) => (ic.el.style.opacity = ""));
-    let launched = false;
-    const launchIcons = () => {
-      if (launched) return;
-      launched = true;
-      icons.forEach((ic, i) => {
-        const kind = (ic.el.dataset.kind ?? "build") as Kind;
-        const delay = i * FLIGHT_GAP_MS;
-        // `fill: backwards` keeps the icon at its hidden start through the stagger delay
-        const flight = ic.el.animate(FLIGHTS[kind], { duration: FLIGHT_MS, delay, easing: FLIGHT_EASE, fill: "backwards" });
-        ic.el.style.opacity = "";
-        anims.push(flight);
-        const words = Array.from(ic.el.closest(".pr-g")?.querySelectorAll<HTMLElement>(".pr-w") ?? []);
-        words.forEach((w, j) =>
-          anims.push(w.animate(WORD_HOP, { duration: 460, delay: delay + FLIGHT_MS * 0.55 + j * 40, easing: "cubic-bezier(0.3, 0, 0.3, 1)" })),
-        );
-        if (i === icons.length - 1) flight.finished.then(() => root.classList.add("pr-live")).catch(() => undefined);
-      });
+    const launchIcon = (ic: (typeof icons)[number]) => {
+      ic.launched = true;
+      const kind = (ic.el.dataset.kind ?? "build") as Kind;
+      const flight = ic.el.animate(FLIGHTS[kind], { duration: FLIGHT_MS, easing: FLIGHT_EASE });
+      ic.el.style.opacity = "";
+      anims.push(flight);
+      const words = Array.from(ic.el.closest(".pr-g")?.querySelectorAll<HTMLElement>(".pr-w") ?? []);
+      words.forEach((w, j) =>
+        anims.push(w.animate(WORD_HOP, { duration: 460, delay: FLIGHT_MS * 0.55 + j * 40, easing: "cubic-bezier(0.3, 0, 0.3, 1)" })),
+      );
+      if (ic === icons[icons.length - 1]) flight.finished.then(() => root.classList.add("pr-live")).catch(() => undefined);
     };
 
     /* plays once, on its own clock, when the statement is a third of the way into view */
@@ -219,8 +217,8 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
       const frame = (now: number) => {
         if (!t0) t0 = now;
         const t = (now - t0) / DURATION;
+        started = true;
         paint(easeInOut(t));
-        if (t >= LAUNCH_AT) launchIcons();
         if (t < 1) raf = requestAnimationFrame(frame);
         else root.classList.remove("pr-armed");
       };
