@@ -20,14 +20,15 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
       {/* cursor trail of HumanX X marks (Figma 5654:9985) — above the glow, beneath the content */}
       <FooterTrail />
 
-      {/* Glow — Ellipse 1801 */}
+      {/* Glow — Ellipse 1801. On phones and tablets it sits 90 px lower than on desktop: otherwise its
+          near-white core lands behind the white copyright line and the text disappears. */}
       <Image
         src="/images/brand/footer-glow.svg"
         alt=""
         width={2451}
         height={1366}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[min(-160px,-33.9vw)] left-[max(-30%,-577px)] -z-10 w-[max(1100px,127.7%)] max-w-none select-none 3xl:left-[calc(50%-1537px)] 3xl:w-[2451px]"
+        className="pointer-events-none absolute bottom-[-250px] md:bottom-[-340px] left-[max(-30%,-577px)] -z-10 w-[max(1100px,127.7%)] lg:bottom-[min(-160px,-33.9vw)] max-w-none select-none 3xl:left-[calc(50%-1537px)] 3xl:w-[2451px]"
       />
 
       <div className="container-page relative grid min-h-[clamp(620px,40vw,767px)] grid-cols-1 content-between gap-12 pb-6 pt-[clamp(40px,3.2vw,61px)] lg:grid-cols-[minmax(0,610px)_1fr]">
@@ -40,7 +41,7 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
             <ObfuscatedEmail
               user={EMAIL_USER}
               domain={EMAIL_DOMAIN}
-              className="link-arrow min-h-0 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4"
+              className="link-arrow -my-2 min-h-0 py-2 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4"
             >
               <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
             </ObfuscatedEmail>
@@ -60,9 +61,9 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
         </div>
 
         <div className="relative flex flex-col gap-4 lg:col-span-2">
-          <ul className="flex flex-wrap items-center gap-x-[14px] gap-y-1 font-mono text-base leading-[1.6] text-white/90">
+          <ul className="flex flex-wrap items-center gap-x-[14px] gap-y-1 font-mono text-base leading-[1.6] text-white/90 max-sm:gap-x-[10px] max-sm:text-[15px]">
             {SOCIAL.map((s, i) => (
-              <li key={s.label} className="flex items-center gap-[14px]">
+              <li key={s.label} className="flex items-center gap-[14px] max-sm:gap-[10px]">
                 {i > 0 && <span aria-hidden="true" className="size-1.5 rounded-full bg-white/90" />}
                 {s.href ? (
                   <a href={s.href} target="_blank" rel="noopener noreferrer me" className="inline-flex min-h-11 items-center hover:underline">

@@ -323,7 +323,7 @@ export default function Gene() {
       )
   }
 
-  const blank = <span className="gn-blank" aria-label="not yet spliced" />
+  const blank = <span className="gn-blank" role="img" aria-label="not yet spliced" />
   return (
     <section id="gene" className="gn" ref={secRef} aria-labelledby="gn-title" data-complete={complete || undefined}>
       <div className="gn-track">
@@ -359,7 +359,7 @@ export default function Gene() {
                       aria-current={step === i ? 'step' : undefined}
                       disabled={i > step && !done[i - 1]}
                       onClick={() => setStep(i)}
-                      aria-label={done[i] ? `${t}: ${answer(i)}. Change` : t}
+                      aria-label={done[i] ? `0${i + 1} ${t}: ${answer(i)}. Change` : `0${i + 1} ${t}`}
                     >
                       <b>{'0' + (i + 1)}</b>
                       <span>{t}</span>

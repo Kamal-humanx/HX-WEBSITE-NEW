@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ADDRESS, LEGAL_NAME, SITE_NAME, SITE_URL, SOCIAL } from "./site";
+import { CAPABILITIES } from "@/content/shared";
 
 /**
  * Page titles + descriptions. These are the ONLY newly written strings in the project
@@ -59,12 +60,24 @@ export function pageMetadata(key: PageKey): Metadata {
     },
     twitter: {
       card: "summary_large_image",
+      site: TWITTER_HANDLE,
+      creator: TWITTER_HANDLE,
       title: m.title,
       description: m.description,
       images: [OG_IMAGE.url],
     },
   };
 }
+
+/** X/Twitter handle for link-preview cards, read from the profile URL in site.ts. */
+const TWITTER_HANDLE = (() => {
+  const href = SOCIAL.find((s) => s.label.startsWith("Twitter"))?.href ?? "";
+  const handle = href.replace(/\/$/, "").split("/").pop();
+  return handle ? `@${handle}` : undefined;
+})();
+
+/** The studio's services, exactly as listed under "What We Bring To The Table". */
+const SERVICE_GROUPS = CAPABILITIES.rows.map((r) => ({ name: r.title.replace(/\s+/g, " "), services: r.columns.flat() }));
 
 const abs = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;
 const ORG_ID = `${SITE_URL}/#organization`;
@@ -91,6 +104,26 @@ export function organizationSchema() {
       addressCountry: ADDRESS.addressCountry,
     },
     ...(sameAs.length ? { sameAs } : {}),
+    // Machine-readable versions of facts already on the pages, for search and answer engines.
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      url: `${SITE_URL}/contact`,
+      availableLanguage: "en",
+    },
+    knowsAbout: SERVICE_GROUPS.flatMap((g) => g.services),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: CAPABILITIES.title,
+      itemListElement: SERVICE_GROUPS.map((g) => ({
+        "@type": "OfferCatalog",
+        name: g.name,
+        itemListElement: g.services.map((service) => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: service, provider: { "@id": ORG_ID } },
+        })),
+      })),
+    },
   };
 }
 
@@ -120,6 +153,10 @@ export function webPageSchema(key: PageKey, type: PageType, extra: Record<string
     inLanguage: "en",
     isPartOf: { "@id": SITE_ID },
     about: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+    primaryImageOfPage: { "@type": "ImageObject", url: `${SITE_URL}${OG_IMAGE.url}`, width: OG_IMAGE.width, height: OG_IMAGE.height },
+    // The page's own headline is the part voice assistants and answer engines should quote.
+    speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1"] },
     ...extra,
   };
 }

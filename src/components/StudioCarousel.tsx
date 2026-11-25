@@ -32,8 +32,17 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
     if (second) el.scrollLeft = second.offsetLeft - (el.clientWidth - second.clientWidth) / 2;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    /** Width of one full set of slides = distance from slide 1 to its copy. */
-    const span = () => (items[slides.length] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft;
+    /* Layout is measured once and again only on resize — never inside the frame loop, where reading
+       it every frame would force the browser to recalculate layout 60 times a second. */
+    let span = 0; // width of one full set of slides = distance from slide 1 to its copy
+    let width = 0;
+    const measure = () => {
+      span = (items[slides.length] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft;
+      width = el.clientWidth;
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
 
     let pos = el.scrollLeft;
     let last = 0;
@@ -42,6 +51,7 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
     let focus = false;
     let visible = true;
     let touchUntil = 0;
+    let wasPaused: boolean | null = null;
 
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
@@ -49,14 +59,14 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
       last = now;
       const paused = hover || focus || !visible || document.hidden || now < touchUntil;
       // Snap only while the visitor is in control; it would fight the drift otherwise.
-      el.style.scrollSnapType = paused ? "" : "none";
-      if (paused) {
-        pos = el.scrollLeft;
-        return;
+      if (paused !== wasPaused) {
+        el.style.scrollSnapType = paused ? "" : "none";
+        if (!paused) pos = el.scrollLeft; // pick up from wherever the visitor left it
+        wasPaused = paused;
       }
-      pos += el.clientWidth * SPEED * dt;
-      const s = span();
-      if (s > 0 && pos >= s) pos -= s;
+      if (paused) return;
+      pos += width * SPEED * dt;
+      if (span > 0 && pos >= span) pos -= span;
       el.scrollLeft = pos;
     };
 
@@ -81,6 +91,7 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
+      ro.disconnect();
       el.removeEventListener("pointerenter", enter);
       el.removeEventListener("pointerleave", leave);
       el.removeEventListener("focusin", focusIn);

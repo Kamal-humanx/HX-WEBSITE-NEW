@@ -20,3 +20,8 @@
 .hxc-footer > div {
   flex: 1;
 }
+
+/* Contrast: the reference's #8b8b8b is 3.4:1 on white; #6b6b6b is 5.3:1 (WCAG AA). */
+.hxc .or-count {
+  color: #6b6b6b;
+}

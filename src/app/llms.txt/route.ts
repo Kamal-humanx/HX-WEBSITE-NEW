@@ -1,4 +1,4 @@
-import { ADDRESS, SITE_URL } from "@/lib/site";
+import { ADDRESS, FOOTER_COPY, SITE_URL, SOCIAL } from "@/lib/site";
 import { HOME } from "@/content/home";
 import { ABOUT } from "@/content/about";
 import { WORKS } from "@/content/works";
@@ -14,7 +14,7 @@ export function GET() {
   const unique = Array.from(new Set(WORKS.projects.map((p) => `${p.name} (${p.meta.replace(/\s+/g, " ")})`)));
   const body = `# HumanX
 
-> ${HOME.hero.intro}. We are a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.
+> ${FOOTER_COPY.manifesto}
 
 Studio: ${ADDRESS.full}. ${ADDRESS.hours}. Contact: ${SITE_URL}/contact.
 
@@ -33,6 +33,10 @@ ${CAPABILITIES.rows.map((r) => `- ${r.title.replace("\n", " ")}: ${r.columns.fla
 ## FAQ
 
 ${CONTACT.faq.items.filter((i) => i.a).map((i) => `- ${i.q} ${i.a}`).join("\n")}
+
+## Official profiles
+
+${SOCIAL.filter((x) => x.href).map((x) => `- [${x.label}](${x.href})`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 }

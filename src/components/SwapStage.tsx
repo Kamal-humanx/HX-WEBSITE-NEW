@@ -66,6 +66,7 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       A.style.pointerEvents = q > 0.45 ? "none" : "";
       B.style.pointerEvents = q < 0.55 ? "none" : "";
       B.setAttribute("aria-hidden", q < 0.5 ? "true" : "false");
+      B.inert = q < 0.5; // hidden from assistive tech must also mean unreachable by keyboard
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -87,6 +88,7 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       });
       A.style.pointerEvents = B.style.pointerEvents = "";
       B.removeAttribute("aria-hidden");
+      B.inert = false;
     };
   }, [hold, lead]);
 

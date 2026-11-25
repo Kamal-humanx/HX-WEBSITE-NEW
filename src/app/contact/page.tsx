@@ -91,7 +91,7 @@ export default function ContactPage() {
                       <div>
                         <dt className="font-mono text-[10px] uppercase leading-[1.5] tracking-[0.16em] text-gray-3">{where.emailLabel}</dt>
                         <dd className="mt-2 font-mono text-sm text-white">
-                          <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="hover:underline" />
+                          <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="-my-3 inline-block py-3 hover:underline" />
                         </dd>
                       </div>
                     </dl>
