@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Progressive-enhancement filter: every item is server-rendered (crawlable); this only toggles
  * `hidden` on elements inside `targetId` whose `data-tags` don't include the chosen filter.
- * Filters with no matching items are disabled rather than showing an empty state (no copy for one in Figma).
+ * Every filter stays selectable; one with no matching items yet shows the page's empty note.
+ * Changing the filter is animated: the current items sink and fade, then the matching set rises back
+ * in one after another (reduced motion: instant).
  */
+const OUT_MS = 240;
 export function FilterChips({
   filters,
   available,
@@ -21,26 +24,54 @@ export function FilterChips({
   label: string;
 }) {
   const [active, setActive] = useState(filters[0]);
+  const first = useRef(true);
 
   useEffect(() => {
     const root = document.getElementById(targetId);
     if (!root) return;
-    root.querySelectorAll<HTMLElement>("[data-tags]").forEach((el) => {
-      const tags = (el.dataset.tags ?? "").split("|");
-      el.hidden = active !== filters[0] && !tags.includes(active);
-    });
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-tags]"));
+    const show = (el: HTMLElement) => active === filters[0] || (el.dataset.tags ?? "").split("|").includes(active);
+    /* a filter with nothing under it yet shows the empty note (#<targetId>-empty) instead of a blank grid */
+    const empty = document.getElementById(`${targetId}-empty`);
+    const apply = () => {
+      items.forEach((el) => (el.hidden = !show(el)));
+      if (empty) empty.hidden = items.some((el) => !el.hidden);
+    };
+
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (first.current || calm) {
+      first.current = false;
+      apply();
+      return;
+    }
+    const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
+    const leaving = items.filter((el) => !el.hidden);
+    leaving.forEach((el) => el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(16px)" }], { duration: OUT_MS, easing: "ease-in", fill: "forwards" }));
+    const t = window.setTimeout(() => {
+      apply();
+      leaving.forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
+      items
+        .filter((el) => !el.hidden)
+        .forEach((el, i) =>
+          el.animate([{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "none" }], { duration: 650, delay: i * 70, easing: ease, fill: "backwards" }),
+        );
+      /* the grid has re-flowed: let scroll-driven reveals re-measure */
+      window.dispatchEvent(new Event("scroll"));
+    }, OUT_MS);
+    return () => window.clearTimeout(t);
   }, [active, filters, targetId]);
 
   const base =
     variant === "dark"
-      ? "px-5 py-[11px] text-sm"
+      ? "px-5 py-[11px] text-sm leading-[19px]" /* Figma pill: 1 + 11 + 19 + 11 + 1 = 43 */
       : "px-4 py-[9px] text-xs leading-[1.35]";
 
   return (
     <div role="group" aria-label={label} className="no-scrollbar flex min-w-0 gap-x-3 overflow-x-auto py-1 max-sm:-mx-[var(--gutter)] max-sm:px-[var(--gutter)] lg:flex-wrap lg:gap-y-2 lg:overflow-visible">
       {filters.map((f) => {
         const isActive = f === active;
-        const enabled = f === filters[0] || available.includes(f);
+        /* every pill looks and works the same (as in Figma), whether or not it has projects yet */
+        const enabled = available.length > 0 || f === filters[0];
         const tone =
           variant === "dark"
             ? isActive

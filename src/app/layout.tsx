@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { chivoMono, hanken, inter, uncutSans } from "@/lib/fonts";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import "./globals.css";
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Skip to content
         </a>
         {children}
+        <SmoothScroll />
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </body>
     </html>

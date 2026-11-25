@@ -35,6 +35,7 @@ export const LEARNING = {
       excerpt:
         "In a world that's obsessed with shiny new objects in tech, we want to focus on what makes it really work, on insights that are unmistakably human...",
       cta: "Join the conversation",
+      href: "https://www.youtube.com/@humanx11",
     },
     {
       image: "/images/learning/crafting-the-one-thing.webp",
@@ -47,6 +48,7 @@ export const LEARNING = {
       excerpt:
         "We had a motley crew of PMs, engineers, enterpreneurs & product designers from R listed companies to young startups participating in this session...",
       cta: "See the thinking",
+      href: "https://www.instagram.com/p/C3IZFJpIMnT/",
     },
     {
       image: "/images/learning/shreya-gulati.webp",
@@ -59,6 +61,7 @@ export const LEARNING = {
       excerpt:
         "Design isn't decoration. It's how products communicate intent, reduce friction, and create trust. That's why we're excited to welcome Shreya as our new Design Director...",
       cta: "Read story",
+      href: "https://www.afaqs.com/agency-briefs/humanx-appoints-shreya-gulati-as-design-director-9459448",
     },
   ],
 };

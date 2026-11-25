@@ -11,20 +11,20 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
   return (
     <section aria-labelledby={`${id}-title`} className="bg-night text-white">
       <div className="container-page pb-[var(--section-y)] pt-[clamp(56px,5.5vw,104px)] lg:px-[clamp(36px,3.75vw,72px)]">
-        <DisplayHeading id={`${id}-title`} className="max-w-[440px] text-white">
-          {CAPABILITIES.title}
-        </DisplayHeading>
+        <div data-swap-block="">
+          <DisplayHeading id={`${id}-title`} className="max-w-[440px] text-white">
+            {CAPABILITIES.title}
+          </DisplayHeading>
+        </div>
         <div className="mt-[clamp(40px,5.4vw,103px)]">
-          {CAPABILITIES.rows.map((row, i) => (
+          {CAPABILITIES.rows.map((row) => (
             <div
               key={row.title}
+              data-swap-block=""
               className="group grid gap-5 border-b border-white/10 py-[23px] md:grid-cols-[minmax(0,39.5%)_1fr] md:gap-0"
             >
-              <h3
-                className={`whitespace-pre-line text-h3 font-normal leading-[1.39] tracking-[-0.03em] transition-colors ${
-                  i === 0 ? "text-accent" : "text-white group-hover:text-accent"
-                }`}
-              >
+              {/* orange only while the row is hovered */}
+              <h3 className="whitespace-pre-line text-h3 font-normal leading-[1.39] tracking-[-0.03em] text-white transition-colors duration-300 group-hover:text-accent">
                 {row.title}
               </h3>
               <div className="md:flex md:gap-[23px]">
@@ -35,8 +35,10 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
                     {row.columns.map((col, c) => (
                       <ul key={c} className={c === 1 ? "max-sm:-mt-px" : ""}>
                         {col.map((item) => (
-                          <li key={item} className="border-b border-white/5 py-[9.7px] text-lg leading-[1.67] text-white/90">
-                            {item}
+                          /* row hovered → all its items go to plain white. The divider under each item is
+                             drawn as its own line (.cap-item::after) so it can draw in apart from the text. */
+                          <li key={item} className="cap-item py-[9.7px] text-lg leading-[1.67] text-white/90 transition-colors duration-300 group-hover:text-white">
+                            <span className="cap-txt">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -54,20 +56,23 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
 
 /**
  * "We're constantly learning in public" — Figma 5376:2864 (Home) / 5376:10234 (About).
- * The cards' CTAs have no destination in the design, so they render as non-interactive labels
- * (see README → "Open content questions").
+ * Each card links to its post (content/shared.ts → href), opening in a new tab; the whole card is
+ * clickable.
  */
 export function LearningSection({ id = "learning" }: { id?: string }) {
   return (
     <section aria-labelledby={`${id}-title`} className="bg-night text-white">
       <div className="container-page pb-[var(--section-y)] lg:px-[clamp(36px,3.1vw,58px)]">
-        <DisplayHeading id={`${id}-title`} className="text-white">
+        {/* Figma 4887:5268: Uncut Sans 70 / 66.42px / -3% */}
+        <DisplayHeading id={`${id}-title`} className="text-white leading-[0.9489]! tracking-[-0.03em]!">
           {LEARNING.title}
         </DisplayHeading>
         <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {LEARNING.posts.map((post) => (
             <li key={post.cta}>
-              <article className="flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
+              <article className="group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
+                {/* the frame keeps the reveal's slight zoom inside the card */}
+                <div className="post-media overflow-hidden">
                 <Image
                   src={post.image}
                   alt={post.alt}
@@ -76,15 +81,23 @@ export function LearningSection({ id = "learning" }: { id?: string }) {
                   sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 92vw"
                   className="aspect-[565/330] w-full object-cover"
                 />
+                </div>
                 <p className="mt-[6px] flex items-center justify-between font-mono text-[17px] tracking-[-0.016em] text-white/60">
                   <time dateTime={post.dateTime}>{post.date}</time>
                   <span>{post.type}</span>
                 </p>
                 <p className="text-base leading-[1.4] text-white/80">{post.excerpt}</p>
-                <p className="mt-auto inline-flex items-center gap-2 pt-[16px] text-base font-bold capitalize leading-[1.5] tracking-[-0.02em]">
-                  {post.cta}
-                  <Image src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
-                </p>
+                {/* opens the post in a new tab; the link stretches over the whole card */}
+                <a
+                  href={post.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-arrow mt-auto inline-flex items-center gap-2 self-start pt-[16px] text-base font-bold capitalize leading-[1.5] tracking-[-0.02em] after:absolute after:inset-0 after:content-['']"
+                >
+                  <span className="la">{post.cta}</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                  <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
+                </a>
               </article>
             </li>
           ))}
