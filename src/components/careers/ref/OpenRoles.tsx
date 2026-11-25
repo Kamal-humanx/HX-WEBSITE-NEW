@@ -10,9 +10,8 @@ import { onScrollFrame, ramp, smooth, motionOn } from './scroll'
    gene's chamber, its
    name travels in across the page and the openings, stacked like the edges of index cards, fan open
    one after another into the full index, the stage held while they do. Each role is listed with
-   what the careers site says of it, in its words. A role under the pointer brings up a photograph of
-   the work it involves, which trails the pointer with a little weight and gives way to the next
-   role's from the direction the pointer travelled. */
+   what the careers site says of it, in its words. (No photograph on hover: removed at the client's
+   request; the row's own hover — name nudge, tangerine Apply — remains.) */
 
 const pad2 = (n: number) => String(n).padStart(2, '0')
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -62,63 +61,9 @@ export default function OpenRoles() {
       },
     })
 
-    /* the photograph: it trails the pointer, leans a little with its speed, and each role's image
-       wipes in over the last from the direction the pointer came */
-    const list = sec.querySelector<HTMLElement>('.or-list')!
-    const peek = sec.querySelector<HTMLElement>('.or-peek')!
-    const imgs = Array.from(peek.querySelectorAll<HTMLElement>('.or-shot'))
-    const cols = sec.querySelectorAll<HTMLElement>('.or-cols span')[2]
-    let on = false, active = -1, z = 1, raf = 0
-    let tx = 0, ty = 0, px = 0, py = 0, tilt = 0
-    const tick = () => {
-      px += (tx - px) * 0.16
-      py += (ty - py) * 0.16
-      tilt += (Math.max(-5, Math.min(5, (tx - px) * 0.05)) - tilt) * 0.15
-      peek.style.transform = `translate3d(${px.toFixed(1)}px,${py.toFixed(1)}px,0) rotate(${tilt.toFixed(2)}deg)`
-      const settled = Math.abs(tx - px) < 0.3 && Math.abs(ty - py) < 0.3 && Math.abs(tilt) < 0.02
-      raf = on || !settled ? requestAnimationFrame(tick) : 0
-    }
-    const show = (i: number) => {
-      if (i === active) return
-      const el = imgs[i], down = i > active
-      el.style.transition = 'none'
-      el.style.clipPath = down ? 'inset(100% 0 0 0)' : 'inset(0 0 100% 0)'
-      el.style.transform = 'scale(1.08)'
-      el.style.zIndex = String(++z)
-      void el.offsetWidth
-      el.style.transition = ''
-      el.style.clipPath = 'inset(0 0 0 0)'
-      el.style.transform = 'scale(1)'
-      active = i
-    }
-    const move = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return
-      /* beside the pointer, but never over the level, location or apply columns */
-      const lane = cols.getBoundingClientRect().left - peek.offsetWidth - 24
-      tx = Math.min(e.clientX + 28, lane)
-      ty = e.clientY - peek.offsetHeight * 0.5
-      const row = (e.target as HTMLElement).closest<HTMLElement>('.or-row')
-      if (!row) return
-      if (!on) {
-        px = tx
-        py = ty
-        on = true
-        peek.classList.add('is-on')
-      }
-      show(+row.dataset.i!)
-      if (!raf) raf = requestAnimationFrame(tick)
-    }
-    const leave = () => {
-      on = false
-      peek.classList.remove('is-on')
-    }
-    list.addEventListener('pointermove', move)
-    list.addEventListener('pointerleave', leave)
+    /* (the photograph that used to trail the pointer over the roles has been removed) */
     return () => {
       off()
-      cancelAnimationFrame(raf)
-      list.removeEventListener('pointermove', move)
-      list.removeEventListener('pointerleave', leave)
     }
   }, [])
 
@@ -156,6 +101,9 @@ export default function OpenRoles() {
                   <a
                     className="or-row"
                     href={r.url}
+                    /* straight to the role's Recruit CRM application form, in a new tab */
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={apply(r.name)}
                     data-i={i}
                     style={{ '--i': i } as CSSProperties}
@@ -179,14 +127,6 @@ export default function OpenRoles() {
         </div>
       </div>
 
-      {/* the photograph that follows the pointer over the list */}
-      <div className="or-peek" aria-hidden="true">
-        <div className="or-frame">
-          {OPENINGS.map((r) => (
-            <img className="or-shot" src={r.img} alt="" key={r.name} decoding="async" />
-          ))}
-        </div>
-      </div>
     </section>
   )
 }

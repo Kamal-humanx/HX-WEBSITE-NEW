@@ -1,18 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
-import { EMAIL, FOOTER_COPY, NAV, SITE_URL, SOCIAL } from "@/lib/site";
-
-const AI_PROMPT = `Summarize ${SITE_URL} — what HumanX does, its work and how to contact the studio.`;
-const AI_LINKS = [
-  { name: "Gemini", icon: "/images/icons/ai-gemini.svg", size: 24, href: `https://gemini.google.com/app?q=${encodeURIComponent(AI_PROMPT)}` },
-  { name: "Claude", icon: "/images/icons/ai-claude.svg", size: 24, href: `https://claude.ai/new?q=${encodeURIComponent(AI_PROMPT)}` },
-  { name: "ChatGPT", icon: "/images/icons/ai-openai.svg", size: 22, href: `https://chatgpt.com/?q=${encodeURIComponent(AI_PROMPT)}` },
-];
+import { EMAIL, FOOTER_COPY, SOCIAL } from "@/lib/site";
+import { FooterTrail } from "@/components/FooterTrail";
 
 /**
  * Figma: footer frame 5376:2925 (1920×767, #0e0e0e) — shared by every page.
- * Manifesto (24px), Let’s talk + email, Ask AI for Summary, socials, copyright, wordmark + glow.
- * The footer nav list is an addition required by the brief (not in Figma).
+ * Manifesto (24px), Let’s talk + email, socials, copyright, wordmark + glow (the "Ask AI for
+ * Summary" row and the extra footer nav list have been removed, as neither is in Figma).
  */
 /** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
 export function Footer({ variant }: { variant?: "careers" } = {}) {
@@ -22,6 +15,9 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
       data-hxc-footer={variant === "careers" ? "" : undefined}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
+      {/* cursor trail of HumanX X marks (Figma 5654:9985) — above the glow, beneath the content */}
+      <FooterTrail />
+
       {/* Glow — Ellipse 1801 */}
       <Image
         src="/images/brand/footer-glow.svg"
@@ -38,43 +34,13 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
 
           <p className="flex flex-wrap items-end gap-x-[15px] gap-y-1 text-base leading-[1.6] text-white/90">
             <span>{FOOTER_COPY.letsTalk}</span>
-            <a href={`mailto:${EMAIL}`} className="link-arrow min-h-0 font-medium text-white underline underline-offset-4">
+            {/* Figma 4887:6362: Chivo Mono Medium 18 / 150% / -2% */}
+            <a href={`mailto:${EMAIL}`} className="link-arrow min-h-0 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4">
               {EMAIL}
               <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
             </a>
           </p>
-
-          <div className="flex flex-col gap-2.5">
-            <p className="text-base leading-[1.6] text-white/90">{FOOTER_COPY.askAi}</p>
-            <ul className="-ml-2.5 flex items-center gap-1">
-              {AI_LINKS.map((ai) => (
-                <li key={ai.name}>
-                  <a
-                    href={ai.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tap inline-flex items-center justify-center rounded-full transition-opacity hover:opacity-70"
-                    aria-label={`Ask ${ai.name} for a summary of HumanX (opens in a new tab)`}
-                  >
-                    <Image src={ai.icon} alt="" width={ai.size} height={ai.size} />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
-
-        <nav aria-label="Footer" className="lg:justify-self-end">
-          <ul className="flex flex-wrap gap-x-6 gap-y-1 font-mono text-base text-white/90">
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="inline-flex min-h-11 items-center hover:text-white hover:underline">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
 
         {/* Wordmark — 5376:2928 (1218×311, right 45px) */}
         <div className="relative lg:pointer-events-none lg:absolute lg:bottom-[11%] lg:right-[max(var(--gutter),2.35%)] lg:w-[63.4%] lg:max-w-[1218px]">
@@ -104,7 +70,8 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
             ))}
           </ul>
           <Image src="/images/brand/footer-line.svg" alt="" width={1793} height={1} className="h-px w-full opacity-60" />
-          <p className="font-mono text-base leading-[1.256] tracking-[-0.01em] text-white">{FOOTER_COPY.copyright}</p>
+          {/* Figma 4887:6344: Chivo Mono Regular 14 / 126% / -1% */}
+          <p className="font-mono text-[14px] leading-[1.26] tracking-[-0.01em] text-white">{FOOTER_COPY.copyright}</p>
         </div>
       </div>
     </footer>

@@ -26,11 +26,11 @@ export const YEARS = ['0–1', '1–4', '4–7', '7+'] as const
 export const YEAR_NAMES = ['AI Native', 'Early Adopter', 'Robust Maker', 'System Shaper'] as const
 
 export const ROLES: Record<string, string> = {
-  'Senior UI Designer': 'https://www.humanx.io/job-roles/senior-ui-designer',
-  'Senior Product Designer': 'https://www.humanx.io/job-roles/sr-product-designer',
-  'Design Lead': 'https://www.humanx.io/job-roles/design-lead',
-  'Product Designer': 'https://www.humanx.io/job-roles/product-designer-1',
-  'Product Design Intern': 'https://www.humanx.io/job-roles/product-design-intern',
+  'Senior UI Designer': 'https://recruitcrm.io/apply/17252664795840068169Pbe',
+  'Senior Product Designer': 'https://recruitcrm.io/apply/17249944376770068169MAI',
+  'Design Lead': 'https://recruitcrm.io/apply/17218929918870068169KFp',
+  'Product Designer': 'https://recruitcrm.io/apply/17283921567990068169CeZ',
+  'Product Design Intern': 'https://recruitcrm.io/apply/17301815425210068169ldp',
 }
 
 /* the senior band splits on craft: Motion or Taste reads as UI, everything else as product */

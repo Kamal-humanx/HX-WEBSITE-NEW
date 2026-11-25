@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 /** /llms.txt — plain-language summary for LLM crawlers, assembled only from on-site copy. */
 export function GET() {
   const u = (p: string) => `${SITE_URL}${p}`;
-  const unique = Array.from(new Set(WORKS.projects.map((p) => `${p.name} (${p.meta})`)));
+  const unique = Array.from(new Set(WORKS.projects.map((p) => `${p.name} (${p.meta.replace(/\s+/g, " ")})`)));
   const body = `# HumanX
 
 > ${HOME.hero.intro}. We are a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.
