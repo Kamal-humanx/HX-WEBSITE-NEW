@@ -692,7 +692,7 @@
 /* Once the icons have landed (.pr-live), hovering a keyword makes its icon hop again. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .pr.pr-live .pr-g:hover .pr-i {
-    animation: pr-hop 0.62s cubic-bezier(0.3, 0.7, 0.2, 1);
+    animation: pr-hop 0.8s cubic-bezier(0.3, 0.7, 0.2, 1);
   }
 }
 @keyframes pr-hop {

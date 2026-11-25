@@ -85,10 +85,10 @@ const mix = (a: number[], b: number[], t: number) =>
 /* ---------- icon fly-ins ----------
    Offsets are in em, so each flight scales with the type size. Every icon starts small, blurred and
    transparent well away from its slot, overshoots it, and settles. */
-const FLIGHT_MS = 950;
+const FLIGHT_MS = 1450; // unhurried enough to follow each icon in, without dragging
 /* An icon takes off when the front is this many letters short of the end of its keyword — early
    enough that it lands just as the keyword finishes turning orange. */
-const LEAD_LETTERS = 6;
+const LEAD_LETTERS = 8;
 const FLIGHT_EASE = "cubic-bezier(0.3, 0.7, 0.2, 1)";
 const far = (transform: string): Keyframe => ({ opacity: 0, filter: "blur(4px)", transform, offset: 0 });
 const FLIGHTS: Record<Kind, Keyframe[]> = {
@@ -205,7 +205,7 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
       anims.push(flight);
       const words = Array.from(ic.el.closest(".pr-g")?.querySelectorAll<HTMLElement>(".pr-w") ?? []);
       words.forEach((w, j) =>
-        anims.push(w.animate(WORD_HOP, { duration: 460, delay: FLIGHT_MS * 0.55 + j * 40, easing: "cubic-bezier(0.3, 0, 0.3, 1)" })),
+        anims.push(w.animate(WORD_HOP, { duration: 560, delay: FLIGHT_MS * 0.55 + j * 40, easing: "cubic-bezier(0.3, 0, 0.3, 1)" })),
       );
       if (ic === icons[icons.length - 1]) flight.finished.then(() => root.classList.add("pr-live")).catch(() => undefined);
     };
