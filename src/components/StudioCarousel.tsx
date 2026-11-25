@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-type Slide = { image: string; alt: string; quote: string; caption: string };
+type Slide = { image: string; alt: string };
 
 /**
- * About — studio carousel (Figma 5376:13146 + "Carousel quotes (animated)" 5376:13164).
- * Slides 1070×574, radius 36, gap 36; neighbours peek in from both edges behind white fades.
- * All slides + quotes are server-rendered; this component only centres slide 2 on load
+ * About — studio carousel (Figma 5724:39129). Photographs only — the quotes were removed in the
+ * 2026 revision. Slides 1070×574, radius 36, gap 36; neighbours peek in from both edges behind
+ * white fades, and the lower edge washes to white (5724:39141).
+ * All slides are server-rendered; this component only centres slide 2 on load
  * (the state shown in Figma). Native scroll-snap handles swipe / trackpad / keyboard.
  */
 export function StudioCarousel({ slides }: { slides: Slide[] }) {
@@ -43,16 +44,10 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
               fetchPriority={i === 1 ? "high" : undefined}
               className="object-cover"
             />
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-            <figure className="absolute bottom-[clamp(16px,3.5vw,60px)] left-[clamp(16px,5vw,96px)] right-4 flex max-w-[531px] flex-col gap-[14px] text-white">
-              <blockquote>
-                <p className="font-inter text-[clamp(1.125rem,2.083vw,2.5rem)] font-medium leading-[1.24] tracking-[-0.02em]">{s.quote}</p>
-              </blockquote>
-              <figcaption className="font-mono text-2xs uppercase tracking-[0.04em]">{s.caption}</figcaption>
-            </figure>
           </li>
         ))}
       </ul>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%] bg-gradient-to-b from-white/0 to-white/80" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[7.6vw] max-w-[147px] bg-gradient-to-r from-white to-transparent" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-[8.4vw] max-w-[162px] bg-gradient-to-l from-white to-transparent" />
     </div>

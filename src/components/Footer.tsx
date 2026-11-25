@@ -1,17 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { EMAIL, FOOTER_COPY, NAV, SITE_URL, SOCIAL } from "@/lib/site";
-
-const AI_PROMPT = `Summarize ${SITE_URL} — what HumanX does, its work and how to contact the studio.`;
-const AI_LINKS = [
-  { name: "Gemini", icon: "/images/icons/ai-gemini.svg", size: 24, href: `https://gemini.google.com/app?q=${encodeURIComponent(AI_PROMPT)}` },
-  { name: "Claude", icon: "/images/icons/ai-claude.svg", size: 24, href: `https://claude.ai/new?q=${encodeURIComponent(AI_PROMPT)}` },
-  { name: "ChatGPT", icon: "/images/icons/ai-openai.svg", size: 22, href: `https://chatgpt.com/?q=${encodeURIComponent(AI_PROMPT)}` },
-];
+import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
+import { EMAIL_DOMAIN, EMAIL_USER, FOOTER_COPY, NAV, SOCIAL } from "@/lib/site";
 
 /**
  * Figma: footer frame 5376:2925 (1920×767, #0e0e0e) — shared by every page.
- * Manifesto (24px), Let’s talk + email, Ask AI for Summary, socials, copyright, wordmark + glow.
+ * Manifesto (24px), Let’s talk + email, socials, copyright, wordmark + glow.
+ * The "Ask AI for Summary" row in Figma was removed at the client's request.
  * The footer nav list is an addition required by the brief (not in Figma).
  */
 /** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
@@ -38,30 +33,10 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
 
           <p className="flex flex-wrap items-end gap-x-[15px] gap-y-1 text-base leading-[1.6] text-white/90">
             <span>{FOOTER_COPY.letsTalk}</span>
-            <a href={`mailto:${EMAIL}`} className="link-arrow min-h-0 font-medium text-white underline underline-offset-4">
-              {EMAIL}
+            <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="link-arrow min-h-0 font-medium text-white underline underline-offset-4">
               <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
-            </a>
+            </ObfuscatedEmail>
           </p>
-
-          <div className="flex flex-col gap-2.5">
-            <p className="text-base leading-[1.6] text-white/90">{FOOTER_COPY.askAi}</p>
-            <ul className="-ml-2.5 flex items-center gap-1">
-              {AI_LINKS.map((ai) => (
-                <li key={ai.name}>
-                  <a
-                    href={ai.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tap inline-flex items-center justify-center rounded-full transition-opacity hover:opacity-70"
-                    aria-label={`Ask ${ai.name} for a summary of HumanX (opens in a new tab)`}
-                  >
-                    <Image src={ai.icon} alt="" width={ai.size} height={ai.size} />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         <nav aria-label="Footer" className="lg:justify-self-end">

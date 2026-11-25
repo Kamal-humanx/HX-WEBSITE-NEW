@@ -47,18 +47,18 @@ families used only in 2 spots), or replace the hero bitmap with a smaller art-di
 6. Footer nav (Home/About/Work/Careers/Contact) added top-right of the footer — not in Figma.
 7. Header active state is consistent (bold + underline). Figma shows “Home” as active on About and Contact, and orange on About.
 8. Mobile drawer menu, skip link, 404 page — no Figma frames; built in the existing visual language.
-9. “Ask AI for Summary” icons link to Gemini / Claude / ChatGPT with a summary prompt for the site.
+9. The footer “Ask AI for Summary” row (Gemini / Claude / ChatGPT icons) was removed at the client's request.
 
 **Interaction / content limitations**
 10. Header (revision 2): sticky, nav right-aligned beside the pill, frosted band rgba(255,255,255,.1) blur 50 on dark sections, and it switches light/dark automatically with the section underneath (matching the About mid-page dark header). The About variant with an IST clock and underlined “Start a Project” is not reproduced; the pill is used everywhere.
-11. About studio carousel: native scroll-snap (swipe/trackpad/keyboard), centred on slide 2 as in Figma, every slide shows its own quote; no autoplay. Figma animates a single quote layer.
-12. About team strip (Figma marquee, 2860 px wide) is a horizontally scrollable row with the Figma stagger on ≥1024 px.
+11. About studio carousel: native scroll-snap (swipe/trackpad/keyboard), centred on slide 2 as in Figma; no autoplay. Quotes removed in the 2026 revision (Figma 5724:36157) — photographs only, with the lower edge washing to white.
+12. About team section ("Different Perspectives. Shared Obsession.") removed at the client's request; the page goes from Capabilities straight to Learning.
 13. Testimonial “logo tabs” render as a static client-logo row (only one testimonial exists, so tabs would switch to nothing).
 14. Careers “mutation” builder (Human Edge / X Strand / Years Shipping → specimen card) is rendered in the designed state, non-interactive. Making it a real quiz needs result logic and copy for other combinations.
 15. Works and Openings filters work client-side over server-rendered lists; filters with no matching projects (Web, Research, Design System, CX, Strategy) are disabled because the design has no empty state.
 16. Case-study cards, featured “Read More”, and learning-card CTAs (“Join the conversation”, “See the thinking”, “Read story”) have no destination pages, so on Works/learning they render as labels. Homepage “Read More”/“See all Work” go to `/works`; “Get In Touch” and “Start a Project” go to `/contact`; “Join Our Team” goes to `/careers`.
 17. Careers “Apply” opens an email to hello@humanx.io with the role in the subject (no ATS link in the design).
-18. Hero play button (Home) and Showreel play button (About) are decorative — no video source in the file.
+18. Hero play button (Home) is decorative — no video source in the file. The About showreel plays the Vimeo video (1099868590) in the 1151×718 frame; the player loads only after the visitor presses play. The principles staircase draws itself in on scroll, step by step from left to right (interaction not in Figma; no hover states).
 19. The live IST clock replaces the static sample time in Careers.
 
 **Fidelity / asset notes**
@@ -105,7 +105,7 @@ families used only in 2 spots), or replace the hero bitmap with a smaller art-di
 ### Other new strings (functional only, not visible design copy unless noted)
 - **Form messages** (visible): “This field is required.”, “Enter a valid email address.”, “Choose a budget range.”, “Sending…”, “Thank you — your message has been sent.”, “Something went wrong. Please try again or email hello@humanx.io.” — Figma has no error/success states.
 - **404 page** (visible): “404”, “Page not found” + nav links.
-- **Screen-reader labels**: “Skip to content”, “Open menu”, “Close menu”, “(selected)”, “(opens Google Maps in a new tab)”, carousel/team scroll-region labels, “Ask {Gemini|Claude|ChatGPT} for a summary of HumanX”.
+- **Screen-reader labels**: “Skip to content”, “Open menu”, “Close menu”, “(selected)”, “(opens Google Maps in a new tab)”, carousel/team scroll-region labels.
 - **Alt text** for every meaningful image (in `src/content/*.ts` and page files) — please check the descriptions of people and products.
 - **JobPosting description** is composed only from table cells (“Senior UI Designer — Senior — Mumbai”). Google requires `datePosted`, a real `description` and ideally `employmentType`/`validThrough` for job rich results — provide these to enable them.
 
@@ -114,7 +114,7 @@ families used only in 2 spots), or replace the hero bitmap with a smaller art-di
 - **Type** scales fluidly with `clamp()`; the Figma size is the max at 1920. Layout is capped at 1920 px and centred on 2560.
 - **Header**: nav collapses to a full-screen dark drawer below 1024 px; “Start a Project” stays visible from 600 px.
 - **Home**: hero crop keeps the faces centred; heading and intro stack; logo marquee keeps the edge fades; case cards stack label → title/description → thumbnail; testimonial logos become a 2/3/6-column grid; learning cards 1/2/3 columns.
-- **About**: carousel slides become 4:5 portrait under 600 px; stats and showreel stack; principles staircase becomes a vertical list with the dashed rule and bar per step; team row scrolls horizontally.
+- **About**: carousel slides become 4:5 portrait under 600 px; stats and showreel stack; principles staircase becomes a vertical list with the dashed rule and bar per step.
 - **Works**: filter chips become a single swipeable row (prevents reflow/CLS); featured card goes portrait with a gradient for legibility; grid 1 → 2 columns at 768.
 - **Careers**: “Edges.” keeps the white-canvas overlap with blend mode at all sizes; brief + CTAs move below the headline; mutation columns stack (helix hidden under 768, centred on tablet); openings table becomes stacked rows with inline “Level:”/“Location:” labels.
 - **Contact**: heading, blob, email, then the form; budget chips wrap; map keeps its aspect with the location card below it under 1024.

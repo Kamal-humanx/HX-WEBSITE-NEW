@@ -1,4 +1,4 @@
-import { ADDRESS, EMAIL, SITE_URL } from "@/lib/site";
+import { ADDRESS, SITE_URL } from "@/lib/site";
 import { HOME } from "@/content/home";
 import { ABOUT } from "@/content/about";
 import { WORKS } from "@/content/works";
@@ -16,7 +16,7 @@ export function GET() {
 
 > ${HOME.hero.intro}. We are a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.
 
-Studio: ${ADDRESS.full}. ${ADDRESS.hours}. Email: ${EMAIL}.
+Studio: ${ADDRESS.full}. ${ADDRESS.hours}. Contact: ${SITE_URL}/contact.
 
 ## Pages
 
