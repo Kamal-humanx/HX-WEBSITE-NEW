@@ -14,7 +14,7 @@ export function ContactBlob({ className = "" }: { className?: string }) {
     <div aria-hidden="true" className={`relative aspect-[665.3/607.636] ${className}`}>
       <img src="/images/contact/sphere-amber.svg" alt="" className="blob-sphere blob-amber absolute left-[9.933%] top-[35.861%] h-[53.863%] w-[48.647%]" />
       <img src="/images/contact/sphere-lilac.svg" alt="" className="blob-sphere blob-lilac absolute left-[58.077%] top-0 h-[46.501%] w-[41.923%]" />
-      <img src="/images/contact/x-glass.svg" alt="" className="absolute inset-0 size-full" />
+      <img src="/images/contact/x-glass.svg" alt="" fetchPriority="high" className="absolute inset-0 size-full" />
     </div>
   );
 }
