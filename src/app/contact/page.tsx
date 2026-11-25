@@ -23,8 +23,11 @@ export default function ContactPage() {
     <>
       <Header current="/contact" theme="light" />
       <main id="main">
-        {/* ---------- Hero + form (5376:6866) ---------- */}
-        <section aria-labelledby="contact-title" className="container-page grid gap-10 pb-[clamp(56px,4.2vw,80px)] pt-[clamp(16px,1vw,20px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,844px)] lg:gap-8">
+        {/* ---------- Hero + form (5376:6866) ----------
+            On the 1920 frame the form is a fixed 844px column. Kept as-is from 1440 up; between
+            1024 and 1439 the columns are proportional (5 : 7), otherwise the fixed form leaves the
+            heading a sliver ~120px wide on an iPad in landscape or a small laptop and clips it. */}
+        <section aria-labelledby="contact-title" className="container-page grid gap-10 pb-[clamp(56px,4.2vw,80px)] pt-[clamp(16px,1vw,20px)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-8 2xl:grid-cols-[minmax(0,1fr)_minmax(0,844px)]">
           <div className="flex flex-col">
             <h1 id="contact-title" className="max-w-[700px] lg:max-w-[36.5vw] 3xl:max-w-[700px] text-h1-xs font-normal capitalize leading-[1.15] tracking-[-0.04em] text-ink">
               {CONTACT.heading}
