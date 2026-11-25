@@ -149,15 +149,20 @@ export default function HomePage() {
             }
           />
 
-          {/* Human Cognition × System Intelligence (5376:2850) */}
+          {/* Human Cognition × System Intelligence (Figma 5692:13015, 1855 wide on the 1920 frame).
+              Two columns with no gutter: the title takes 914, the copy starts at 914 and runs 941
+              to the right edge — so the body sets in three lines and the quote in three, as drawn.
+              Body → quote is a tight 19 px; quote → link is 41 px. */}
           <section aria-labelledby="manifesto-title" className="text-white">
-            <div className="container-page grid gap-10 pb-[clamp(80px,8.1vw,156px)] lg:grid-cols-[minmax(0,914px)_1fr] lg:px-[clamp(36px,1.9vw,36px)]">
+            <div className="container-page grid gap-10 pb-[clamp(80px,8.1vw,156px)] lg:grid-cols-[914fr_941fr] lg:gap-0 lg:px-[clamp(36px,1.9vw,36px)]">
               <h2 id="manifesto-title" className="max-w-[454px] text-h3 font-normal leading-[1.2] tracking-[-0.02em]">
                 {manifesto.title}
               </h2>
-              <div className="flex max-w-[941px] flex-col gap-[clamp(20px,2.1vw,40px)]">
-                <p className="text-xl leading-[1.66] text-gray-4">{manifesto.body}</p>
-                <p className="text-h2 leading-[1.09] tracking-[0.02em] text-white/80">{manifesto.quote}</p>
+              <div className="flex flex-col gap-[clamp(24px,2.125vw,41px)]">
+                <div className="flex flex-col gap-[clamp(12px,1.01vw,19px)]">
+                  <p className="text-xl leading-[1.66] text-gray-4">{manifesto.body}</p>
+                  <p className="text-h2 leading-[1.09] tracking-[0.02em] text-white/80">{manifesto.quote}</p>
+                </div>
                 <ArrowLink href="/contact" onDark>
                   {manifesto.cta}
                 </ArrowLink>
