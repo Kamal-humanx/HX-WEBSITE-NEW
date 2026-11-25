@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { FilterChips } from "@/components/FilterChips";
 import { WorksMotion } from "@/components/WorksMotion";
+import { ArrowLink } from "@/components/ui";
 import { WORKS, parseMeta } from "@/content/works";
 import { WORK_LAYERS, type WorkCardLayers } from "@/content/workLayers";
 import { ORG_ID, absoluteUrl, breadcrumbSchema, pageMetadata, webPageSchema } from "@/lib/seo";
@@ -30,7 +32,7 @@ const GLOW: Record<string, string> = {
   ask: "222, 176, 90", minitv: "255, 96, 186", setu: "250, 182, 150", godrej: "245, 170, 80",
 };
 
-function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: string; badge: string; glow: string }) {
+function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: string; badge: string | null; glow: string }) {
   const base = layers.layers.filter((l) => l.d === 0);
   const rest = layers.layers.filter((l) => l.d > 0);
   const layer = (l: WorkCardLayers["layers"][number], i: number) => (
@@ -57,9 +59,11 @@ function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: 
         {layers.overlay && <div aria-hidden="true" className="absolute inset-0" style={{ background: layers.overlay }} />}
         {rest.map((l, i) => layer(l, i + 1))}
       </div>
-      <span aria-hidden="true" className="wk-badge absolute left-[6.25%] top-[7.34%] z-[1]">
-        {badge}
-      </span>
+      {badge && (
+        <span aria-hidden="true" className="wk-badge absolute left-[6.25%] top-[7.34%] z-[1]">
+          {badge}
+        </span>
+      )}
     </div>
   );
 }
@@ -143,9 +147,7 @@ export default function WorksPage() {
                   />
                 </div>
               ))}
-              <span data-feat="badge" className="wk-badge absolute left-[3.842%] top-[8.077%]">
-                {WORKS.badge}
-              </span>
+              {/* (the featured card's "Coming Soon" pill was removed in Figma) */}
             </div>
             {/* text block 5740:95371: 35px in from the left, 72px up from the bottom, 858 wide */}
             <div data-feat="text" className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[46.43%] md:p-0">
@@ -159,10 +161,10 @@ export default function WorksPage() {
                 </h2>
                 <p className="font-mono text-base leading-[1.4] tracking-[-0.02em] text-[#fafaf8]">{featured.description}</p>
               </div>
-              <p className="inline-flex items-center gap-1.5 text-base font-bold leading-[1.5] tracking-[-0.02em] text-accent">
+              {/* opens the project page; the link's ::after covers the whole card, so the card is clickable */}
+              <ArrowLink href={featured.href} srSuffix={`: ${featured.title}`} className="self-start after:absolute after:inset-0 after:content-['']">
                 {featured.cta}
-                <Image src="/images/icons/arrow-orange.svg" alt="" width={9} height={9} />
-              </p>
+              </ArrowLink>
             </div>
           </article>
         </section>
@@ -173,23 +175,48 @@ export default function WorksPage() {
             {WORKS.allWork}
           </h2>
           <ul id="all-work" className="mt-[clamp(24px,2.1875vw,42px)] grid gap-x-6 gap-y-[clamp(40px,4.167vw,80px)] md:grid-cols-2">
-            {projects.map((p, i) => (
+            {projects.map((p, i) => {
+              const href = (p as { href?: string }).href;
+              const thumb = (
+                <WorkThumb
+                  layers={WORK_LAYERS[p.key]}
+                  alt={p.alt}
+                  badge={(p as { soon?: boolean }).soon === false ? null : WORKS.badge}
+                  glow={GLOW[p.key] ?? "255, 255, 255"}
+                />
+              );
+              return (
               <li key={`${p.name}-${i}`} data-tags={p.tags.join("|")} className="wk-item">
                 <article>
-                  {/* thumbnail 912×640, r16 — built from its Figma layers so each can float on its own */}
-                  <WorkThumb layers={WORK_LAYERS[p.key]} alt={p.alt} badge={WORKS.badge} glow={GLOW[p.key] ?? "255, 255, 255"} />
+                  {/* thumbnail 912×640, r16 — built from its Figma layers so each can float on its own.
+                      With a project page, the thumbnail and the name both open it (the name is the
+                      link screen readers and keyboards use). */}
+                  {href ? (
+                    <Link href={href} tabIndex={-1} aria-hidden="true" className="block cursor-pointer">
+                      {thumb}
+                    </Link>
+                  ) : (
+                    thumb
+                  )}
 
                   {/* name Hanken Grotesk Medium 28, tags Chivo Mono 15 #9E9E9E — 20px under the thumbnail */}
                   <div className="wk-cap mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
                     <h3 className="font-hanken text-xl font-medium leading-[1.286]">
-                      {p.name}
-                      <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>
+                      {href ? (
+                        <Link href={href} className="transition-opacity hover:opacity-70">
+                          {p.name}
+                        </Link>
+                      ) : (
+                        p.name
+                      )}
+                      {(p as { soon?: boolean }).soon !== false && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
                     </h3>
                     <p className="whitespace-pre font-mono text-[15px] text-gray-2">{p.meta}</p>
                   </div>
                 </article>
               </li>
-            ))}
+              );
+            })}
           </ul>
           {/* shown by the filter when a category has no projects yet (not in Figma: the design shows "All" only) */}
           <p id="all-work-empty" hidden className="py-[clamp(48px,6vw,120px)] font-mono text-sm text-gray-2">

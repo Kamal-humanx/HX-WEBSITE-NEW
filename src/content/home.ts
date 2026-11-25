@@ -47,6 +47,8 @@ export const HOME = {
         alt: "Bengaluru International Airport app screens showing the Care by BLR services and EZPass security slot booking",
         w: 1006,
         h: 610,
+        /* its project page; the other cards go to the Work page until theirs are built */
+        href: "/works/bengaluru-international-airport",
       },
       {
         label: "Quick Commerce",
@@ -74,6 +76,7 @@ export const HOME = {
         alt: "Mom Verse brand artwork: “Empowering your journey” beside a woman drinking from a glass",
         w: 998,
         h: 604,
+        href: "/works/apollo-momverse",
       },
       {
         label: "GovTech",

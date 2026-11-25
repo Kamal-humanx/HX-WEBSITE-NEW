@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLink } from "@/components/ui";
 import { RippleImage } from "@/components/RippleImage";
 
-type Case = { label: string; title: string; description: string; image: string; alt: string };
+type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string };
 
 /*
  * Work cards â€” "thumbnail explo" (5253:31321 active, 5253:31411 rest).
@@ -147,7 +147,7 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
             {c.description}
           </p>
         </div>
-        <ArrowLink href="/works" srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
+        <ArrowLink href={c.href ?? "/works"} srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
           {readMore}
         </ArrowLink>
       </div>

@@ -174,6 +174,14 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
         "d": 0
       },
       {
+        "src": "/images/work/layers/sbi-life/118290.webp",
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 100,
+        "d": 0
+      },
+      {
         "src": "/images/work/layers/sbi-life/101961.webp",
         "x": 0,
         "y": 26.453,
