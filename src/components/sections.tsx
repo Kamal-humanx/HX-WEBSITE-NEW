@@ -6,6 +6,11 @@ import { DisplayHeading } from "./ui";
  * "What We Bring To The Table" — Figma 5376:2788 (Home), 5376:10179 (About), 5376:4919 (Contact).
  * Rows: 42px title (first row orange), 1px rgba(255,255,255,.1) separators, a vertical rule,
  * "Our Capabilities" (Chivo Mono 16px, +1.94px, #8b8b8b) and two 24px/40px columns.
+ *
+ * Phones (< 768px, no Figma frame): the same content in a compact form — each group keeps its two
+ * columns side by side at 14px instead of stacking into one long list. On the homepage this block
+ * is held in place for a screen while the testimonials take over, so it has to fit one phone
+ * screen; as a single column it was ~1.5 screens tall and most of it was never on screen at once.
  */
 export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
   return (
@@ -16,28 +21,28 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
             {CAPABILITIES.title}
           </DisplayHeading>
         </div>
-        <div className="mt-[clamp(40px,5.4vw,103px)]">
+        <div className="mt-[clamp(20px,5.4vw,103px)]">
           {CAPABILITIES.rows.map((row) => (
             <div
               key={row.title}
               data-swap-block=""
-              className="group grid gap-5 border-b border-white/10 py-[23px] md:grid-cols-[minmax(0,39.5%)_1fr] md:gap-0"
+              className="group grid gap-2 border-b border-white/10 py-[14px] md:grid-cols-[minmax(0,39.5%)_1fr] md:gap-0 md:py-[23px]"
             >
               {/* orange only while the row is hovered */}
-              <h3 className="whitespace-pre-line text-h3 font-normal leading-[1.39] tracking-[-0.03em] text-white transition-colors duration-300 group-hover:text-accent">
+              <h3 className="text-[1.3125rem] font-normal leading-[1.3] tracking-[-0.03em] text-white transition-colors duration-300 group-hover:text-accent md:whitespace-pre-line md:text-h3 md:leading-[1.39]">
                 {row.title}
               </h3>
               <div className="md:flex md:gap-[23px]">
                 <span aria-hidden="true" className="hidden w-px shrink-0 bg-white/10 md:block" />
                 <div className="min-w-0 flex-1">
-                  <p className="font-mono text-sm uppercase tracking-[0.12em] text-gray">{CAPABILITIES.label}</p>
-                  <div className="mt-2 grid sm:grid-cols-2">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-gray md:text-sm">{CAPABILITIES.label}</p>
+                  <div className="mt-1 grid grid-cols-2 gap-x-4 md:mt-2 md:gap-x-0">
                     {row.columns.map((col, c) => (
-                      <ul key={c} className={c === 1 ? "max-sm:-mt-px" : ""}>
+                      <ul key={c}>
                         {col.map((item) => (
                           /* row hovered → all its items go to plain white. The divider under each item is
                              drawn as its own line (.cap-item::after) so it can draw in apart from the text. */
-                          <li key={item} className="cap-item py-[9.7px] text-lg leading-[1.67] text-white/90 transition-colors duration-300 group-hover:text-white">
+                          <li key={item} className="cap-item py-[5px] text-[14px] leading-[1.3] text-white/90 transition-colors duration-300 group-hover:text-white md:py-[9.7px] md:text-lg md:leading-[1.67]">
                             <span className="cap-txt">{item}</span>
                           </li>
                         ))}

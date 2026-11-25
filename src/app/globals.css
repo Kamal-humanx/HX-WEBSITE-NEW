@@ -873,6 +873,27 @@
   }
 }
 
+/* Phones only: in the homepage's held screen the capabilities rows are sized from the viewport
+   height for desktop; on a phone keep the compact row padding set in sections.tsx so both groups
+   and the title fit one screen. */
+@media (max-width: 767px) {
+  .swap-stage.swap-on .swap-a .container-page {
+    padding-top: calc(var(--header-h) + 12px) !important;
+    padding-bottom: 12px !important;
+  }
+  .swap-stage.swap-on .swap-a .container-page > div:nth-child(2) {
+    margin-top: 14px !important;
+  }
+  .swap-stage.swap-on .swap-a .group {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+  .swap-stage.swap-on .swap-a .group li {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+}
+
 /* ---------- Thank-you pop-up (see components/ThankYouDialog.tsx) ---------- */
 .hx-thanks[open] {
   animation: hx-thanks-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
