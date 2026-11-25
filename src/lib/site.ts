@@ -8,7 +8,9 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://humanx.io"
 export const SITE_NAME = "HumanX";
 /** Legal name, from the footer: "© 2026 Human Experience Pvt. Ltd. All Rights Reserved" */
 export const LEGAL_NAME = "Human Experience Pvt. Ltd.";
-export const EMAIL = "hello@humanx.io";
+/** Kept in two halves so the address is never emitted as plain text (see ObfuscatedEmail). */
+export const EMAIL_USER = "hello";
+export const EMAIL_DOMAIN = "humanx.io";
 
 /** Contact page — "Where We Are" card */
 export const ADDRESS = {
@@ -45,6 +47,5 @@ export const FOOTER_COPY = {
   manifesto:
     "We are a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.",
   letsTalk: "Let’s talk",
-  askAi: "Ask AI for Summary:",
   copyright: "© 2026 Human Experience Pvt. Ltd. All Rights Reserved",
 };

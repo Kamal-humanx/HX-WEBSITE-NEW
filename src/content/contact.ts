@@ -25,7 +25,21 @@ export const CONTACT = {
     budget: "Choose a budget range.",
     sending: "Sending…",
     success: "Thank you — your message has been sent.",
-    error: "Something went wrong. Please try again or email hello@humanx.io.",
+    error: "Something went wrong. Please try again in a moment.",
+    phone: "Enter a valid phone number.",
+    tooShort: "Please add a little more detail.",
+    tooLong: "This is too long — please shorten it.",
+    tooFast: "That was quick — please wait a few seconds and send again.",
+    rateLimited: "You have sent several messages already. Please try again in an hour.",
+    botCheck: "We could not verify your browser. Please reload the page and try again.",
+    staleForm: "This form has expired. Please send it again.",
+  },
+  /** Thank-you pop-up shown after a successful submission. NOT in Figma — newly written. */
+  thanks: {
+    title: "Thank you",
+    body: "Your note has reached us. One of us will read it properly and reply within 48 hours.",
+    cta: "Back To The Site",
+    close: "Close",
   },
   where: {
     title: "Where We Are",

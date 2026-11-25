@@ -2,11 +2,13 @@ import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { ContactBlob } from "@/components/ContactBlob";
 import { ContactForm } from "@/components/ContactForm";
 import { CapabilitiesSection } from "@/components/sections";
 import { DisplayHeading } from "@/components/ui";
 import { CONTACT } from "@/content/contact";
-import { ADDRESS, EMAIL } from "@/lib/site";
+import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
+import { ADDRESS, EMAIL_DOMAIN, EMAIL_USER } from "@/lib/site";
 import { ORG_ID, absoluteUrl, breadcrumbSchema, pageMetadata, webPageSchema } from "@/lib/seo";
 
 export const metadata = pageMetadata("contact");
@@ -27,22 +29,12 @@ export default function ContactPage() {
             <h1 id="contact-title" className="max-w-[700px] lg:max-w-[36.5vw] 3xl:max-w-[700px] text-h1-xs font-normal capitalize leading-[1.15] tracking-[-0.04em] text-ink">
               {CONTACT.heading}
             </h1>
-            <Image
-              src="/images/contact/x-blob.webp"
-              alt=""
-              width={1331}
-              height={1216}
-              aria-hidden="true"
-              sizes="(min-width: 1024px) 35vw, 70vw"
-              priority
-              className="mx-auto mt-6 w-[min(665px,80%)] lg:ml-[12%] lg:mt-0"
-            />
+            <ContactBlob className="mx-auto mt-6 w-[min(665px,80%)] lg:ml-[12%] lg:mt-0" />
             <p className="mt-6 flex flex-wrap items-end gap-x-[15px] text-base leading-[1.6] text-black/90 lg:mt-auto">
               <span>Let’s talk</span>
-              <a href={`mailto:${EMAIL}`} className="link-arrow min-h-11 font-medium text-black underline underline-offset-4">
-                {EMAIL}
+              <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="link-arrow min-h-11 font-medium text-black underline underline-offset-4">
                 <Image className="arrow brightness-0" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
-              </a>
+              </ObfuscatedEmail>
             </p>
           </div>
           <ContactForm />
@@ -99,9 +91,7 @@ export default function ContactPage() {
                       <div>
                         <dt className="font-mono text-[10px] uppercase leading-[1.5] tracking-[0.16em] text-gray-3">{where.emailLabel}</dt>
                         <dd className="mt-2 font-mono text-sm text-white">
-                          <a href={`mailto:${EMAIL}`} className="hover:underline">
-                            {EMAIL}
-                          </a>
+                          <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="hover:underline" />
                         </dd>
                       </div>
                     </dl>
@@ -165,7 +155,6 @@ export default function ContactPage() {
             "@id": `${ORG_ID.replace("#organization", "#studio")}`,
             name: "HumanX",
             parentOrganization: { "@id": ORG_ID },
-            email: EMAIL,
             image: absoluteUrl("/images/contact/studio.webp"),
             address: {
               "@type": "PostalAddress",

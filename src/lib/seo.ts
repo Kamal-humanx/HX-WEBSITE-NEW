@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ADDRESS, EMAIL, LEGAL_NAME, SITE_NAME, SITE_URL, SOCIAL } from "./site";
+import { ADDRESS, LEGAL_NAME, SITE_NAME, SITE_URL, SOCIAL } from "./site";
 
 /**
  * Page titles + descriptions. These are the ONLY newly written strings in the project
@@ -34,7 +34,7 @@ export const PAGE_META = {
     path: "/contact",
     title: "Contact HumanX — Start a Project",
     description:
-      "Every great idea needs a co-conspirator. Tell us what brings you here, visit the HumanX studio in Goregaon East, Mumbai, or write to hello@humanx.io.",
+      "Every great idea needs a co-conspirator. Tell us what brings you here, visit the HumanX studio in Goregaon East, Mumbai, or send us a message.",
   },
 } as const;
 
@@ -80,7 +80,6 @@ export function organizationSchema() {
     legalName: LEGAL_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/icon-512.png`,
-    email: EMAIL,
     description:
       "We are a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.",
     address: {

@@ -1,11 +1,13 @@
 import Image from "next/image";
-import { EMAIL, FOOTER_COPY, SOCIAL } from "@/lib/site";
 import { FooterTrail } from "@/components/FooterTrail";
+import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
+import { EMAIL_DOMAIN, EMAIL_USER, FOOTER_COPY, SOCIAL } from "@/lib/site";
 
 /**
  * Figma: footer frame 5376:2925 (1920×767, #0e0e0e) — shared by every page.
  * Manifesto (24px), Let’s talk + email, socials, copyright, wordmark + glow (the "Ask AI for
  * Summary" row and the extra footer nav list have been removed, as neither is in Figma).
+ * The email is rendered by ObfuscatedEmail so the address never appears as plain text in the HTML.
  */
 /** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
 export function Footer({ variant }: { variant?: "careers" } = {}) {
@@ -35,10 +37,13 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
           <p className="flex flex-wrap items-end gap-x-[15px] gap-y-1 text-base leading-[1.6] text-white/90">
             <span>{FOOTER_COPY.letsTalk}</span>
             {/* Figma 4887:6362: Chivo Mono Medium 18 / 150% / -2% */}
-            <a href={`mailto:${EMAIL}`} className="link-arrow min-h-0 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4">
-              {EMAIL}
+            <ObfuscatedEmail
+              user={EMAIL_USER}
+              domain={EMAIL_DOMAIN}
+              className="link-arrow min-h-0 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4"
+            >
               <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
-            </a>
+            </ObfuscatedEmail>
           </p>
         </div>
 

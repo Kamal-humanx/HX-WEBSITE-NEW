@@ -32,9 +32,33 @@ form handler to a third-party endpoint first (`output: "export"` cannot host API
 
 Before launch:
 1. Set `NEXT_PUBLIC_SITE_URL` and the social URLs.
-2. Wire the contact form: `src/app/api/contact/route.ts` validates input, has a honeypot, and has a
-   `TODO(integration)` where the email/CRM provider call goes (keep keys in env vars).
+2. Set the contact-form and admin variables listed in `.env.example` (see “Contact form, spam protection and admin” below).
 3. Review the copy/meta items in [REPORT.md](REPORT.md).
+
+## Contact form, spam protection and admin
+
+`POST /api/contact` runs these layers in order (`src/app/api/contact/route.ts`):
+
+1. Same-origin check and a 20 kB body cap.
+2. Rate limit — 30 requests and 5 accepted submissions per visitor per hour.
+3. Honeypot field (`website`) — filled means a fake success and nothing is kept.
+4. Time check — a signed token from `GET /api/contact/token`; rejected if under 3 s old, missing, forged or reused.
+5. Cloudflare Turnstile, invisible (skipped when the keys are not set).
+6. Field validation (`src/lib/contact-rules.ts`, shared with the form).
+7. Content filter (`src/lib/server/spam.ts`) — `clean`, `flagged` or `spam`.
+
+Clean inquiries are stored and emailed to `NOTIFY_EMAILS` — through the studio's own Google Workspace
+mailbox over SMTP when `SMTP_USER` / `SMTP_PASSWORD` are set, otherwise through Brevo (`src/lib/server/notify.ts`). Flagged and spam inquiries are
+stored only; clearing one in the admin panel sends the email then.
+
+`/admin` (username + password from env, 12-hour signed session cookie, 5 sign-in attempts per 15 minutes)
+lists every inquiry with the form's own field labels, split into Inquiries / Needs review / Spam.
+
+Storage: Upstash Redis over REST (`KV_REST_API_URL`, `KV_REST_API_TOKEN`). Without it, local dev writes
+to `.data/inquiries.json`; on Vercel nothing can be stored and rate limits are per-instance only.
+
+The public email address is rendered by `ObfuscatedEmail` and never appears as plain text or a `mailto:`
+in the served HTML, JSON-LD, meta description or `llms.txt`.
 
 ## Project structure
 
@@ -48,7 +72,8 @@ src/
     careers/page.tsx      /careers
     contact/page.tsx      /contact
     not-found.tsx         custom 404
-    api/contact/route.ts  form handler (placeholder delivery)
+    api/contact/route.ts  form handler (spam layers, storage, Brevo notification)
+    admin/                /admin       inquiries panel (sign-in required)
     robots.ts  sitemap.ts  manifest.ts  llms.txt/route.ts  favicon.ico
     globals.css           design tokens (@theme) + base/components layers
   components/             Header, MobileMenu, Footer, Logo, sections (Capabilities, Learning),
