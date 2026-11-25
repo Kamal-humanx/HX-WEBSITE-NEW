@@ -98,7 +98,7 @@
   --gutter: clamp(16px, 1.875vw, 36px); /* 36px side margin on the 1920 frame */
   --section-y: clamp(64px, 6.77vw, 130px);
   --header-h: clamp(64px, 5.3vw, 102px); /* sticky bar: logo/nav row of the 127px Figma header */
-  --header-gap: clamp(0px, 1.3vw, 25px); /* rest of the 127px header frame, in flow */
+  --header-gap: clamp(0px, 1.3146vw, 25.24px); /* rest of the 127px header frame, in flow (101.76 + 25.24 = 127 at 1920) */
   color-scheme: light;
 }
 
@@ -151,23 +151,63 @@
     background-image: linear-gradient(90deg, var(--color-btn-from), var(--color-btn-to));
     border: 0.5px solid #fff;
     box-shadow: var(--shadow-pill);
-    transition: filter 0.2s ease, transform 0.2s ease;
+    overflow: hidden;
+    isolation: isolate;
+    transition: filter 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
   }
-  .btn-pill:hover {
-    filter: brightness(1.08);
+  /* CTA hovers. Pill: lifts a touch, a soft sheen sweeps across, the arrow steps forward. */
+  .btn-pill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.32) 50%, transparent 70%);
+    transform: translateX(-110%);
+    pointer-events: none;
   }
-  .btn-pill:active {
-    transform: translateY(1px);
+  .btn-pill img {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-pill:is(:hover, :focus-visible):not(:disabled) {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+  .btn-pill:is(:hover, :focus-visible):not(:disabled)::after {
+    transform: translateX(110%);
+    transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-pill:is(:hover, :focus-visible):not(:disabled) img {
+    transform: translate(3px, -3px);
+  }
+  .btn-pill:active:not(:disabled) {
+    transform: translateY(0);
   }
   .link-arrow {
     @apply inline-flex min-h-11 items-center gap-1.5 font-bold tracking-[-0.02em];
   }
-  .link-arrow .arrow {
-    transition: transform 0.2s ease;
+  /* Arrow link: a 1px underline draws in under the label from the left (and leaves to the right),
+     and the arrow flies out to the top-right and comes back in from the bottom-left. Card links
+     whose ::after covers the card get this whenever the card is hovered. */
+  .link-arrow .la {
+    background: linear-gradient(currentColor, currentColor) no-repeat right 100% / 0 1px;
+    transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .link-arrow:hover .arrow,
-  .link-arrow:focus-visible .arrow {
-    transform: translate(2px, -2px);
+  .link-arrow:is(:hover, :focus-visible) .la {
+    background-position: left 100%;
+    background-size: 100% 1px;
+  }
+  .link-arrow:is(:hover, :focus-visible) .arrow {
+    animation: arrow-loop 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes arrow-loop {
+    0% { transform: translate(0, 0); opacity: 1; }
+    40% { transform: translate(7px, -7px); opacity: 0; }
+    41% { transform: translate(-7px, 7px); opacity: 0; }
+    100% { transform: translate(0, 0); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .link-arrow:is(:hover, :focus-visible) .arrow { animation: none; }
+    .btn-pill::after { display: none; }
   }
   .sr-only-focusable:not(:focus):not(:focus-within) {
     @apply sr-only;
@@ -190,29 +230,103 @@
 .site-header[data-theme="dark"] {
   color: #fff;
 }
+/* Figma 4887:4329: 1920×127 band, fill white 10%, Glass (frost 100 → CSS blur 50px) + progressive
+   Layer blur 0→100 (top→bottom). The progressive blur spreads the band's lower edge well past 127px:
+   measured from the Figma render over the dark section, coverage is full to 72px, 50% at ~124px and
+   gone by 210px (on the 1920 frame). The element is 210/127 of the header frame tall and the mask
+   reproduces that measured coverage curve (stops = px/210 on the 1920 frame). */
 .site-header .header-band {
-  background: rgba(255, 255, 255, 0.1);
-  filter: blur(50px);
+  height: calc((var(--header-h) + var(--header-gap)) * 210 / 127) !important;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
-.site-header[data-theme="dark"][data-scrolled="false"] .header-band {
+/* The white 10% tint, on the measured Figma coverage curve (and a touch lighter over the top ~12px). */
+.site-header .header-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.079) 0%,
+    rgba(255, 255, 255, 0.087) 2.9%,
+    rgba(255, 255, 255, 0.095) 5.7%,
+    rgba(255, 255, 255, 0.1) 8.6%
+  );
+  --band-mask: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 34.3%,
+    rgba(0, 0, 0, 0.875) 40%,
+    rgba(0, 0, 0, 0.79) 45.7%,
+    rgba(0, 0, 0, 0.71) 51.4%,
+    rgba(0, 0, 0, 0.54) 57.1%,
+    rgba(0, 0, 0, 0.46) 60%,
+    rgba(0, 0, 0, 0.375) 65.7%,
+    rgba(0, 0, 0, 0.25) 71.4%,
+    rgba(0, 0, 0, 0.17) 77.1%,
+    rgba(0, 0, 0, 0.08) 82.9%,
+    rgba(0, 0, 0, 0.04) 91.4%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--band-mask);
+  mask-image: var(--band-mask);
+}
+/* Diffuse (progressive) blur, after the reference recording: a stack of glass layers, each blurring
+   more strongly and each kept to its own slice of the strip — so what passes under the menu is
+   barely softened near the strip's foot and melts into a heavy blur at the very top, with no step
+   anywhere. Strongest layer 48px ≈ the Figma frost (blur 50). */
+.site-header .header-band .hb {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--b));
+  backdrop-filter: blur(var(--b));
+  -webkit-mask-image: var(--m);
+  mask-image: var(--m);
+}
+.site-header .header-band .hb:nth-child(1) {
+  --b: 0.75px;
+  --m: linear-gradient(to top, transparent 0%, #000 12.5%, #000 25%, transparent 37.5%);
+}
+.site-header .header-band .hb:nth-child(2) {
+  --b: 1.5px;
+  --m: linear-gradient(to top, transparent 12.5%, #000 25%, #000 37.5%, transparent 50%);
+}
+.site-header .header-band .hb:nth-child(3) {
+  --b: 3px;
+  --m: linear-gradient(to top, transparent 25%, #000 37.5%, #000 50%, transparent 62.5%);
+}
+.site-header .header-band .hb:nth-child(4) {
+  --b: 6px;
+  --m: linear-gradient(to top, transparent 37.5%, #000 50%, #000 62.5%, transparent 75%);
+}
+.site-header .header-band .hb:nth-child(5) {
+  --b: 12px;
+  --m: linear-gradient(to top, transparent 50%, #000 62.5%, #000 75%, transparent 87.5%);
+}
+.site-header .header-band .hb:nth-child(6) {
+  --b: 24px;
+  --m: linear-gradient(to top, transparent 62.5%, #000 75%, #000 87.5%, transparent 100%);
+}
+.site-header .header-band .hb:nth-child(7) {
+  --b: 48px;
+  --m: linear-gradient(to top, transparent 75%, #000 87.5%, #000 100%);
+}
+/* One header surface everywhere — over dark and light sections, scrolled or not — exactly the Figma
+   band (white 10% + Glass frost 100 + progressive Layer blur 0→100). Only the text colour follows
+   the section underneath. No separate solid bar, so no hard bottom edge. */
+.site-header .header-band {
   opacity: 1;
 }
 .site-header .header-backdrop {
-  opacity: 0;
-  transition: opacity 0.25s ease, background-color 0.25s ease;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  display: none;
 }
-.site-header[data-scrolled="true"] .header-backdrop {
-  opacity: 1;
+.site-header .header-pill {
+  box-shadow: 0 0 0 0.5px currentColor, inset 0 0 0 0.5px currentColor;
+  transition: color 0.3s ease, background-color 0.3s ease, scale 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.site-header[data-theme="light"] .header-backdrop {
-  background: rgba(255, 255, 255, 0.78);
-}
-.site-header[data-theme="dark"] .header-backdrop {
-  background: rgba(14, 14, 14, 0.6);
+.site-header .header-pill:active {
+  scale: 0.97;
 }
 .site-header .header-pill:hover {
   background: currentColor;
@@ -226,6 +340,371 @@
   background: #fff;
 }
 
+/* Work cards (WorkCards.tsx; thumbnail explo 5253:31321 active vs 5253:31411 rest). The outline is
+   the SVG path (fill + 1px inside stroke #919191); active = fill #F3F3F3 and the notch (script),
+   thumbnail frame 3px stroke in the card's fill colour. One easing for fill, frame and image. */
+.case-card {
+  --case-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.case-card .case-shape {
+  fill: #fff;
+  stroke: var(--color-line);
+  transition: fill 0.45s var(--case-ease);
+}
+.case-card.is-active .case-shape {
+  fill: var(--color-surface-hover);
+}
+.case-card .case-thumb {
+  border-color: #fff;
+  transition: border-color 0.45s var(--case-ease);
+}
+.case-card.is-active .case-thumb {
+  border-color: var(--color-surface-hover);
+}
+.case-card .case-img {
+  transition: transform 0.7s var(--case-ease);
+}
+.case-card.is-active .case-img {
+  transform: scale(1.02);
+}
+
+/* Hero (HeroIntro.tsx): lines are drawn in by the Careers feathered mask; "Human" letters are
+   boxes so each can hold its width while it is still a machine glyph. */
+.hh .hh-ch {
+  display: inline-block;
+}
+/* "Human" while it is still the machine: mono glyphs, quieter, centred in the letter's own width */
+.hh .hh-ch.hh-machine {
+  font-family: var(--font-chivo-mono), ui-monospace, monospace;
+  font-size: 0.62em;
+  letter-spacing: 0;
+  color: #a3a3a3;
+  text-align: center;
+}
+.hh .hh-ch.hh-resolved {
+  animation: hh-resolve 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes hh-resolve {
+  from {
+    opacity: 0.25;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+/* Hero image: opens quickly on load — unmasks from a slightly inset rounded frame while the picture
+   settles from a gentle zoom — and is in before the headline starts (HeroIntro waits for it). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-media {
+    animation: hero-open 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero-media img:first-child {
+    animation: hero-settle 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+@keyframes hero-open {
+  from {
+    clip-path: inset(6% 4% 6% 4% round 18px);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0);
+    opacity: 1;
+  }
+}
+@keyframes hero-settle {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* the hero sequence's pieces wait unseen until the script has masked them (no flash on load);
+   the logo strip simply fades in, all at once, when the hero text is done */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-seq]:not(.seq-on):not(.seq-done) {
+    opacity: 0;
+  }
+  [data-seq="clients"] {
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* Work page featured card: the plane's picture is cut off at its right and bottom edges. It is drawn 8%
+   larger and rests pushed back down-right (WorksMotion PLANE_X / PLANE_Y), so both cut edges sit
+   outside the card; scrolling flies it forward and up from here without ever bringing them into view. */
+.wk-feat [data-layer="plane"] img {
+  transform-origin: 0 0;
+  scale: 1.08;
+  translate: 6% 10%;
+}
+
+/* Work page thumbnails: the nearest layers bob very gently on their own (offset per layer by --fd),
+   so a resting card still reads as stacked layers rather than one picture. */
+@media (prefers-reduced-motion: no-preference) {
+  .wk-f {
+    animation: wk-float 7s ease-in-out infinite;
+    animation-delay: calc(var(--fd, 0s) * -1);
+  }
+}
+@keyframes wk-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.45%); }
+}
+
+/* Work page thumbnails: on hover, a glow lights the stretch of the card's edge nearest the cursor
+   (the testimonial tabs' border spotlight), tinted to the card's own colours (--glow, set per card);
+   WorksMotion sets --mx/--my and --spot. A 1.5px ring, masked to the border only. */
+.wk-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(var(--glow, 255, 255, 255), 1),
+    rgba(var(--glow, 255, 255, 255), 0.45) 40%,
+    rgba(var(--glow, 255, 255, 255), 0) 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: var(--spot, 0);
+  transition: opacity 0.4s ease;
+}
+
+/* Work page "Coming Soon" glass pill (Figma 5751:106866): 167.58×41.16 at 1920, r23.52, white @31%
+   with a glass blur; Uncut Sans Medium 17.64 / 23.52, −0.588px, white. Scales down with the card. */
+.wk-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(28px, 2.144vw, 41.16px);
+  padding-inline: clamp(14px, 1.72vw, 33.1px);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.31);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font-size: clamp(12px, 0.919vw, 17.64px);
+  font-weight: 500;
+  line-height: 1.3333;
+  letter-spacing: -0.0333em;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Pinned statement + overtake (PinStage.tsx): stage 100svh + a short hold + 100svh of cover.
+   The next section climbs 100svh back up over the pinned stage, on its own white ground. */
+.pin-stage {
+  height: calc(200svh + 35svh);
+}
+.pin-next {
+  position: relative;
+  z-index: 10;
+  margin-top: -100svh;
+  /* a feathered top instead of a hard white edge: the sheet fades in over its first stretch, so the
+     philosophy statement dissolves under it as it rises rather than being cut off */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.55) clamp(60px, 9vh, 110px),
+    var(--tone, #fff) clamp(150px, 24vh, 260px)
+  );
+  overflow-x: clip;
+}
+
+/* Work → dark hand-over (ToneShift.tsx + PinCover), as Careers' manifesto → gene: the work section
+   holds, its cards dip out one by one, and the stage darkens white → night; the dark block shares
+   that colour (--tone) and scrolls in already dark, with no edge. */
+.tone-dark {
+  position: relative;
+  z-index: 10;
+  background: var(--color-night);
+  margin-top: -1px;
+  padding-top: 1px;
+}
+/* With motion: the dark block is pulled up over the work section's held screen (one screen + the
+   70svh hold), so the capabilities are already in their final place while the stage darkens and
+   just fade in there — nothing scrolls in. That overlap is see-through (the held stage's own colour
+   shows) and takes no pointer; the block is solid below it. */
+.tone-dark.tone-on {
+  margin-top: calc(-170svh - 1px);
+  padding-top: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    /* the solid part starts 6px early, overlapping the work section's bottom padding (same --tone
+       colour): a hard stop exactly on its edge lands on a fractional pixel while scrolling, the
+       browser blends that row to transparent, and the white page showed through as a hairline */
+    transparent calc(170svh - 6px),
+    var(--tone, var(--color-night)) calc(170svh - 6px)
+  );
+}
+.tone-dark.tone-on > :not(.swap-stage) {
+  pointer-events: auto;
+}
+.tone-dark .swap-a > section {
+  background: transparent;
+}
+
+/* Capability item divider (was border-b white/5) as its own line, so it can draw in right → left
+   before the item's text fades in (ToneShift sets --line 0 → 1); at rest identical to the border. */
+.cap-item {
+  position: relative;
+}
+.cap-item::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  transform: scaleX(var(--line, 1));
+  transform-origin: 100% 50%;
+}
+.cap-item .cap-txt {
+  display: inline-block;
+}
+
+/* Capabilities → testimonials in one held screen (SwapStage.tsx). Stacked only when the script runs. */
+.swap-stage .swap-hold {
+  display: none;
+}
+.swap-stage.swap-on .swap-hold {
+  display: block;
+}
+.swap-stage.swap-on .swap-stick {
+  position: sticky;
+  display: grid;
+  min-height: 100svh;
+}
+.swap-stage.swap-on .swap-stick > * {
+  grid-area: 1 / 1;
+}
+/* In the held screen both sections start below the header and fit one screen at any height:
+   top space = the header's own height + a little; gaps and the logo tabs are capped by the screen
+   height (vh), so on a short laptop screen they tighten instead of pushing content under the nav. */
+.swap-stage.swap-on .swap-a .container-page,
+.swap-stage.swap-on .swap-b .container-page {
+  padding-top: calc(var(--header-h) + clamp(20px, 4.5vh, 48px)) !important;
+  padding-bottom: clamp(12px, 2.5vh, 40px) !important;
+}
+.swap-stage.swap-on .swap-a .container-page > div:nth-child(2) {
+  margin-top: min(5.4vw, 5vh) !important;
+}
+.swap-stage.swap-on .swap-a .group {
+  padding-top: min(23px, 1.8vh) !important;
+  padding-bottom: min(23px, 1.8vh) !important;
+}
+.swap-stage.swap-on .swap-a .group li {
+  padding-top: min(9.7px, 0.55vh) !important;
+  padding-bottom: min(9.7px, 0.55vh) !important;
+}
+.swap-stage.swap-on .swap-b .testimonial-stage {
+  margin-top: min(4.552vw, 5vh) !important;
+  min-height: min(20.677vw, 34vh) !important;
+}
+.swap-stage.swap-on .swap-b ul[data-swap-block] {
+  margin-top: min(5.729vw, 6vh) !important;
+}
+.swap-stage.swap-on .swap-b .logo-tab {
+  height: min(10.9375vw, 18vh) !important;
+}
+
+/* Philosophy statement ink-front reveal (PhilosophyReveal.tsx). Words are inline boxes so they can
+   rise and sharpen; script writes the per-letter colour and per-word/icon transforms. */
+.pr .pr-w {
+  display: inline-block;
+}
+.pr.pr-armed .pr-w,
+.pr.pr-armed .pr-i {
+  will-change: transform, filter;
+}
+
+/* Testimonials — Logo Tab 4905:154 Default → Active, and the quote that follows it. */
+.logo-tab {
+  background-color: transparent;
+  box-shadow: inset 0 -19px 47.6px -17px rgba(255, 255, 255, 0);
+  transition:
+    background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.logo-tab.is-active {
+  background-color: var(--color-night-3);
+  box-shadow: var(--shadow-tab);
+}
+/* Cursor spotlight on the borders (Testimonials.tsx sets --mx/--my per tab, --spot on the row):
+   a white glow that lights only the stretch of border near the pointer, fading with distance, and
+   carrying across neighbouring tabs as the pointer moves between them. Drawn as a 1px ring over
+   the tab's own border (mask keeps only the border area). */
+.logo-tab {
+  position: relative;
+}
+.logo-tab::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(
+    170px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.35) 40%,
+    rgba(255, 255, 255, 0) 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: var(--spot, 0);
+  transition: opacity 0.35s ease;
+}
+/* the selected (highlighted) tab keeps its own look; only the others glow under the cursor */
+.logo-tab.is-active::after {
+  opacity: 0;
+}
+.logo-tab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+.testimonial-slide {
+  opacity: 0;
+  transform: translateY(8px);
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.35s;
+}
+.testimonial-slide.is-active {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 0.35s ease 0.1s,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.1s,
+    visibility 0s;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -234,8 +713,9 @@
     transform: translateX(-50%);
   }
 }
+/* One copy of the 19-logo list is ~4,500px wide on the 1920 frame; 90s ≈ 50px/s, the same pace as before. */
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 90s linear infinite;
 }
 
 /* ---------- Contact hero artwork (see components/ContactBlob.tsx) ----------

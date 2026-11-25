@@ -6,8 +6,34 @@ export const HOME = {
     heading: { line1: "We craft products ", line2: "that are Unmistakably Human" },
     intro: "CX Design and Tech studio that shapes digital experiences with a human edge",
   },
-  clientsAlt:
-    "Client logos: Aadhaar, Apollo 24|7, Godrej Industries, Grubhub, Hamleys, SBI Life, Kotak, HDFC, NPCI, DBS, ThinkPlace, JLL, Bengaluru International Airport, Axis Bank and Aditya Birla Group",
+  /**
+   * Client logo carousel — order = numbered list in Figma section "logos" (5654:9565).
+   * Images exported from that section at 2×; w/h = the logo's cell size in the homepage strip
+   * (Group 2147206535, 5000:19060: row 115.2px tall, 84px between cells). Momverse isn't in the
+   * strip, so it uses the strip's 0.9× scale of its section size (140×73). HP is on the list but
+   * has no logo in Figma yet.
+   */
+  clients: [
+    { name: "Amazon", src: "/images/clients/amazon.png", w: 171.9, h: 75.2 },
+    { name: "Aadhaar", src: "/images/clients/aadhaar.png", w: 102.6, h: 65.7 },
+    { name: "Apollo Momverse", src: "/images/clients/apollo-momverse.png", w: 126, h: 65.7 },
+    { name: "Godrej Industries", src: "/images/clients/godrej-industries.png", w: 171.9, h: 75.6 },
+    { name: "Grubhub", src: "/images/clients/grubhub.png", w: 206.1, h: 52.2 },
+    { name: "Hamleys", src: "/images/clients/hamleys.png", w: 124.2, h: 65.7 },
+    { name: "SBI Life", src: "/images/clients/sbi-life.png", w: 124.2, h: 65.7 },
+    { name: "Kotak Mahindra Bank", src: "/images/clients/kotak.png", w: 124.2, h: 65.7 },
+    { name: "HDFC Bank", src: "/images/clients/hdfc-bank.png", w: 124.2, h: 65.7 },
+    { name: "NPCI", src: "/images/clients/npci.png", w: 124.2, h: 65.7 },
+    { name: "DBS", src: "/images/clients/dbs.png", w: 124.2, h: 65.7 },
+    { name: "ThinkPlace", src: "/images/clients/thinkplace.png", w: 161.9, h: 85.6 },
+    { name: "JLL", src: "/images/clients/jll.png", w: 161.9, h: 85.6 },
+    { name: "ITC", src: "/images/clients/itc.png", w: 161.9, h: 85.6 },
+    { name: "Kempegowda International Airport Bengaluru", src: "/images/clients/bial.png", w: 161.9, h: 85.6 },
+    { name: "Axis Bank", src: "/images/clients/axis-bank.png", w: 161.9, h: 85.6 },
+    { name: "Apollo 24|7", src: "/images/clients/apollo-247.png", w: 115.2, h: 115.2 },
+    { name: "Aditya Birla Capital", src: "/images/clients/aditya-birla-capital.png", w: 161.9, h: 85.6 },
+    { name: "Centre for Strategic Negotiations", src: "/images/clients/csn.png", w: 161.9, h: 85.6 },
+  ],
   work: {
     title: "Good ideas are only the beginning",
     seeAll: "See all Work",
@@ -63,10 +89,54 @@ export const HOME = {
   },
   testimonial: {
     title: "from our co-conspirators",
-    quote:
-      "Their product thinking transformed our onboarding flow. Users stayed longer, engaged deeper, and our churn dropped dramatically-ultimately delivering 3× retention.",
-    name: "Tarush Singhal",
-    role: "Head of Content Marketing, Apollo 24|7",
+    /** Quotes, names, roles and headshots: Figma component set "Testimonial Slide" (4905:65), one per
+     *  logo tab (component set "Logo Tab", 4905:154), in tab order. */
+    items: [
+      {
+        company: "Apollo 24|7",
+        quote:
+          "HumanX's design is sharp. If you want a product that actually works and drives growth for your business, these are your people.",
+        name: "Tarush Singhal",
+        role: "Head of Content Marketing, Apollo 24|7",
+        photo: "/images/testimonials/tarush-singhal.png",
+      },
+      {
+        company: "Fox Star Studios",
+        quote: "They delivered a high quality AR experience leading to 3x improvement in time spent.",
+        name: "Irshad Daftari",
+        role: "Fox Star Studio",
+        photo: "/images/testimonials/irshad-daftari.png",
+      },
+      {
+        company: "JLL",
+        quote: "They hit the ground running and quickly became a seamless extension of our team.",
+        name: "Lori Louis",
+        role: "JLL Tech",
+        photo: "/images/testimonials/lori-louis.png",
+      },
+      {
+        company: "Quickplay",
+        quote: "The product received outstanding reviews and garnered several industry awards.",
+        name: "Naveen Narayanan",
+        role: "Head of Product Innovation & Data Science, Quickplay",
+        photo: "/images/testimonials/naveen-narayanan.png",
+      },
+      {
+        company: "OML",
+        quote: "We really loved collaborating and working with HumanX, you are a very big part of our journey.",
+        name: "Himani Agrawal",
+        role: "Senior VP, Hypothesis – OML",
+        photo: "/images/testimonials/himani-agrawal.png",
+      },
+      {
+        company: "ASK",
+        quote:
+          "From start to finish, their team demonstrated exceptional professionalism, creativity, solution orientation and attention to detail.",
+        name: "Shanu Singh",
+        role: "CMO, ASK Asset & Wealth Management Group",
+        photo: "/images/testimonials/shanu-singh.png",
+      },
+    ],
   },
   manifesto: {
     title: "Human Cognition × System Intelligence",

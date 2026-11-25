@@ -1,13 +1,13 @@
 import Image from "next/image";
-import Link from "next/link";
+import { FooterTrail } from "@/components/FooterTrail";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
-import { EMAIL_DOMAIN, EMAIL_USER, FOOTER_COPY, NAV, SOCIAL } from "@/lib/site";
+import { EMAIL_DOMAIN, EMAIL_USER, FOOTER_COPY, SOCIAL } from "@/lib/site";
 
 /**
  * Figma: footer frame 5376:2925 (1920×767, #0e0e0e) — shared by every page.
- * Manifesto (24px), Let’s talk + email, socials, copyright, wordmark + glow.
- * The "Ask AI for Summary" row in Figma was removed at the client's request.
- * The footer nav list is an addition required by the brief (not in Figma).
+ * Manifesto (24px), Let’s talk + email, socials, copyright, wordmark + glow (the "Ask AI for
+ * Summary" row and the extra footer nav list have been removed, as neither is in Figma).
+ * The email is rendered by ObfuscatedEmail so the address never appears as plain text in the HTML.
  */
 /** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
 export function Footer({ variant }: { variant?: "careers" } = {}) {
@@ -17,6 +17,9 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
       data-hxc-footer={variant === "careers" ? "" : undefined}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
+      {/* cursor trail of HumanX X marks (Figma 5654:9985) — above the glow, beneath the content */}
+      <FooterTrail />
+
       {/* Glow — Ellipse 1801 */}
       <Image
         src="/images/brand/footer-glow.svg"
@@ -33,23 +36,16 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
 
           <p className="flex flex-wrap items-end gap-x-[15px] gap-y-1 text-base leading-[1.6] text-white/90">
             <span>{FOOTER_COPY.letsTalk}</span>
-            <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="link-arrow min-h-0 font-medium text-white underline underline-offset-4">
+            {/* Figma 4887:6362: Chivo Mono Medium 18 / 150% / -2% */}
+            <ObfuscatedEmail
+              user={EMAIL_USER}
+              domain={EMAIL_DOMAIN}
+              className="link-arrow min-h-0 font-mono font-medium leading-[1.5] tracking-[-0.02em] text-white underline underline-offset-4"
+            >
               <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
             </ObfuscatedEmail>
           </p>
         </div>
-
-        <nav aria-label="Footer" className="lg:justify-self-end">
-          <ul className="flex flex-wrap gap-x-6 gap-y-1 font-mono text-base text-white/90">
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="inline-flex min-h-11 items-center hover:text-white hover:underline">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
 
         {/* Wordmark — 5376:2928 (1218×311, right 45px) */}
         <div className="relative lg:pointer-events-none lg:absolute lg:bottom-[11%] lg:right-[max(var(--gutter),2.35%)] lg:w-[63.4%] lg:max-w-[1218px]">
@@ -79,7 +75,8 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
             ))}
           </ul>
           <Image src="/images/brand/footer-line.svg" alt="" width={1793} height={1} className="h-px w-full opacity-60" />
-          <p className="font-mono text-base leading-[1.256] tracking-[-0.01em] text-white">{FOOTER_COPY.copyright}</p>
+          {/* Figma 4887:6344: Chivo Mono Regular 14 / 126% / -1% */}
+          <p className="font-mono text-[14px] leading-[1.26] tracking-[-0.01em] text-white">{FOOTER_COPY.copyright}</p>
         </div>
       </div>
     </footer>

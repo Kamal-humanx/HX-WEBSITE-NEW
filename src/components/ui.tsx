@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 type Tone = "orange" | "white" | "ink";
 
 const toneClass: Record<Tone, string> = {
-  orange: "text-accent-ink", // AA-safe orange on light backgrounds
+  orange: "text-accent", // Figma: Read More / Get In Touch = #F36712 on light and dark
   white: "text-white",
   ink: "text-black",
 };
@@ -36,7 +36,7 @@ export function ArrowLink({
   const external = href.startsWith("http") || href.startsWith("mailto:");
   const content = (
     <>
-      {children}
+      <span className="la">{children}</span>
       {srSuffix && <span className="sr-only">{srSuffix}</span>}
       <Image
         className={`arrow ${tone === "ink" ? "brightness-0" : ""}`}
