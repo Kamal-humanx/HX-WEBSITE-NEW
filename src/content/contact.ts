@@ -37,7 +37,7 @@ export const CONTACT = {
   /** Thank-you pop-up shown after a successful submission. NOT in Figma — newly written. */
   thanks: {
     title: "Thank you",
-    body: "Your note has reached us. One of us will read it properly and reply within 48 hours.",
+    body: "Your note has reached us. Our team will respond within 48 hours.",
     cta: "Back To The Site",
     close: "Close",
   },
