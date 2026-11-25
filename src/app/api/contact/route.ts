@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { validateContact } from "@/lib/contact-rules";
 import { saveInquiry, updateInquiry, type Inquiry } from "@/lib/server/inquiries";
 import { claimOnce, incrWindow, peekWindow } from "@/lib/server/kv";
@@ -138,14 +138,22 @@ export async function POST(req: Request) {
   }
 
   // Only clean inquiries reach the founders' inboxes; flagged and spam wait in /admin.
-  let sent = false;
   if (inquiry.status === "new") {
-    sent = (await notifyFounders(inquiry)).sent;
-    if (sent && stored) await updateInquiry(inquiry.id, { notified: true }).catch(() => undefined);
+    if (stored) {
+      // The enquiry is safe in storage, so answer the visitor now and send the email afterwards
+      // (the SMTP handshake alone takes several seconds). `after` keeps the function alive on
+      // Vercel until the send finishes.
+      after(async () => {
+        const { sent } = await notifyFounders(inquiry);
+        if (sent) await updateInquiry(inquiry.id, { notified: true }).catch(() => undefined);
+      });
+    } else {
+      // Storage failed: the email is now the only copy, so wait for it. If that fails too the
+      // enquiry is lost — tell the visitor to retry.
+      const { sent } = await notifyFounders(inquiry);
+      if (!sent && process.env.EMAIL_DRY_RUN !== "1") return reject(500, "server_error");
+    }
   }
-
-  // A genuine inquiry that was neither stored nor emailed is lost — tell the visitor to retry.
-  if (inquiry.status === "new" && !stored && !sent && process.env.EMAIL_DRY_RUN !== "1") return reject(500, "server_error");
 
   return ok();
 }
