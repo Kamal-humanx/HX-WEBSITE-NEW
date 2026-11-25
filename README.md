@@ -22,7 +22,7 @@ Node 20+ is required.
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin (default `https://humanx.io`). Used for canonical URLs, Open Graph, JSON-LD, sitemap, robots, llms.txt. |
-| `NEXT_PUBLIC_LINKEDIN_URL`, `NEXT_PUBLIC_TWITTER_URL`, `NEXT_PUBLIC_INSTAGRAM_URL` | Footer social links. Figma names them but gives no URLs, so until set they render as plain text and are omitted from `Organization.sameAs`. |
+| `NEXT_PUBLIC_LINKEDIN_URL`, `NEXT_PUBLIC_TWITTER_URL`, `NEXT_PUBLIC_INSTAGRAM_URL` | Optional overrides for the footer social links. The real HumanX profiles are the defaults in `src/lib/site.ts`. |
 
 ## Deploy
 

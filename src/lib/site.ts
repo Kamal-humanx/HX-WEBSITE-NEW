@@ -25,14 +25,13 @@ export const ADDRESS = {
 };
 
 /**
- * Social profiles shown in the footer. The design names them but gives no URLs.
- * TODO(content): add the real profile URLs. Until then they render as plain text
- * and are left out of Organization.sameAs (no fabricated URLs).
+ * Social profiles shown in the footer (and listed in Organization.sameAs).
+ * Each can be overridden with its NEXT_PUBLIC_*_URL environment variable.
  */
 export const SOCIAL: { label: string; href?: string }[] = [
-  { label: "LinkedIn", href: process.env.NEXT_PUBLIC_LINKEDIN_URL },
-  { label: "Twitter/X", href: process.env.NEXT_PUBLIC_TWITTER_URL },
-  { label: "Instagram", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL },
+  { label: "LinkedIn", href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://in.linkedin.com/company/humanexperience" },
+  { label: "Twitter/X", href: process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/humanX_io" },
+  { label: "Instagram", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/humanx_io/" },
 ];
 
 export const NAV = [
