@@ -44,17 +44,20 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       const s = -wrap.getBoundingClientRect().top - Math.max(0, h - V) - leadPx;
       const q = ramp(s, 0, holdPx);
 
+      /* Phones: the swap finishes by ~55% of the hold (desktop: ~90%), so the second section is
+         then held fully in view for the rest of it — long enough to read and use. */
+      const phone = window.innerWidth < 768;
       const outs = aBlocks(), n = outs.length;
       outs.forEach((el, i) => {
-        const a = (i / Math.max(1, n)) * 0.15;
-        const t = smooth(ramp(q, a, a + 0.25));
+        const a = (i / Math.max(1, n)) * (phone ? 0.08 : 0.15);
+        const t = smooth(ramp(q, a, a + (phone ? 0.16 : 0.25)));
         el.style.transform = t ? `translateY(${(-70 * t).toFixed(1)}px)` : "";
         el.style.opacity = t ? (1 - t).toFixed(3) : "";
       });
       const ins = bBlocks(), m = ins.length;
       ins.forEach((el, i) => {
-        const a = 0.42 + (i / Math.max(1, m)) * 0.18;
-        const t = smooth(ramp(q, a, a + 0.3));
+        const a = (phone ? 0.24 : 0.42) + (i / Math.max(1, m)) * (phone ? 0.1 : 0.18);
+        const t = smooth(ramp(q, a, a + (phone ? 0.2 : 0.3)));
         /* no exit: once in, the page simply scrolls on */
         el.style.transform = t < 1 ? `translateY(${(70 * (1 - t)).toFixed(1)}px)` : "";
         el.style.opacity = t < 1 ? t.toFixed(3) : "";
@@ -63,10 +66,11 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       /* hidden layer: never takes the pointer; visible layer: follows the stage (which, on the
          homepage, ToneShift keeps pointer-less until the capabilities have faded in — otherwise the
          invisible stage would sit over the last work cards and swallow their hover) */
-      A.style.pointerEvents = q > 0.45 ? "none" : "";
-      B.style.pointerEvents = q < 0.55 ? "none" : "";
-      B.setAttribute("aria-hidden", q < 0.5 ? "true" : "false");
-      B.inert = q < 0.5; // hidden from assistive tech must also mean unreachable by keyboard
+      const mid = phone ? 0.3 : 0.5; // the point where the second section takes over
+      A.style.pointerEvents = q > mid - 0.05 ? "none" : "";
+      B.style.pointerEvents = q < mid + 0.05 ? "none" : "";
+      B.setAttribute("aria-hidden", q < mid ? "true" : "false");
+      B.inert = q < mid; // hidden from assistive tech must also mean unreachable by keyboard
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);

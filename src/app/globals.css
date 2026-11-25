@@ -866,10 +866,18 @@
     margin-top: clamp(20px, 3.5vh, 40px) !important;
   }
   .swap-stage.swap-on .swap-b .logo-tab {
-    height: clamp(60px, 9.5vh, 92px) !important;
+    height: clamp(56px, 9vh, 84px) !important;
   }
   .swap-stage .logo-tab > * {
-    scale: 0.7;
+    scale: 0.62;
+  }
+  /* held screen on a phone: title, quote, arrows and the logo strip share one screen */
+  .swap-stage.swap-on .swap-b .container-page {
+    padding-top: calc(var(--header-h) + 44px) !important; /* clears the header's soft blur, which reaches ~42px below the bar */
+    padding-bottom: 12px !important;
+  }
+  .swap-stage.swap-on .swap-b ul[data-swap-block] {
+    margin-top: clamp(12px, 2.2vh, 24px) !important;
   }
 }
 
@@ -878,7 +886,7 @@
    and the title fit one screen. */
 @media (max-width: 767px) {
   .swap-stage.swap-on .swap-a .container-page {
-    padding-top: calc(var(--header-h) + 12px) !important;
+    padding-top: calc(var(--header-h) + 44px) !important; /* clears the header's soft blur, which reaches ~42px below the bar */
     padding-bottom: 12px !important;
   }
   .swap-stage.swap-on .swap-a .container-page > div:nth-child(2) {

@@ -7,7 +7,12 @@ import { useEffect, useRef } from "react";
  * cursor enters a new cell, a HumanX "X" appears there — one of the four marks from Figma
  * "X’s for the footer" (5654:9985), at a random quarter-turn — fading and scaling in. Each holds a
  * moment, then fades away, so the trail dissolves behind the cursor. Fast moves fill the cells in
- * between so the trail stays continuous. Mouse only; off with reduced motion.
+ * between so the trail stays continuous. Off with reduced motion.
+ *
+ * Touch screens get the same trail under the finger. It listens to touch events rather than
+ * pointer events, because on a phone the browser cancels pointer events the moment a drag turns
+ * into a scroll — and scrolling is what a finger is usually doing in the footer. The listeners are
+ * passive, so they never block or slow the scroll.
  */
 
 /* the four marks, exported from Figma as vectors (225×225 frames; the triangles one is 222×222) */
@@ -91,11 +96,15 @@ export function FooterTrail() {
       };
     };
 
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+    /* leave a mark under a point given in viewport coordinates (mouse or finger) */
+    const trace = (clientX: number, clientY: number) => {
       const r = host.getBoundingClientRect();
+      if (clientX < r.left || clientX > r.right || clientY < r.top || clientY > r.bottom) {
+        last = null;
+        return;
+      }
       const S = cellSize();
-      const cx = Math.floor((e.clientX - r.left) / S), cy = Math.floor((e.clientY - r.top) / S);
+      const cx = Math.floor((clientX - r.left) / S), cy = Math.floor((clientY - r.top) / S);
       if (last && last[0] === cx && last[1] === cy) return;
       /* walk every cell between the last one and this one, so a fast flick leaves no gaps */
       if (last) {
@@ -117,13 +126,35 @@ export function FooterTrail() {
       } else spawn(cx, cy, S);
       last = [cx, cy];
     };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") trace(e.clientX, e.clientY);
+    };
     const onLeave = () => (last = null);
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) trace(t.clientX, t.clientY);
+    };
+    /* a new touch starts a new trail rather than drawing a line from where the last one ended */
+    const onTouchStart = (e: TouchEvent) => {
+      last = null;
+      onTouch(e);
+    };
 
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
+    /* on the window, not the footer: a scroll that began higher up the page still leaves a trail
+       once the finger is over the footer (trace() ignores points outside it) */
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    window.addEventListener("touchend", onLeave, { passive: true });
+    window.addEventListener("touchcancel", onLeave, { passive: true });
     return () => {
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("touchend", onLeave);
+      window.removeEventListener("touchcancel", onLeave);
       live.forEach((s) => s.remove());
       live.clear();
     };
