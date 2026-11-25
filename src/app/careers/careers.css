@@ -25,3 +25,25 @@
 .hxc .or-count {
   color: #6b6b6b;
 }
+
+/* Touch screens: the reference's step buttons are 28px tall with 10–11px labels and its text link
+   is 23px tall — fine for a mouse, small for a thumb. Give them a 44px target and legible labels
+   without changing how they look on desktop. Also applies to any touch device (iPad in landscape). */
+@media (max-width: 1023px), (pointer: coarse) {
+  .hxc .gn-stepper button {
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .hxc .gn-stepper span,
+  .hxc .gn-stepper em {
+    font-size: 12px;
+  }
+  .hxc .gn-stepper b {
+    font-size: 12px;
+  }
+  .hxc .lnk::before {
+    content: "";
+    position: absolute;
+    inset: -13px -8px -9px;
+  }
+}

@@ -819,6 +819,60 @@
   }
 }
 
+/* ==========================================================================================
+   Phones and tablets (< 1024px). There is no mobile design in Figma, so these adapt the desktop
+   build using common mobile practice: legible sticky header, content that never overlaps while
+   pinned sections hand over, and controls sized for a thumb.
+   ========================================================================================== */
+@media (max-width: 1023px) {
+  /* Header: on desktop the glass band is a 10% tint over a progressive blur. On a narrow screen
+     body text passes directly behind the logo and menu button, and that is not enough to keep
+     them readable — so once the page has scrolled, a veil in the header's own tone sits behind
+     the bar and feathers out below it. At the very top of a page the header is untouched. */
+  .site-header .header-band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .site-header[data-theme="light"] .header-band::after {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.84) 55%, rgba(255, 255, 255, 0) 100%);
+  }
+  .site-header[data-theme="dark"] .header-band::after {
+    background: linear-gradient(to bottom, rgba(14, 14, 14, 0.9) 0%, rgba(14, 14, 14, 0.8) 55%, rgba(14, 14, 14, 0) 100%);
+  }
+  .site-header[data-scrolled="true"] .header-band::after {
+    opacity: 1;
+  }
+
+  /* Homepage: the work section slides up over the pinned statement on a sheet whose top edge is
+     feathered. On desktop its heading sits ~200px down, below the feather; on a phone it sits
+     72px down, inside it, so the heading was drawn over the statement's text. A much shorter
+     feather puts the heading on solid ground. */
+  .pin-next {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 20px, var(--tone, #fff) 48px);
+  }
+
+  /* Homepage testimonials: the held screen sizes its logo tabs from the viewport WIDTH (tuned for
+     desktop), which made them ~43px tall on a phone with the logos spilling over the grid lines.
+     Size them from the screen height instead and scale the artwork to fit the smaller cells. */
+  .swap-stage.swap-on .swap-b .testimonial-stage {
+    margin-top: clamp(16px, 3vh, 32px) !important;
+    min-height: 0 !important;
+  }
+  .swap-stage.swap-on .swap-b ul[data-swap-block] {
+    margin-top: clamp(20px, 3.5vh, 40px) !important;
+  }
+  .swap-stage.swap-on .swap-b .logo-tab {
+    height: clamp(60px, 9.5vh, 92px) !important;
+  }
+  .swap-stage .logo-tab > * {
+    scale: 0.7;
+  }
+}
+
 /* ---------- Thank-you pop-up (see components/ThankYouDialog.tsx) ---------- */
 .hx-thanks[open] {
   animation: hx-thanks-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);

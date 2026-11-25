@@ -85,11 +85,11 @@ export default function ContactPage() {
                     <p className="mt-[30px] font-mono text-sm leading-[1.42] text-gray-3">{ADDRESS.full}</p>
                     <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
                       <div>
-                        <dt className="font-mono text-[10px] uppercase leading-[1.5] tracking-[0.16em] text-gray-3">{where.hoursLabel}</dt>
+                        <dt className="font-mono text-[12px] uppercase lg:text-[10px] leading-[1.5] tracking-[0.16em] text-gray-3">{where.hoursLabel}</dt>
                         <dd className="mt-2 font-mono text-sm text-white">{ADDRESS.hours}</dd>
                       </div>
                       <div>
-                        <dt className="font-mono text-[10px] uppercase leading-[1.5] tracking-[0.16em] text-gray-3">{where.emailLabel}</dt>
+                        <dt className="font-mono text-[12px] uppercase lg:text-[10px] leading-[1.5] tracking-[0.16em] text-gray-3">{where.emailLabel}</dt>
                         <dd className="mt-2 font-mono text-sm text-white">
                           <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="-my-3 inline-block py-3 hover:underline" />
                         </dd>
