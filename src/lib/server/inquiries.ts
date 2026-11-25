@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { hasRedis, redis } from "./kv";
+import { hasSupabase, insertRow, selectRows, updateRows } from "./supabase";
 
 export type InquiryStatus = "new" | "flagged" | "spam";
 
@@ -29,8 +30,80 @@ const INDEX = "hx:inquiries:index";
 const FILE = path.join(process.cwd(), ".data", "inquiries.json");
 const LIST_LIMIT = 500;
 
-/** Vercel's filesystem is read-only, so without Redis there is nowhere durable to write. */
-export const storageMode: "redis" | "file" | "none" = hasRedis ? "redis" : process.env.VERCEL ? "none" : "file";
+/**
+ * Where enquiries live: Supabase (hx_inquiries table) when configured, else Upstash Redis, else a
+ * local JSON file in development. Vercel's filesystem is read-only, so with neither service there
+ * is nowhere durable to write.
+ */
+export const storageMode: "supabase" | "redis" | "file" | "none" = hasSupabase
+  ? "supabase"
+  : hasRedis
+    ? "redis"
+    : process.env.VERCEL
+      ? "none"
+      : "file";
+
+/* ---------- Supabase rows (snake_case columns ↔ the Inquiry shape) ---------- */
+
+const TABLE = "hx_inquiries";
+
+type Row = {
+  id: string;
+  created_at: string;
+  status: InquiryStatus;
+  full_name: string;
+  contact: string;
+  email: string;
+  company: string;
+  budget: string;
+  message: string;
+  reasons: string[];
+  spam_score: number;
+  country: string;
+  notified: boolean;
+};
+
+const toRow = (i: Inquiry): Row => ({
+  id: i.id,
+  created_at: i.createdAt,
+  status: i.status,
+  full_name: i.fullName,
+  contact: i.contact,
+  email: i.email,
+  company: i.company,
+  budget: i.budget,
+  message: i.message,
+  reasons: i.reasons,
+  spam_score: i.spamScore,
+  country: i.country,
+  notified: i.notified,
+});
+
+const fromRow = (r: Row): Inquiry => ({
+  id: r.id,
+  createdAt: new Date(r.created_at).toISOString(),
+  status: r.status,
+  fullName: r.full_name,
+  contact: r.contact,
+  email: r.email,
+  company: r.company,
+  budget: r.budget,
+  message: r.message,
+  reasons: r.reasons ?? [],
+  spamScore: r.spam_score,
+  country: r.country,
+  notified: r.notified,
+});
+
+/** Only the fields the admin panel is allowed to change. */
+function toPatch(patch: Partial<Inquiry>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  if (patch.status !== undefined) out.status = patch.status;
+  if (patch.notified !== undefined) out.notified = patch.notified;
+  return out;
+}
+
+const isUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 
 /* ---------- file store (local dev) ---------- */
 
@@ -60,7 +133,11 @@ async function writeFile(all: Inquiry[]) {
 /* ---------- public API ---------- */
 
 export async function saveInquiry(inquiry: Inquiry): Promise<void> {
-  if (storageMode === "none") throw new Error("No inquiry storage configured (set KV_REST_API_URL / KV_REST_API_TOKEN)");
+  if (storageMode === "none") throw new Error("No inquiry storage configured (set SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)");
+  if (storageMode === "supabase") {
+    await insertRow(TABLE, toRow(inquiry));
+    return;
+  }
   if (storageMode === "redis") {
     await redis("HSET", HASH, inquiry.id, JSON.stringify(inquiry));
     await redis("ZADD", INDEX, Date.parse(inquiry.createdAt), inquiry.id);
@@ -72,6 +149,9 @@ export async function saveInquiry(inquiry: Inquiry): Promise<void> {
 /** Newest first. */
 export async function listInquiries(): Promise<Inquiry[]> {
   if (storageMode === "none") return [];
+  if (storageMode === "supabase") {
+    return (await selectRows<Row>(TABLE, `select=*&order=created_at.desc&limit=${LIST_LIMIT}`)).map(fromRow);
+  }
   if (storageMode === "redis") {
     const ids = await redis<string[]>("ZRANGE", INDEX, 0, LIST_LIMIT - 1, "REV");
     if (!ids.length) return [];
@@ -83,6 +163,11 @@ export async function listInquiries(): Promise<Inquiry[]> {
 
 export async function updateInquiry(id: string, patch: Partial<Inquiry>): Promise<Inquiry | null> {
   if (storageMode === "none") return null;
+  if (storageMode === "supabase") {
+    if (!isUuid(id)) return null;
+    const rows = await updateRows<Row>(TABLE, `id=eq.${id}`, toPatch(patch));
+    return rows[0] ? fromRow(rows[0]) : null;
+  }
   if (storageMode === "redis") {
     const raw = await redis<string | null>("HGET", HASH, id);
     if (!raw) return null;

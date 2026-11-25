@@ -1,8 +1,10 @@
 import "server-only";
+import { hasSupabase, rpc } from "./supabase";
 
 /**
  * Tiny key-value layer used for rate limits and one-time tokens.
- * Production: Upstash Redis over REST (the Vercel Marketplace integration sets KV_REST_API_*).
+ * Production: Supabase (the hx_kv table and its hx_* functions) when SUPABASE_URL is set, otherwise
+ * Upstash Redis over REST if KV_REST_API_* is set.
  * Fallback: an in-process Map — fine for local dev, but per-instance only on serverless.
  */
 
@@ -43,6 +45,7 @@ function memSweep(now: number) {
 
 /** Increment a counter that expires `windowSec` after its first hit. Returns the new count. */
 export async function incrWindow(key: string, windowSec: number): Promise<number> {
+  if (hasSupabase) return rpc<number>("hx_incr_window", { p_key: key, p_window_sec: windowSec });
   if (hasRedis) {
     const n = await redis<number>("INCR", key);
     if (n === 1) await redis("EXPIRE", key, windowSec);
@@ -58,12 +61,14 @@ export async function incrWindow(key: string, windowSec: number): Promise<number
 
 /** Read a counter without incrementing it. */
 export async function peekWindow(key: string): Promise<number> {
+  if (hasSupabase) return rpc<number>("hx_peek_window", { p_key: key });
   if (hasRedis) return Number((await redis<string | null>("GET", key)) ?? 0);
   return memGet(key, Date.now())?.count ?? 0;
 }
 
 /** True the first time a key is claimed within `ttlSec`; false on any repeat. */
 export async function claimOnce(key: string, ttlSec: number): Promise<boolean> {
+  if (hasSupabase) return rpc<boolean>("hx_claim_once", { p_key: key, p_ttl_sec: Math.round(ttlSec) });
   if (hasRedis) return (await redis<string | null>("SET", key, "1", "NX", "EX", ttlSec)) === "OK";
   const now = Date.now();
   if (memGet(key, now)) return false;

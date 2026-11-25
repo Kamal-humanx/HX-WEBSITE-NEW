@@ -168,8 +168,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
         {storageMode === "none" && (
           <p role="alert" className="mb-6 rounded-xl bg-[#fdecea] p-4 text-sm text-[#b3261e]">
-            Enquiry storage is not connected, so nothing can be listed here. Add an Upstash Redis database to the Vercel project (it sets{" "}
-            <code>KV_REST_API_URL</code> and <code>KV_REST_API_TOKEN</code>) and redeploy.
+            Enquiry storage is not connected, so nothing can be listed here. Set <code>SUPABASE_URL</code> and{" "}
+            <code>SUPABASE_SERVICE_ROLE_KEY</code> on the Vercel project and redeploy.
           </p>
         )}
         {loadError && (

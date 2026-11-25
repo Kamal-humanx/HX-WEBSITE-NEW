@@ -54,8 +54,11 @@ stored only; clearing one in the admin panel sends the email then.
 `/admin` (username + password from env, 12-hour signed session cookie, 5 sign-in attempts per 15 minutes)
 lists every inquiry with the form's own field labels, split into Inquiries / Needs review / Spam.
 
-Storage: Upstash Redis over REST (`KV_REST_API_URL`, `KV_REST_API_TOKEN`). Without it, local dev writes
-to `.data/inquiries.json`; on Vercel nothing can be stored and rate limits are per-instance only.
+Storage: Supabase (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) — the `hx_inquiries` table for
+enquiries and `hx_kv` plus three `hx_*` functions for rate limits and one-time tokens, all created by
+`supabase/migrations`. Row Level Security is on with no policies, so only the server key has access.
+Upstash Redis (`KV_REST_API_*`) is a fallback; with neither, local dev writes to `.data/inquiries.json`
+and on Vercel nothing can be stored.
 
 The public email address is rendered by `ObfuscatedEmail` and never appears as plain text or a `mailto:`
 in the served HTML, JSON-LD, meta description or `llms.txt`.
