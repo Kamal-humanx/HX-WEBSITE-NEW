@@ -730,6 +730,12 @@
 .hxc .mf-statement,.hxc .mf-h{background:linear-gradient(180deg,#262626 0%,#363636 64%,#5e5e5e 82%,#bdbdbd 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 .hxc .mf-statement .mf-dot{-webkit-text-fill-color:var(--x)}
+/* the statement's words carry their own slice of the heading gradient (Manifesto.tsx sizes and places
+   it), so each can blur and rise on its own as it arrives and still keep its exact colour */
+.hxc .mf-statement:has(.mfw){background:none}
+.hxc .mf-statement .mfw{display:inline-block;background-image:linear-gradient(180deg,#262626 0%,#363636 64%,#5e5e5e 82%,#bdbdbd 100%);background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;will-change:filter,transform}
+.hxc .mf-statement .mfw-i{display:inline-block}
 /* each of the principle's two sentences keeps to its own line, whole, on wide screens */
 @media (min-width:1280px){.hxc .mf-pinned .mf-h{white-space:nowrap}}
 

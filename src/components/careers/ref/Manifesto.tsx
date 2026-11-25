@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { activeAt, darkAt, Field, HOLD } from './field'
 import { lineBands, maskLines, resetMask, type Band } from './reveal'
 import { onScrollFrame, ramp, sceneProgress, smooth, motionOn } from './scroll'
@@ -57,7 +57,21 @@ export default function Manifesto() {
     let pinned = false
     let V = 1, wrapTop = 0, wrapH = 1, stageH = 1
     let rowTop: number[] = [], anchor: number[] = []
-    let statementBands: Band[] = [], headBands: Band[][] = []
+    let headBands: Band[][] = []
+    /* the statement's words (and the orange X after "tools.") arrive one after another, each rising
+       a touch and sharpening out of a blur — the homepage philosophy reveal */
+    const words = Array.from(statement.querySelectorAll<HTMLElement>('.mfw, .mfw-i'))
+    /* the heading's ink is one gradient over both lines; give every word its own slice of it, so a
+       word can blur and move on its own and still carry exactly the colour it had in place */
+    function sliceInk() {
+      const s = statement.getBoundingClientRect()
+      words.forEach((w) => {
+        if (!w.classList.contains('mfw')) return
+        const r = w.getBoundingClientRect()
+        w.style.backgroundSize = `${s.width.toFixed(1)}px ${s.height.toFixed(1)}px`
+        w.style.backgroundPosition = `${(s.left - r.left).toFixed(1)}px ${(s.top - r.top).toFixed(1)}px`
+      })
+    }
 
     function measure() {
       /* changing layout mode lands on its state at once, rather than fading the copy across */
@@ -85,8 +99,10 @@ export default function Manifesto() {
         return q.top + q.height / 2 + sy - wrapTop
       })
       if (!js) return
-      ;[statement, ...heads].forEach(resetMask)
-      statementBands = lineBands(statement)
+      heads.forEach(resetMask)
+      /* measured with the words at rest, so each slice lines up with the whole heading */
+      words.forEach((w) => ((w.style.transform = ''), (w.style.filter = ''), (w.style.opacity = '')))
+      sliceInk()
       headBands = pinned ? [] : heads.map(lineBands)
     }
     const onWide = () => {
@@ -254,13 +270,53 @@ export default function Manifesto() {
       if (!tRaf) tLast = 0
     }
 
+    const FW = 3.2 // the front's width, in words
+    const SWEEP_MS = 2600
+    const sweep = { on: false, raf: 0 }
+    function paintWords(q: number) {
+      const F = q * (words.length + FW)
+      words.forEach((w, i) => {
+        const v = smooth((F - i) / FW)
+        if (v >= 1) {
+          w.style.transform = ''
+          w.style.filter = ''
+          w.style.opacity = ''
+        } else {
+          w.style.transform = `translateY(${(0.18 * (1 - v)).toFixed(3)}em)`
+          w.style.filter = `blur(${(6 * (1 - v)).toFixed(2)}px)`
+          /* from fully invisible (no waiting ghost of the text): each word fades in as it sharpens */
+          w.style.opacity = v.toFixed(3)
+        }
+      })
+    }
+    function playSweep() {
+      sweep.on = true
+      let t0 = 0
+      const frame = (now: number) => {
+        if (!sweep.on) return
+        if (!t0) t0 = now
+        const t = Math.min(1, (now - t0) / SWEEP_MS)
+        paintWords((1 - Math.cos(Math.PI * t)) / 2) // gentle in-out, as on the homepage
+        if (t < 1) sweep.raf = requestAnimationFrame(frame)
+      }
+      sweep.raf = requestAnimationFrame(frame)
+    }
+
     function update(y: number) {
       if (js) {
         /* the statement is written onto the canvas once it has turned white, line by line, finishing as the page lets go of the opening scene */
         const p = sceneProgress(y)
         sec.classList.toggle('mf-through', p < 1)
-        const n = statementBands.length, gap = n > 1 ? 0.14 / (n - 1) : 0
-        maskLines(statement, statementBands, statementBands.map((_, j) => smooth(ramp(p, 0.7 + j * gap, 0.86 + j * gap))))
+        /* like the homepage philosophy statement, it plays on its own clock once the canvas has
+           turned white (p ≥ 0.66): a soft front sweeps the words in reading order over ~2.6s, each
+           fading up from a ghost, rising 0.18em and sharpening out of a 6px blur. Scrolling back up
+           past the opening puts it back to its ghost, ready to play again. */
+        if (p >= 0.66 && !sweep.on) playSweep()
+        else if (p < 0.5 && sweep.on) {
+          sweep.on = false
+          cancelAnimationFrame(sweep.raf)
+          paintWords(0)
+        } else if (!sweep.on) paintWords(0)
       }
 
       if (pinned) {
@@ -313,6 +369,8 @@ export default function Manifesto() {
     const off = onScrollFrame({ measure, update })
     return () => {
       off()
+      sweep.on = false
+      cancelAnimationFrame(sweep.raf)
       cancelAnimationFrame(tRaf)
       cancelAnimationFrame(dRaf)
       ghost.remove()
@@ -327,11 +385,25 @@ export default function Manifesto() {
   return (
     <section id="manifesto" className="mf" ref={secRef} aria-labelledby="mf-title">
       <div className="mf-open">
-        <h2 className="mf-statement" id="mf-title">
-          Design isn’t about the tools.
-          <i className="hx-glyph hx-xs" aria-hidden="true" />
+        {/* each word is its own piece so it can sharpen out of a blur as it arrives (the homepage
+            philosophy reveal); each carries its slice of the heading's gradient (set in measure) */}
+        <h2 className="mf-statement" id="mf-title" aria-label="Design isn’t about the tools. It’s about the experiences we shape.">
+          {'Design isn’t about the tools.'.split(' ').map((w, i) => (
+            <Fragment key={'a' + i}>
+              <span className="mfw" aria-hidden="true">{w}</span>{' '}
+            </Fragment>
+          ))}
+          <i className="hx-glyph hx-xs mfw-i" aria-hidden="true" />
           <br />
-          It’s about the experiences we shape<span className="mf-dot">.</span>
+          {'It’s about the experiences we shape'.split(' ').map((w, i, all) => (
+            <Fragment key={'b' + i}>
+              <span className="mfw" aria-hidden="true">
+                {w}
+                {i === all.length - 1 && <span className="mf-dot">.</span>}
+              </span>
+              {i < all.length - 1 ? ' ' : null}
+            </Fragment>
+          ))}
         </h2>
       </div>
 
