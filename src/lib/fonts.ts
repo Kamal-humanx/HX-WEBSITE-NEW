@@ -1,5 +1,5 @@
 import localFont from "next/font/local";
-import { Chivo_Mono, Hanken_Grotesk, Inter } from "next/font/google";
+import { Hanken_Grotesk, Inter } from "next/font/google";
 
 /** Uncut Sans — primary typeface in Figma (display + body). Self-hosted from @fontsource/uncut-sans. */
 export const uncutSans = localFont({
@@ -18,12 +18,19 @@ export const uncutSans = localFont({
 });
 
 /** Chivo Mono — labels, meta, nav (Figma: Chivo Mono Light/Regular/Medium/Bold). */
-export const chivoMono = Chivo_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+// Self-hosted from @fontsource/chivo-mono: fetching it via next/font/google broke the Vercel build.
+export const chivoMono = localFont({
+  src: [
+    { path: "../fonts/chivo-mono-latin-300-normal.woff2", weight: "300", style: "normal" },
+    { path: "../fonts/chivo-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/chivo-mono-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/chivo-mono-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-chivo-mono",
   display: "swap",
   preload: false,
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
 });
 
 /** Inter Medium — used by the About studio carousel quotes in Figma. */
