@@ -34,6 +34,13 @@ export const CONTACT = {
     botCheck: "We could not verify your browser. Please reload the page and try again.",
     staleForm: "This form has expired. Please send it again.",
   },
+  /** Thank-you pop-up shown after a successful submission. NOT in Figma — newly written. */
+  thanks: {
+    title: "Thank you",
+    body: "Your note has reached us. One of us will read it properly and reply within 48 hours.",
+    cta: "Back To The Site",
+    close: "Close",
+  },
   where: {
     title: "Where We Are",
     intro: "Come by, say hello, and spend some time with the people and ideas behind HumanX.",

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { ThankYouDialog } from "@/components/ThankYouDialog";
 import { CONTACT } from "@/content/contact";
 import { validateContact, type ContactErrorCode, type ContactField } from "@/lib/contact-rules";
 
@@ -100,6 +101,8 @@ export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLParagraphElement>(null);
   const [notice, setNotice] = useState("");
+  /** First name of the person who just sent the form — drives the thank-you pop-up. */
+  const [thanks, setThanks] = useState<{ open: boolean; firstName: string }>({ open: false, firstName: "" });
   const formToken = useRef("");
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
@@ -186,6 +189,7 @@ export function ContactForm() {
       });
       if (res.ok) {
         setStatus("success");
+        setThanks({ open: true, firstName: String(data.get("fullName") ?? "").trim().split(/\s+/)[0].slice(0, 40) });
         formRef.current?.reset();
       } else {
         const body = (await res.json().catch(() => ({}))) as { error?: string; errors?: Partial<Record<Field, ContactErrorCode>> };
@@ -203,6 +207,7 @@ export function ContactForm() {
   }
 
   return (
+    <>
     <form
       ref={formRef}
       action="/api/contact"
@@ -270,5 +275,7 @@ export function ContactForm() {
         </p>
       </div>
     </form>
+    <ThankYouDialog open={thanks.open} firstName={thanks.firstName} onClose={() => setThanks((t) => ({ ...t, open: false }))} />
+    </>
   );
 }

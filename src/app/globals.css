@@ -751,6 +751,25 @@
   }
 }
 
+/* ---------- Thank-you pop-up (see components/ThankYouDialog.tsx) ---------- */
+.hx-thanks[open] {
+  animation: hx-thanks-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.hx-thanks[open]::backdrop {
+  animation: hx-thanks-fade 0.4s ease-out;
+}
+@keyframes hx-thanks-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+}
+@keyframes hx-thanks-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ---------- Scroll reveal (see components/Reveal.tsx) ----------
    Hidden states apply only while the wrapper is [data-reveal="pending"], which JS sets on mount,
    so everything is visible without JS. --i staggers siblings. */

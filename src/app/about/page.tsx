@@ -68,8 +68,9 @@ export default function AboutPage() {
           </DisplayHeading>
 
           {/* The staircase builds itself as it scrolls into view, one step at a time from left to
-              right: each riser draws upward, its step fades in and its bar wipes across. */}
-          <Reveal as="ol" perItemBelow={1024} className="mt-[clamp(32px,1.25vw,24px)] grid gap-8 md:mt-12 lg:mt-6 lg:grid-cols-6 lg:items-end lg:gap-0">
+              right: each riser draws upward, its step fades in and its bar wipes across. It replays
+              every time the section comes back into view, scrolling down or up. */}
+          <Reveal as="ol" perItemBelow={1024} repeat className="mt-[clamp(32px,1.25vw,24px)] grid gap-8 md:mt-12 lg:mt-6 lg:grid-cols-6 lg:items-end lg:gap-0">
             <li aria-hidden="true" className="hidden lg:block">
               <span className="rv-wipe block h-4 bg-[url('/images/about/bar-ticks.svg')] bg-[length:298px_16px] bg-repeat-x" />
             </li>
