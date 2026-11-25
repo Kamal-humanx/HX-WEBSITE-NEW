@@ -55,11 +55,25 @@ export const CONTACT = {
         q: "Do I need a detailed brief?",
         a: "Not necessarily. A detailed brief isn’t required to get started. A high-level overview of what you’re looking to achieve, the key requirements, and any important context should be enough. From there, I can help shape the direction and ask for any additional details or clarification where needed.",
       },
-      // Answers for the following are not in the design (collapsed rows only) — see REPORT.md.
-      { q: "Can we start with just an idea?" },
-      { q: "Do you work internationally?" },
-      { q: "Can we visit the studio?" },
-      { q: "How quickly can projects begin?" },
+      /* The four answers below are not in Figma. They were written for answer engines (AEO) from
+         facts on humanx.io and this site: the capabilities list, the client list, the studio card and
+         the form's 48-hour reply note. Each opens with the direct answer. */
+      {
+        q: "Can we start with just an idea?",
+        a: "Yes. Many of our projects begin with an idea rather than a finished brief. Through product discovery, UX research and innovation workshops, we work with your team to turn it into a clear direction, co-creating the solution with you and agreeing on the metrics that matter from day one.",
+      },
+      {
+        q: "Do you work internationally?",
+        a: "Yes. HumanX is based in Mumbai and partners with CXOs and product teams around the world. Our clients include global names such as JLL, Grubhub and DBS, alongside Amazon, Apollo 24|7 and Bengaluru International Airport in India.",
+      },
+      {
+        q: "Can we visit the studio?",
+        a: "Yes, we would love to have you. The HumanX studio is at 201, Chintamani Avenue, Goregaon East, Mumbai, and is open Monday to Friday, 9:00 to 19:00 IST. Send us a note through the form on this page first, so the right people are here to meet you.",
+      },
+      {
+        q: "How quickly can projects begin?",
+        a: "We usually reply to a new enquiry within 48 hours. An introductory conversation follows to agree the scope, and the start date then depends on the size of the project and the team it needs. We work in small, expert teams, which helps us get moving quickly.",
+      },
     ] as { q: string; a?: string }[],
   },
 };

@@ -83,7 +83,7 @@ families used only in 2 spots), or replace the hero bitmap with a smaller art-di
 7. **About stats** — “What began as A brother sister duo…” (capital “A”, “brother-sister”).
 8. **About** — “following The Process… when to challenge It.” (capitalised “The”, “It”).
 9. **Team** — two people named “Sukhada ” (trailing space, no surname) with different roles (Sr. Visual Designer, Sr. Product Designer).
-10. **FAQ** — the only answer is written in first person (“I can help shape the direction”), unlike the studio voice elsewhere; four questions have no answers.
+10. **FAQ** — the only answer is written in first person (“I can help shape the direction”), unlike the studio voice elsewhere; the other four answers were written for answer engines from facts on humanx.io and this site (not in Figma).
 11. **Contact form** — “Contact ” label has a trailing space and no asterisk; placeholder “XXXXX XXXXX”.
 12. **Philosophy line** — “behaviours ✖ , To tell a new story” has a space before the comma.
 13. **Careers** — “02 / 03” step indicator but only principle 02 is designed.
