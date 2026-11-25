@@ -203,7 +203,7 @@ export default function WorksPage() {
                   <div className="wk-cap mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
                     <h3 className="font-hanken text-xl font-medium leading-[1.286]">
                       {href ? (
-                        <Link href={href} className="transition-opacity hover:opacity-70">
+                        <Link href={href} className="-my-2 inline-block py-2 transition-opacity hover:opacity-70">
                           {p.name}
                         </Link>
                       ) : (

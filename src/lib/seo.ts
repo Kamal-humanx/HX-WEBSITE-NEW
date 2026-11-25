@@ -70,7 +70,7 @@ export function pageMetadata(key: PageKey): Metadata {
 }
 
 /** X/Twitter handle for link-preview cards, read from the profile URL in site.ts. */
-const TWITTER_HANDLE = (() => {
+export const TWITTER_HANDLE = (() => {
   const href = SOCIAL.find((s) => s.label.startsWith("Twitter"))?.href ?? "";
   const handle = href.replace(/\/$/, "").split("/").pop();
   return handle ? `@${handle}` : undefined;

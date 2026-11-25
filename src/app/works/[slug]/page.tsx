@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { CaseReveal } from "@/components/CaseReveal";
 import { ArrowLink } from "@/components/ui";
 import { CASE_STUDIES, caseStudy, isVideo, type Block, type Img, type Media, type Testimonial, type Vid } from "@/content/caseStudies";
-import { ORG_ID, absoluteUrl } from "@/lib/seo";
+import { ORG_ID, TWITTER_HANDLE, absoluteUrl } from "@/lib/seo";
 
 /* Project detail page, in the new site's language (header, footer, Uncut Sans + Chivo Mono), coloured
    by each case's own theme: every colour below reads a --c-* variable set from caseStudies.ts. */
@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: { absolute: title },
     description: c.metaDescription,
     alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title, description: c.metaDescription, images: [{ url: c.hero.imgs[0].src }] },
+    openGraph: { type: "article", url: path, siteName: "HumanX", locale: "en_IN", title, description: c.metaDescription, images: [{ url: c.hero.imgs[0].src }] },
+    twitter: { card: "summary_large_image", site: TWITTER_HANDLE, creator: TWITTER_HANDLE, title, description: c.metaDescription, images: [c.hero.imgs[0].src] },
   };
 }
 
@@ -774,6 +775,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   /* chapter numbers count the headed chapters only */
   const numbered = c.chapters.filter((ch) => "heading" in ch).length;
+  /* the case study after this one, wrapping round to the first */
+  const next = CASE_STUDIES[(CASE_STUDIES.findIndex((x) => x.slug === c.slug) + 1) % CASE_STUDIES.length];
   let n = 0;
   const logoH = c.logo.h;
 
@@ -783,9 +786,27 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <main id="main">
         {/* ---------- Intro ---------- */}
         <section aria-labelledby="case-title" className="container-page pt-[clamp(16px,2vw,40px)]">
-          <Link href="/works" className={`inline-flex min-h-11 items-center gap-2 font-mono text-sm ${BODY} transition-opacity hover:opacity-70`}>
-            <span aria-hidden="true">←</span> All Work
-          </Link>
+          {/* Breadcrumb trail — the same Home › Work › project path as the BreadcrumbList data below,
+              so visitors and search engines see one consistent way back up the site. */}
+          <nav aria-label="Breadcrumb">
+            <ol className={`flex flex-wrap items-center gap-x-2 font-mono text-sm ${BODY}`}>
+              <li>
+                <Link href="/" className="inline-flex min-h-11 items-center transition-opacity hover:opacity-70">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li>
+                <Link href="/works" className="inline-flex min-h-11 items-center transition-opacity hover:opacity-70">
+                  Work
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" className={`inline-flex items-center py-1 ${FG}`}>
+                {c.client}
+              </li>
+            </ol>
+          </nav>
           <div className="mt-[clamp(16px,2.4vw,48px)] grid gap-[clamp(24px,3vw,64px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-end">
             <div>
               <div
@@ -882,7 +903,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                   {c.closing}
                 </p>
               )}
-              <div data-rv>
+              {/* Onward links: the next case study (they form a loop, so no page is a dead end) and
+                  the way back to the full list. */}
+              <div data-rv className="flex flex-wrap items-center gap-x-[clamp(24px,3vw,56px)] gap-y-3">
+                <ArrowLink href={`/works/${next.slug}`} tone="orange" onDark={dark} className="text-lg">
+                  Next project: {next.client}
+                </ArrowLink>
                 <ArrowLink href="/works" tone="orange" onDark={dark} className="text-lg">
                   Explore more work
                 </ArrowLink>
@@ -904,6 +930,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             url: absoluteUrl(path),
             image: absoluteUrl(c.hero.imgs[0].src),
             creator: { "@id": ORG_ID },
+            publisher: { "@id": ORG_ID },
+            inLanguage: "en",
+            mainEntityOfPage: absoluteUrl(path),
             about: c.client,
           },
           {
