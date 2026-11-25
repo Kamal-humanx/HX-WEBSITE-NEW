@@ -5,8 +5,10 @@ import { useEffect, useRef } from "react";
 
 type Slide = { image: string; alt: string };
 
-/** Auto-scroll speed, as a fraction of the carousel's width per second (≈ 58 px/s on a 1920 screen). */
-const SPEED = 0.03;
+/** Auto-scroll speed, as a fraction of the carousel's width per second (≈ 65 px/s on a 1440 screen)… */
+const SPEED = 0.045;
+/** …but never slower than this, so it does not crawl on a phone, where the carousel is narrow. */
+const MIN_SPEED_PX = 46;
 /** How long to wait after the visitor stops interacting before drifting again. */
 const RESUME_MS = 1800;
 
@@ -16,35 +18,46 @@ const RESUME_MS = 1800;
  * the lower edge washes to white (5724:39141).
  *
  * It drifts on its own in an endless loop: the slides are rendered twice (the second set hidden
- * from assistive tech) and the scroll position wraps by exactly one set, so the seam never shows.
- * It is still an ordinary horizontal scroller — hovering, touching, dragging or focusing it pauses
- * the drift and hands control to the visitor (with scroll-snap), and it resumes shortly after.
- * It does not move for visitors who prefer reduced motion, or while it is off screen.
+ * from assistive tech) and the position wraps by exactly one set, so the seam never shows.
+ *
+ * The drift moves the whole track with a GPU transform rather than by changing the scroll position.
+ * Scroll positions snap to whole pixels, so nudging them a fraction of a pixel per frame visibly
+ * stutters; a transform is placed with sub-pixel precision on the compositor and glides.
+ *
+ * It is still an ordinary horizontal scroller. Hovering, touching, dragging or focusing it pauses
+ * the drift and hands control to the visitor: the transform is folded into the real scroll position,
+ * so it stops exactly where it was. There is deliberately no scroll-snap — snapping would yank the
+ * slides to the nearest centre the moment the pointer arrived. It resumes shortly after. It does not move for
+ * visitors who prefer reduced motion, or while it is off screen.
  */
 export function StudioCarousel({ slides }: { slides: Slide[] }) {
-  const ref = useRef<HTMLUListElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const items = el.children;
+    const scroller = scrollerRef.current;
+    const track = trackRef.current;
+    if (!scroller || !track) return;
+    const items = track.children;
     const second = items[1] as HTMLElement | undefined;
-    if (second) el.scrollLeft = second.offsetLeft - (el.clientWidth - second.clientWidth) / 2;
+    if (second) scroller.scrollLeft = second.offsetLeft - (scroller.clientWidth - second.clientWidth) / 2;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    /* Layout is measured once and again only on resize — never inside the frame loop, where reading
-       it every frame would force the browser to recalculate layout 60 times a second. */
+    /* Layout is measured once and again only on resize — never inside the frame loop. */
     let span = 0; // width of one full set of slides = distance from slide 1 to its copy
     let width = 0;
     const measure = () => {
       span = (items[slides.length] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft;
-      width = el.clientWidth;
+      width = scroller.clientWidth;
     };
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(el);
+    ro.observe(scroller);
 
-    let pos = el.scrollLeft;
+    /* `pos` is where the carousel appears to be; `base` is the real scroll position underneath.
+       While drifting, the difference is carried by the track's transform. */
+    let base = scroller.scrollLeft;
+    let pos = base;
     let last = 0;
     let raf = 0;
     let hover = false;
@@ -58,16 +71,24 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
       const dt = Math.min(now - (last || now), 64) / 1000;
       last = now;
       const paused = hover || focus || !visible || document.hidden || now < touchUntil;
-      // Snap only while the visitor is in control; it would fight the drift otherwise.
+
       if (paused !== wasPaused) {
-        el.style.scrollSnapType = paused ? "" : "none";
-        if (!paused) pos = el.scrollLeft; // pick up from wherever the visitor left it
+        if (paused) {
+          // Hand over to the visitor: fold the drift into the real scroll position, drop the transform.
+          track.style.transform = "";
+          scroller.scrollLeft = pos;
+        } else {
+          // Take over from wherever the visitor left it.
+          base = scroller.scrollLeft;
+          pos = base;
+        }
         wasPaused = paused;
       }
       if (paused) return;
-      pos += width * SPEED * dt;
-      if (span > 0 && pos >= span) pos -= span;
-      el.scrollLeft = pos;
+
+      pos += Math.max(MIN_SPEED_PX, width * SPEED) * dt;
+      if (span > 0 && pos >= span) pos -= span; // the copy set looks identical, so the wrap is invisible
+      track.style.transform = `translate3d(${(base - pos).toFixed(3)}px, 0, 0)`;
     };
 
     const hold = () => (touchUntil = performance.now() + RESUME_MS);
@@ -75,63 +96,70 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
     const leave = () => (hover = false);
     const focusIn = () => (focus = true);
     const focusOut = () => (focus = false);
-    el.addEventListener("pointerenter", enter);
-    el.addEventListener("pointerleave", leave);
-    el.addEventListener("focusin", focusIn);
-    el.addEventListener("focusout", focusOut);
-    el.addEventListener("touchstart", hold, { passive: true });
-    el.addEventListener("touchmove", hold, { passive: true });
-    el.addEventListener("touchend", hold, { passive: true });
-    el.addEventListener("wheel", hold, { passive: true });
+    scroller.addEventListener("pointerenter", enter);
+    scroller.addEventListener("pointerleave", leave);
+    scroller.addEventListener("focusin", focusIn);
+    scroller.addEventListener("focusout", focusOut);
+    scroller.addEventListener("touchstart", hold, { passive: true });
+    scroller.addEventListener("touchmove", hold, { passive: true });
+    scroller.addEventListener("touchend", hold, { passive: true });
+    scroller.addEventListener("wheel", hold, { passive: true });
 
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
-    io.observe(el);
+    io.observe(scroller);
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
       ro.disconnect();
-      el.removeEventListener("pointerenter", enter);
-      el.removeEventListener("pointerleave", leave);
-      el.removeEventListener("focusin", focusIn);
-      el.removeEventListener("focusout", focusOut);
-      el.removeEventListener("touchstart", hold);
-      el.removeEventListener("touchmove", hold);
-      el.removeEventListener("touchend", hold);
-      el.removeEventListener("wheel", hold);
+      track.style.transform = "";
+      scroller.removeEventListener("pointerenter", enter);
+      scroller.removeEventListener("pointerleave", leave);
+      scroller.removeEventListener("focusin", focusIn);
+      scroller.removeEventListener("focusout", focusOut);
+      scroller.removeEventListener("touchstart", hold);
+      scroller.removeEventListener("touchmove", hold);
+      scroller.removeEventListener("touchend", hold);
+      scroller.removeEventListener("wheel", hold);
     };
   }, [slides.length]);
 
   return (
     <div className="relative">
-      <ul
-        ref={ref}
+      <div
+        ref={scrollerRef}
         tabIndex={0}
+        role="group"
         aria-label="Life at the HumanX studio — scroll horizontally"
-        className="no-scrollbar flex snap-x snap-mandatory gap-[clamp(12px,1.875vw,36px)] overflow-x-auto overscroll-x-contain px-[7.5vw] focus-visible:outline-offset-[-4px] 2xl:px-[calc((100%-1070px)/2)]"
+        className="no-scrollbar overflow-x-auto overscroll-x-contain focus-visible:outline-offset-[-4px]"
       >
-        {[...slides, ...slides].map((s, i) => {
-          const copy = i >= slides.length;
-          return (
-            <li
-              key={`${s.image}-${copy ? "copy" : "main"}`}
-              aria-hidden={copy || undefined}
-              className="relative aspect-[4/5] w-[85vw] shrink-0 snap-center overflow-hidden rounded-[clamp(18px,1.875vw,36px)] sm:aspect-[1070/574] md:w-[min(1070px,72vw)]"
-            >
-              <Image
-                src={s.image}
-                alt={copy ? "" : s.alt}
-                fill
-                sizes="(min-width: 768px) 72vw, 85vw"
-                priority={i < 3}
-                fetchPriority={i === 1 ? "high" : undefined}
-                className="object-cover"
-              />
-            </li>
-          );
-        })}
-      </ul>
+        <ul
+          ref={trackRef}
+          className="flex w-max gap-[clamp(12px,1.875vw,36px)] px-[7.5vw] will-change-transform 2xl:px-[calc((100vw-1070px)/2)]"
+        >
+          {[...slides, ...slides].map((s, i) => {
+            const copy = i >= slides.length;
+            return (
+              <li
+                key={`${s.image}-${copy ? "copy" : "main"}`}
+                aria-hidden={copy || undefined}
+                className="relative aspect-[4/5] w-[85vw] shrink-0 overflow-hidden rounded-[clamp(18px,1.875vw,36px)] sm:aspect-[1070/574] md:w-[min(1070px,72vw)]"
+              >
+                <Image
+                  src={s.image}
+                  alt={copy ? "" : s.alt}
+                  fill
+                  sizes="(min-width: 768px) 72vw, 85vw"
+                  priority={i < 3}
+                  fetchPriority={i === 1 ? "high" : undefined}
+                  className="object-cover"
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%] bg-gradient-to-b from-white/0 to-white/80" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[7.6vw] max-w-[147px] bg-gradient-to-r from-white to-transparent" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-[8.4vw] max-w-[162px] bg-gradient-to-l from-white to-transparent" />
