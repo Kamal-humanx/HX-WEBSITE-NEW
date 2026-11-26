@@ -33,7 +33,9 @@ export default function ContactPage() {
               {CONTACT.heading}
             </h1>
             <ContactBlob className="mx-auto mt-6 w-[min(665px,80%)] lg:ml-[12%] lg:mt-0" />
-            <p className="mt-6 flex flex-wrap items-end gap-x-[15px] text-base leading-[1.6] text-black/90 lg:mt-auto">
+            {/* baseline-aligned: the email keeps its 44px tap target, centred, so aligning bottoms
+                left it sitting higher than "Let's talk" */}
+            <p className="mt-6 flex flex-wrap items-baseline gap-x-[15px] text-base leading-[1.6] text-black/90 lg:mt-auto">
               <span>Let’s talk</span>
               <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="link-arrow min-h-11 font-medium text-black underline underline-offset-4">
                 <Image className="arrow brightness-0" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
