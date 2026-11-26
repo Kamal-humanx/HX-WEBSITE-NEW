@@ -102,7 +102,17 @@ const SPOT: Record<string, Spot> = {
   "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20", blend: "haze" },
   ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112", blend: "extend", fw: 34 },
   minitv: { field: "linear-gradient(122deg, #12060f 0%, #2a0c24 45%, #4a1440 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196", blend: "fade", fw: 46, po: 0.5 },
-  hurun: { field: "linear-gradient(122deg, #0c0606 0%, #1a0a0b 50%, #3a0e11 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98", blend: "fade", fw: 13 },
+  /* Hurun: the field is the thumbnail's own left-edge colours, row by row (red top, the laptop's
+     near-black, dark red foot — sampled from the thumbnail), so the edge fades into matching colour */
+  hurun: {
+    field:
+      "linear-gradient(90deg, rgba(10, 5, 6, 0.45) 0%, rgba(10, 5, 6, 0) 55%), linear-gradient(180deg, #6e1015 0%, #3a1417 7%, #1d1618 14%, #131315 24%, #0d0d0f 34%, #0d0d0f 58%, #161618 66%, #141415 76%, #121112 84%, #2e1215 93%, #4e1418 100%)",
+    ink: "light",
+    pattern: "grid",
+    tint: "226, 178, 98",
+    blend: "fade",
+    fw: 30,
+  },
 };
 const SPOT_DEFAULT: Spot = { field: "linear-gradient(122deg, #111 0%, #1c1c1c 100%)", ink: "light", pattern: "dots", tint: "255, 255, 255", blend: "fade" };
 /* patterns: noticeable on a second look, never competing with the text (mask keeps them top-left) */

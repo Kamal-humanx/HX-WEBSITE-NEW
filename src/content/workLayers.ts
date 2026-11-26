@@ -6,38 +6,16 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
   "aadhaar": {
     "bg": null,
     "overlay": null,
+    /* 2026 thumbnail (Figma 5917:21123): its artwork frame 5917:21126 (914 × 638) as one image,
+       filling the card (thumbnails no longer move their layers separately) */
     "layers": [
       {
-        "src": "/images/work/layers/aadhaar/99256.webp",
-        "x": 0.219,
+        "src": "/images/work/layers/aadhaar/21126.webp",
+        "x": 0,
         "y": 0,
-        "w": 99.781,
-        "h": 99.688,
+        "w": 100.219,
+        "h": 100,
         "d": 0
-      },
-      {
-        "src": "/images/work/layers/aadhaar/99257.webp",
-        "x": 0.219,
-        "y": 31.703,
-        "w": 80.702,
-        "h": 67.969,
-        "d": 0.4
-      },
-      {
-        "src": "/images/work/layers/aadhaar/99258.webp",
-        "x": 0.219,
-        "y": 0,
-        "w": 99.781,
-        "h": 99.766,
-        "d": 1
-      },
-      {
-        "src": "/images/work/layers/aadhaar/99259.webp",
-        "x": 14.386,
-        "y": 21.219,
-        "w": 22.149,
-        "h": 63.047,
-        "d": 2.2
       }
     ]
   },

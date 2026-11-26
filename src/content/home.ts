@@ -86,9 +86,10 @@ export const HOME = {
         label: "GovTech",
         title: "myAadhaar",
         description: "Simplifying government digital identity services through intuitive, trust-led design.",
-        image: "/images/work/myaadhaar-thumb.webp",
+        /* 2026 thumbnail (Figma 5917:21123), composed for this card */
+        image: "/images/work/myaadhaar-thumb-2026.webp",
         soon: true,
-        alt: "myAadhaar web portal welcome screen with service shortcuts",
+        alt: "myAadhaar on a laptop and phone: the Address Update page and its upload-document step",
         w: 1006,
         h: 610,
       },
