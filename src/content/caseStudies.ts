@@ -133,7 +133,16 @@ export const CASE_STUDIES: CaseStudy[] = [
       "If you think airports are just about flights, security and endless paper cups of coffee, think again. Bengaluru’s Kempegowda International Airport (BLR), the gateway to India’s startup capital, is a premier destination for retail, live entertainment and dining experiences.",
       "Since its launch operations in 2008, BLR crossed the 30-million passenger mark. Now, they have embarked on a journey to become one of the most digitally advanced airports globally, and engaged HumanX to design a strong foundation for digital CX.",
     ],
-    hero: { imgs: [{ src: `${B}/hero.webp`, w: 1524, h: 1240, alt: "Pulse, the BLR Airport app: home screen with flight status, services and offers on two phones" }] },
+    hero: {
+      imgs: [
+        {
+          src: `${B}/hero-2026.webp`,
+          w: 1608,
+          h: 1247,
+          alt: "Pulse, the BLR Airport app: the Welcome to Bengaluru home screen, with an IndiGo flight card and Care by BLR services beside it",
+        },
+      ],
+    },
     theme: {
       mode: "light",
       bg: "#ffffff",
@@ -223,14 +232,22 @@ export const CASE_STUDIES: CaseStudy[] = [
             type: "annotated",
             text: "left",
             dw: 368,
+            /* the 2026 home screen (Figma 5834:147561): each marker points at its part of it, measured from
+               the screen's layers — flight card, Reserve Security Slot, Airport Cabs, Airport Amenities,
+               Book your Flights (which now sits below the amenities, so those two swap places) */
             items: [
-              { title: "Flight Info", at: 17.29, body: "Upfront flight information that tells you how much time until departure, so you know if you need to rush or if you can relax." },
-              { title: "Fastest Entry", at: 47.5, body: "Breeze through the crowd, queue information at your fingertips." },
-              { title: "Assured Cab", at: 56.65, body: "Schedule a ride to the airport that’s guaranteed and avoid last minute cancellations." },
-              { title: "Book in Advance", at: 68.7, body: "From your flight to duty free to lounge, this is your one stop shop for everything related to your trip." },
-              { title: "Airport Essentials", at: 85.13, body: "Quick access to essential services and facilities." },
+              { title: "Flight Info", at: 20.5, body: "Upfront flight information that tells you how much time until departure, so you know if you need to rush or if you can relax." },
+              { title: "Fastest Entry", at: 31.5, body: "Breeze through the crowd, queue information at your fingertips." },
+              { title: "Assured Cab", at: 44, body: "Schedule a ride to the airport that’s guaranteed and avoid last minute cancellations." },
+              { title: "Airport Essentials", at: 63, body: "Quick access to essential services and facilities." },
+              { title: "Book in Advance", at: 74, body: "From your flight to duty free to lounge, this is your one stop shop for everything related to your trip." },
             ],
-            img: { src: `${B}/features.webp`, w: 736, h: 2556, alt: "Pulse home screen: upcoming flight, fastest entry gate, assured cab and airport essentials" },
+            img: {
+              src: `${B}/features-2026.webp`,
+              w: 848,
+              h: 3482,
+              alt: "Pulse home screen: flight card, quick actions including Reserve Security Slot, Explore & Book with Airport Cabs, Airport Amenities and Book your Flights",
+            },
           },
           {
             type: "features",
@@ -256,10 +273,7 @@ export const CASE_STUDIES: CaseStudy[] = [
               {
                 title: "Not just a pitstop, but a destination",
                 body: "See the airport as not just a pitstop, but a destination to explore events, art, culture and more.",
-                imgs: [
-                  { src: `${B}/destination-1.webp`, w: 736, h: 1640, alt: "Explore while you wait: art and culture at the airport" },
-                  { src: `${B}/destination-2.webp`, w: 1470, h: 1594, alt: "Events, art and dining at the airport in the Pulse app" },
-                ],
+                imgs: [{ src: `${B}/destination-2026.webp`, w: 841, h: 1871, alt: "Pulse airport amenities: Experience the Naurasa art at T2, with 314 artworks by 103 artists" }],
               },
               {
                 title: "Navigate indoors",
@@ -269,15 +283,15 @@ export const CASE_STUDIES: CaseStudy[] = [
               {
                 title: "Search",
                 body: "See the airport as not just a pitstop, but a destination to explore events, art, culture and more.",
-                imgs: [{ src: `${B}/search.webp`, w: 736, h: 2996, alt: "Search results across shops, food and services at the airport" }],
+                imgs: [{ src: `${B}/search-2026.webp`, w: 842, h: 1900, alt: "Pulse BLR Duty Free: search premium brands by departure or arrival" }],
               },
               {
                 title: "Rewards",
                 body: "A loyalty programme for members and frequent travellers to stand a chance to enjoy the perks that the airport offers across its services.",
                 imgs: [
-                  { src: `${B}/rewards-1.webp`, w: 540, h: 1170, alt: "Rewards notifications on a lock screen" },
-                  { src: `${B}/rewards-2.webp`, w: 540, h: 1170, alt: "Earn reward points on every purchase" },
-                  { src: `${B}/rewards-3.webp`, w: 540, h: 1170, alt: "Unlock bonus points and refer friends" },
+                  { src: `${B}/rewards-1-2026.webp`, w: 747, h: 1578, alt: "Pulse Rewards: member card, points expiring and points history" },
+                  { src: `${B}/rewards-2-2026.webp`, w: 840, h: 1772, alt: "Find exciting deals with BLR Pulse Rewards" },
+                  { src: `${B}/rewards-3-2026.webp`, w: 684, h: 1578, alt: "Earn 2 points for every ₹100 and shop from reward partners" },
                 ],
               },
             ],
