@@ -177,31 +177,40 @@ export function WorksMotion() {
       });
       if (moving) hraf = requestAnimationFrame(drift);
     };
+    /* hover: one hover for the whole project — thumbnail or the name/tags under it. Over the picture
+       the glow and the drift follow the cursor; over the caption the glow sits on the picture's lower
+       edge above the cursor. data-hot also turns the name from grey to white (globals.css).
+       "Coming Soon" projects aren't clickable, so they get no hover at all. */
     const offPointer = items.map((it) => {
       const m = it.media;
-      if (!m) return () => {};
+      const card = it.li.querySelector<HTMLElement>("article");
+      if (!m || !card || it.li.hasAttribute("data-soon")) return () => {};
       const move = (e: PointerEvent) => {
         if (e.pointerType !== "mouse") return;
         const r = m.getBoundingClientRect();
-        it.tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-        it.ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        /* border glow follows the cursor */
-        m.style.setProperty("--mx", `${(e.clientX - r.left).toFixed(0)}px`);
-        m.style.setProperty("--my", `${(e.clientY - r.top).toFixed(0)}px`);
+        const x = Math.min(r.width, Math.max(0, e.clientX - r.left));
+        const y = Math.min(r.height, Math.max(0, e.clientY - r.top));
+        it.tx = (x / r.width - 0.5) * 2;
+        it.ty = (y / r.height - 0.5) * 2;
+        /* border glow follows the cursor (clamped to the picture, so from the caption it lights the lower edge) */
+        m.style.setProperty("--mx", `${x.toFixed(0)}px`);
+        m.style.setProperty("--my", `${y.toFixed(0)}px`);
         m.style.setProperty("--spot", "1");
+        it.li.dataset.hot = "";
         if (!hraf) hraf = requestAnimationFrame(drift);
       };
       const leave = () => {
         it.tx = 0;
         it.ty = 0;
         m.style.setProperty("--spot", "0");
+        delete it.li.dataset.hot;
         if (!hraf) hraf = requestAnimationFrame(drift);
       };
-      m.addEventListener("pointermove", move);
-      m.addEventListener("pointerleave", leave);
+      card.addEventListener("pointermove", move);
+      card.addEventListener("pointerleave", leave);
       return () => {
-        m.removeEventListener("pointermove", move);
-        m.removeEventListener("pointerleave", leave);
+        card.removeEventListener("pointermove", move);
+        card.removeEventListener("pointerleave", leave);
       };
     });
     let awBands: Band[] = allWork ? lineBands(allWork) : [];

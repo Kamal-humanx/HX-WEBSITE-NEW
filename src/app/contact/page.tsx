@@ -65,16 +65,23 @@ export default function ContactPage() {
             </div>
 
             {/* the map unmasks upward and settles from a slight zoom; the location card then rises in */}
-            <div data-rv="media" className="relative mt-[clamp(24px,1.5vw,30px)] overflow-hidden lg:aspect-[1845/843]" style={{ ["--rv-r" as string]: "0px" }}>
-              <div className="relative aspect-[1845/843] lg:absolute lg:inset-0 lg:aspect-auto">
-                <Image src="/images/contact/map.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio near IITC Road and Padmavati Road" fill sizes="96vw" className="object-cover" />
-                <div aria-hidden="true" className="absolute inset-0 bg-black/20" />
-                <span aria-hidden="true" className="absolute left-[38.6%] top-[49.6%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
-                  {[1, 0.81, 0.66, 0.47, 0.24].map((s) => (
-                    <span key={s} className="absolute inset-0 m-auto rounded-full border border-accent/40 bg-accent/10" style={{ width: `${s * 100}%`, height: `${s * 100}%` }} />
-                  ))}
-                </span>
-                <Image src="/images/contact/pin.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[38.4%] top-[49.1%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
+            {/* Desktop: the location card (697px tall) sits on the map. The map is 1845:843 of the width,
+                which on 13–16" screens is shorter than the card, so the card spilled past the map's foot
+                and "View On Maps" sat on it. The map now keeps at least 812px (card + its 3.1% top inset +
+                the button below it); at 1920 it is 838 as in Figma. The map picture, rings and pin live in
+                one 1845:843 layer that covers the box, so the pin stays on the studio however it crops. */}
+            <div data-rv="media" className="relative mt-[clamp(24px,1.5vw,30px)] overflow-hidden lg:h-[max(812px,calc((min(100vw,1920px)-2*var(--gutter))*0.456911))]" style={{ ["--rv-r" as string]: "0px" }}>
+              <div className="relative aspect-[1845/843] overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto lg:[container-type:size]">
+                <div className="absolute inset-0 lg:inset-auto lg:left-1/2 lg:top-1/2 lg:aspect-[1845/843] lg:w-[max(100cqw,calc(100cqh*1845/843))] lg:-translate-x-1/2 lg:-translate-y-1/2">
+                  <Image src="/images/contact/map.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio near IITC Road and Padmavati Road" fill sizes="(min-width: 1024px) 140vw, 96vw" className="object-cover" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-black/20" />
+                  <span aria-hidden="true" className="absolute left-[38.6%] top-[49.6%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
+                    {[1, 0.81, 0.66, 0.47, 0.24].map((s) => (
+                      <span key={s} className="absolute inset-0 m-auto rounded-full border border-accent/40 bg-accent/10" style={{ width: `${s * 100}%`, height: `${s * 100}%` }} />
+                    ))}
+                  </span>
+                  <Image src="/images/contact/pin.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[38.4%] top-[49.1%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
+                </div>
                 <a
                   href={MAPS_URL}
                   target="_blank"

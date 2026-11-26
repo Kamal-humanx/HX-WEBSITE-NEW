@@ -28,7 +28,7 @@ export const WORKS = {
    *  as written under each thumbnail in the design. */
   projects: [
     { name: "MyAadhaar", meta: "Mobile · Security  ·  2024", key: "aadhaar", image: "/images/work/w-aadhaar.webp", alt: "myAadhaar website on a laptop and phone: “Welcome to myAadhaar” with service shortcuts" },
-    { name: "Mom Verse", meta: "AI · Enterprise  ·  2025", soon: false, key: "momverse", href: "/works/apollo-momverse", image: "/images/work/w-momverse.webp", alt: "Mom Verse brand and app: a pregnant woman on her phone beside the community post screen" },
+    { name: "Apollo Momverse", meta: "AI · Enterprise  ·  2025", soon: false, key: "momverse", href: "/works/apollo-momverse", image: "/images/work/w-momverse.webp", alt: "Apollo Momverse brand and app: a pregnant woman on her phone beside the community post screen" },
     { name: "Amazon Now", meta: "AI · Consumer  ·  2025", key: "amazon-now", image: "/images/work/w-amazon-now.webp", alt: "Amazon Now quick-commerce app on a phone among groceries, with an “Arriving in 10 mins” card" },
     { name: "Juice AI", meta: "Consumer · Brand  ·  2025", key: "juice-ai", image: "/images/work/w-juice-ai.webp", alt: "Juice AI insights screen generating a “Glass lips beat matte” ad insight on a yellow background" },
     { name: "Quickplay", meta: "Enterprise · Mobile  ·  2024", soon: false, key: "quickplay", href: "/works/quickplay", image: "/images/work/w-quickplay.webp", alt: "Quickplay screens: a live basketball stream on a phone and the widget builder on a tablet" },

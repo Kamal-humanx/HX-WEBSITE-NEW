@@ -4,7 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLink } from "@/components/ui";
 import { RippleImage } from "@/components/RippleImage";
 
-type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string };
+/** soon: the project page isn't out yet — the Work page's glass "Coming Soon" pill on the thumbnail */
+type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string; soon?: boolean };
 
 /*
  * Work cards â€” "thumbnail explo" (5253:31321 active, 5253:31411 rest).
@@ -142,7 +143,10 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
       </p>
       <div className="flex flex-col gap-[clamp(20px,2.9vw,55px)] px-6 pb-6 pt-3 md:pb-[30px] md:pl-0 md:pr-6 md:pt-[30px]">
         <div>
-          <h3 className="text-h3 font-semibold leading-[1.5] tracking-[-0.02em] text-ink">{c.title}</h3>
+          <h3 className="text-h3 font-semibold leading-[1.5] tracking-[-0.02em] text-ink">
+            {c.title}
+            {c.soon && <span className="sr-only"> (coming soon)</span>}
+          </h3>
           <p className="mt-1 max-w-[397px] font-mono text-base font-medium leading-[1.4] tracking-[-0.02em] text-body">
             {c.description}
           </p>
@@ -155,9 +159,15 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
       {/* fills the card's height at every width (1.64px from the top, 1.36px from the bottom, 1px from
           the right, as Figma), so the gap around it is even whatever height the text gives the card;
           the picture crops to fit. At 1920 the card is 305px and this is exactly Figma's 502×302. */}
-      <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] overflow-hidden rounded-card border-[3px] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
+      <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
         {/* cursor-local liquid ripple (RippleImage); z-[1] keeps it above the card's full-card link */}
         <RippleImage src={c.image} alt={c.alt} sizes="(min-width: 768px) 27vw, 100vw" className="case-img object-cover" />
+        {/* the Work page's pill (.wk-badge), sized by this thumbnail's width */}
+        {c.soon && (
+          <span aria-hidden="true" className="wk-badge pointer-events-none z-[2]">
+            Coming Soon
+          </span>
+        )}
       </div>
     </article>
   );

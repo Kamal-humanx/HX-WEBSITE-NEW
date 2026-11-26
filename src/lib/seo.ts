@@ -23,7 +23,7 @@ export const PAGE_META = {
     path: "/works",
     title: "Work — HumanX Projects and Case Studies",
     description:
-      "Work that starts with people: Bengaluru International Airport, Mom Verse, Juice AI, MyAdhaar, Quickplay, Stream Discovery and more from the HumanX studio.",
+      "Work that starts with people: Bengaluru International Airport, Apollo Momverse, Juice AI, MyAdhaar, Quickplay, Stream Discovery and more from the HumanX studio.",
   },
   careers: {
     path: "/careers",

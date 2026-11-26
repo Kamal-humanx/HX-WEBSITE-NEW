@@ -564,6 +564,17 @@
   transition: opacity 0.4s ease;
 }
 
+/* Work page project names: a soft grey at rest, white while the project is hovered (thumbnail or
+   caption — WorksMotion sets data-hot on the item) or its link has keyboard focus. */
+.wk-name {
+  color: rgba(255, 255, 255, 0.68);
+  transition: color 0.35s ease;
+}
+.wk-item[data-hot] .wk-name,
+.wk-item:has(a:focus-visible) .wk-name {
+  color: #fff;
+}
+
 /* Work page "Coming Soon" pill (Figma 2026 update): desktop 5859:34198 on a 912px card — 176.71×40.88
    at 23,19, padding 30.35 around 16px uppercase Uncut Sans Medium, inner glow 12px; phone 5850:34152 on
    a ~352px card — 134×31 at 7,7, 23.5 / 12px, glow 9.1px. Same gradient on both (static, no shimmer).

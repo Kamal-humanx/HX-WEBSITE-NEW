@@ -168,22 +168,25 @@ export default function WorksPage() {
 
         {/* ---------- All work grid: label 30px under the featured card, grid 42px under the label ---------- */}
         <section aria-labelledby="all-work-title" className="container-page pb-[clamp(80px,9.115vw,175px)] pt-[clamp(20px,1.5625vw,30px)]">
-          <h2 id="all-work-title" data-wk="allwork" className="font-mono text-[15px] font-normal leading-[1.2]">
+          {/* the visible "All Work" label was removed on feedback; kept for screen readers as the list's heading */}
+          <h2 id="all-work-title" className="sr-only">
             {WORKS.allWork}
           </h2>
           <ul id="all-work" className="mt-[clamp(24px,2.1875vw,42px)] grid gap-x-6 gap-y-[clamp(40px,4.167vw,80px)] md:grid-cols-2">
             {projects.map((p, i) => {
               const href = (p as { href?: string }).href;
+              const soon = (p as { soon?: boolean }).soon !== false;
               const thumb = (
                 <WorkThumb
                   layers={WORK_LAYERS[p.key]}
                   alt={p.alt}
-                  badge={(p as { soon?: boolean }).soon === false ? null : WORKS.badge}
+                  badge={soon ? WORKS.badge : null}
                   glow={GLOW[p.key] ?? "255, 255, 255"}
                 />
               );
               return (
-              <li key={`${p.name}-${i}`} data-tags={p.tags.join("|")} className="wk-item">
+              /* data-soon: "Coming Soon" — not clickable, so no hover (WorksMotion) */
+              <li key={`${p.name}-${i}`} data-tags={p.tags.join("|")} data-soon={soon ? "" : undefined} className="wk-item">
                 <article>
                   {/* thumbnail 912×640, r16 — built from its Figma layers so each can float on its own.
                       With a project page, the thumbnail and the name both open it (the name is the
@@ -198,15 +201,16 @@ export default function WorksPage() {
 
                   {/* name Hanken Grotesk Medium 28, tags Chivo Mono 15 #9E9E9E — 20px under the thumbnail */}
                   <div className="wk-cap mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                    <h3 className="font-hanken text-xl font-medium leading-[1.286]">
+                    {/* the name rests a soft grey and turns white with the card's hover (.wk-name, globals.css) */}
+                    <h3 className="wk-name font-hanken text-xl font-medium leading-[1.286]">
                       {href ? (
-                        <Link href={href} className="-my-2 inline-block py-2 transition-opacity hover:opacity-70">
+                        <Link href={href} className="-my-2 inline-block py-2">
                           {p.name}
                         </Link>
                       ) : (
                         p.name
                       )}
-                      {(p as { soon?: boolean }).soon !== false && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
+                      {soon && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
                     </h3>
                     {/* tags only: the year is no longer shown */}
                     <p className="whitespace-pre font-mono text-[15px] text-gray-2">{p.tags.join(" · ")}</p>
