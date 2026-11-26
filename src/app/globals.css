@@ -456,18 +456,8 @@
   translate: 6% 10%;
 }
 
-/* Work page thumbnails: the nearest layers bob very gently on their own (offset per layer by --fd),
-   so a resting card still reads as stacked layers rather than one picture. */
-@media (prefers-reduced-motion: no-preference) {
-  .wk-f {
-    animation: wk-float 7s ease-in-out infinite;
-    animation-delay: calc(var(--fd, 0s) * -1);
-  }
-}
-@keyframes wk-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-0.45%); }
-}
+/* (Work page thumbnails used to bob their nearest layers on their own; removed so each thumbnail
+   reads and moves as one picture.) */
 
 /* Project detail pages (CaseReveal.tsx): text rises and sharpens out of a blur; media unmask upward
    and settle from a slight zoom. Pieces revealed together are staggered by --rv-i. */
@@ -569,17 +559,46 @@
   transition: opacity 0.4s ease;
 }
 
-/* Work page highlighted card (a category's single project; works/page.tsx SpotCard): the ground is the
-   thumbnail's own layers, enlarged and blurred; on desktop the crisp thumbnail sits flush right with its
-   left edge fading into it, and its Coming Soon pill moves to the top-right (clear of the fade). */
-.spot-ground {
-  filter: blur(42px) saturate(1.1);
-  scale: 1.12;
+/* Work page highlighted card (a category's single project; works/page.tsx SpotCard). Back to front: the
+   colour field (inline), a faint pattern strongest behind the text, the thumbnail's own colours heavily
+   blurred and spilling left beneath it, then the untouched thumbnail flush right whose left edge fades
+   out along an eased curve (many stops, so the fade has no visible start or end). Phones: thumbnail on
+   top, fading the same way into the field below it. */
+.spot-pattern {
+  -webkit-mask-image: radial-gradient(ellipse 62% 95% at 16% 62%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
+  mask-image: radial-gradient(ellipse 62% 95% at 16% 62%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
+}
+.spot-haze {
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform-origin: 50% 0%;
+  scale: 1.15 1.7;
+  filter: blur(60px) saturate(1.1);
+  opacity: 0.75;
+}
+.spot-thumb {
+  --fade: linear-gradient(180deg, #000 0%, #000 62%, rgba(0, 0, 0, 0.94) 67%, rgba(0, 0, 0, 0.82) 72%, rgba(0, 0, 0, 0.64) 77%, rgba(0, 0, 0, 0.44) 82%, rgba(0, 0, 0, 0.26) 87%, rgba(0, 0, 0, 0.12) 92%, rgba(0, 0, 0, 0.04) 96%, transparent 100%);
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+}
+/* the pill in Read More's place: the same glass, set in the text column */
+.spot-pill.wk-badge {
+  position: relative;
+  left: auto;
+  top: auto;
 }
 @media (min-width: 768px) {
+  .spot-haze {
+    left: auto;
+    right: 0;
+    width: auto;
+    height: 100%;
+    transform-origin: 100% 50%;
+    scale: 1.75 1.08;
+  }
   .spot-thumb {
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 36%);
-    mask-image: linear-gradient(90deg, transparent 0%, #000 36%);
+    --fade: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.04) 5%, rgba(0, 0, 0, 0.12) 10%, rgba(0, 0, 0, 0.26) 15%, rgba(0, 0, 0, 0.44) 20%, rgba(0, 0, 0, 0.64) 25%, rgba(0, 0, 0, 0.82) 30%, rgba(0, 0, 0, 0.94) 35%, #000 41%);
   }
   .spot-thumb .wk-badge {
     left: auto;

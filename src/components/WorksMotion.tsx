@@ -153,17 +153,9 @@ export function WorksMotion() {
 
     /* each layer: build-in rise (nearer layers arrive a beat later and from further), scroll parallax
        (nearer layers travel more) and pointer drift — all subtle, in px scaled to the card's width */
-    const setLayers = (it: (typeof items)[number]) => {
-      const k = (it.media?.offsetWidth ?? 912) / 912;
-      it.layers.forEach(({ el, d }) => {
-        if (!d) return;
-        const u = smooth(ramp(it.build, 0.12 + d * 0.06, 0.62 + d * 0.06));
-        const y = (1 - u) * (26 + d * 12) * k + it.par * d * 9 * k + it.hy * d * 4 * k;
-        const x = it.hx * d * 6 * k;
-        el.style.transform = x || y ? `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)` : "";
-        el.style.opacity = u < 1 ? u.toFixed(3) : "";
-      });
-    };
+    /* the thumbnail moves as one piece (feedback): its layers no longer build in, drift with the scroll
+       or follow the pointer on their own — the card's unmask + settle (applyCard) is its only motion */
+    const setLayers = (it: (typeof items)[number]) => void it;
     let hraf = 0;
     const drift = () => {
       hraf = 0;
@@ -260,7 +252,9 @@ export function WorksMotion() {
     const applyCard = (it: (typeof items)[number]) => {
       const { media, zoom, cap } = it;
       const p = it.cur;
-      const t = smooth(ramp(p, 0, 0.72));
+      /* a category's highlighted card (data-spot) has its thumbnail flush in the card: no unmask/zoom,
+         which left a strip above it whenever the build hadn't finished; it rises in with the filter */
+      const t = it.li.hasAttribute("data-spot") ? 1 : smooth(ramp(p, 0, 0.72));
       if (media) media.style.clipPath = t < 1 ? `inset(${((1 - t) * 100).toFixed(2)}% 0 0 0 round 16px)` : "";
       if (zoom) zoom.style.transform = t < 1 ? `scale(${(1 + 0.06 * (1 - t)).toFixed(4)})` : "";
       it.build = p;

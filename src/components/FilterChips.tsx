@@ -37,7 +37,12 @@ export function FilterChips({
     /* a filter with nothing under it yet shows the empty note (#<targetId>-empty) instead of a blank grid */
     const empty = document.getElementById(`${targetId}-empty`);
     const apply = () => {
-      items.forEach((el) => (el.hidden = !show(el)));
+      items.forEach((el) => {
+        el.hidden = !show(el);
+        /* items that were hidden at load hold lazy images the browser doesn't always start once they
+           appear (half-loaded layered thumbnails): load them now */
+        if (!el.hidden) el.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = "eager"));
+      });
       if (empty) empty.hidden = items.some((el) => !el.hidden);
     };
 

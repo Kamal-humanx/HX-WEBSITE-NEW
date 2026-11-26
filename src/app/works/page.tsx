@@ -43,7 +43,7 @@ function Layers({ layers, scale = 1, still = false }: { layers: WorkCardLayers; 
       data-d={still ? undefined : l.d}
       style={{ left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, height: `${l.h}%`, ["--fd" as string]: `${(i * 0.9).toFixed(1)}s` }}
     >
-      <div className={`relative h-full w-full ${!still && l.d >= 1.8 ? "wk-f" : ""}`}>
+      <div className="relative h-full w-full">
         <Image
           src={l.src}
           alt=""
@@ -84,38 +84,58 @@ function WorkThumb({ layers, alt, badge, glow, flush = false, scale = 1 }: { lay
   );
 }
 
-/* light thumbnails get a pale wash and dark text on their highlighted card; the rest a dark wash, white text */
-const LIGHT = new Set(["juice-ai", "setu", "aokah", "aadhaar", "momverse", "amazon-now", "sbi-life"]);
+/* Each highlighted card's ground, in its thumbnail's own palette: a colour field, a very faint pattern
+   echoing the artwork (Aokah's dots, Juice's interface grid, Setu's progress rings, ASK's light
+   streaks, Hurun's line art, miniTV's glow rings), and light or dark text to suit. */
+type Spot = { field: string; ink: "dark" | "light"; pattern: "dots" | "grid" | "arcs" | "lines"; tint: string };
+const SPOT: Record<string, Spot> = {
+  momverse: { field: "linear-gradient(118deg, #f5f2ef 0%, #e9e3dd 52%, #d3cbc4 100%)", ink: "dark", pattern: "dots", tint: "120, 96, 84" },
+  aokah: { field: "linear-gradient(122deg, #0b1f4a 0%, #173f8e 52%, #3375d6 100%)", ink: "dark", pattern: "dots", tint: "20, 52, 120" },
+  setu: { field: "linear-gradient(118deg, #f7f1eb 0%, #eee2d8 52%, #e2d1c4 100%)", ink: "dark", pattern: "arcs", tint: "196, 112, 80" },
+  "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20" },
+  ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112" },
+  minitv: { field: "linear-gradient(122deg, #10050e 0%, #33102c 52%, #6e1c58 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196" },
+  hurun: { field: "linear-gradient(122deg, #0c0505 0%, #260a0c 52%, #561216 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98" },
+};
+const SPOT_DEFAULT: Spot = { field: "linear-gradient(122deg, #111 0%, #1c1c1c 100%)", ink: "light", pattern: "dots", tint: "255, 255, 255" };
+const pattern = (s: Spot) =>
+  ({
+    dots: { backgroundImage: `radial-gradient(rgba(${s.tint}, 0.16) 1.1px, transparent 1.6px)`, backgroundSize: "22px 22px" },
+    grid: {
+      backgroundImage: `linear-gradient(rgba(${s.tint}, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(${s.tint}, 0.08) 1px, transparent 1px)`,
+      backgroundSize: "56px 56px",
+    },
+    arcs: { backgroundImage: `repeating-radial-gradient(circle at 6% 112%, rgba(${s.tint}, 0.1) 0 1px, transparent 1px 38px)` },
+    lines: { backgroundImage: `repeating-linear-gradient(112deg, rgba(${s.tint}, 0.07) 0 1px, transparent 1px 30px)` },
+  })[s.pattern];
 
-/* A category's highlighted project when it isn't BIAL, made one piece like the BIAL card: the card's
-   ground is the project's own thumbnail, enlarged and softly blurred to fill it; the thumbnail itself
-   sits flush on the right, full height, its left edge fading into that ground; a wash on the left
-   keeps the text readable (pale + dark text for light thumbnails). Hidden until its filter is chosen. */
+/* A category's highlighted project when it isn't BIAL, built like the BIAL card — eyebrow, title, a
+   two-line description and Read More (Coming Soon projects: the glass pill in its place) — and made
+   one piece with its thumbnail: the colour field and pattern fill the card, a heavily blurred copy of
+   the thumbnail spills left beneath it, and the thumbnail (untouched) sits flush right at full height,
+   its left edge fading out along an eased curve. Hidden until its filter is chosen. */
 function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats: string[]; glow: string }) {
   const soon = p.soon !== false;
   const L = WORK_LAYERS[p.key];
-  const light = LIGHT.has(p.key);
+  const s = SPOT[p.key] ?? SPOT_DEFAULT;
+  const dark = s.ink === "dark";
   const thumb = <WorkThumb layers={L} alt={p.alt} badge={soon ? WORKS.badge : null} glow={glow} flush scale={1.25} />;
-  const wash = light
-    ? "linear-gradient(90deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 34%, rgba(255,255,255,0) 58%)"
-    : "linear-gradient(90deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.45) 34%, rgba(10,10,10,0) 58%)";
   return (
     <section data-tags={cats.join("|")} hidden aria-label={p.name} className="container-page mt-[clamp(32px,2.969vw,57px)]">
-      {/* wk-item: the grid's build-in and hover (none for Coming Soon) */}
-      <div className="wk-item" data-soon={soon ? "" : undefined}>
+      {/* wk-item: the grid's hover (none for Coming Soon); data-spot: no unmask build (WorksMotion) */}
+      <div className="wk-item" data-spot="" data-soon={soon ? "" : undefined}>
         <article
-          className={`spot-card relative isolate overflow-hidden rounded-feature md:aspect-[1848/780] md:[container-type:size] ${light ? "text-ink" : "text-white"}`}
-          style={{ background: L.bg ?? "#131313" }}
+          className={`spot-card relative isolate overflow-hidden rounded-feature md:aspect-[1848/780] md:[container-type:size] ${dark ? "text-ink" : "text-white"}`}
+          style={{ background: s.field, boxShadow: "inset 14px 11px 84px rgba(244, 244, 244, 0.18)" }}
         >
-          {/* the ground: the same layers, enlarged to cover the card and blurred */}
           <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-            <div className="spot-ground absolute left-1/2 top-1/2 aspect-[912/640] h-[130%] -translate-x-1/2 -translate-y-1/2 md:h-auto md:w-[max(100cqw,calc(100cqh*912/640))]">
-              <Layers layers={L} scale={0.5} still />
+            {/* the faint pattern, strongest behind the text and fading away toward the picture */}
+            <div className="spot-pattern absolute inset-0" style={pattern(s)} />
+            {/* the thumbnail's own colours, blurred and spilling left beneath it */}
+            <div className="spot-haze absolute aspect-[912/640]" style={{ background: L.bg ?? undefined }}>
+              <Layers layers={L} scale={0.3} still />
             </div>
-            <div className="absolute inset-0 max-md:hidden" style={{ background: wash }} />
-            <div className="absolute inset-0 md:hidden" style={{ background: light ? "rgba(255,255,255,0.55)" : "rgba(10,10,10,0.5)" }} />
           </div>
-          {/* the thumbnail, flush right and full height on desktop; its left edge melts into the ground */}
           <div className="spot-thumb relative md:absolute md:inset-y-0 md:right-0 md:aspect-[912/640] md:h-full">
             {p.href ? (
               <Link href={p.href} tabIndex={-1} aria-hidden="true" className="block cursor-pointer">
@@ -125,19 +145,27 @@ function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats:
               thumb
             )}
           </div>
-          <div className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[38%] md:p-0">
+          {/* text: the BIAL card's block — 35px in from the left, 72px up from the bottom (at 1848) */}
+          <div className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[40%] md:p-0">
             <div className="flex flex-col gap-3">
               <p className="font-mono text-xs uppercase leading-[1.2] tracking-[-0.015em]">{cats[0]}</p>
               <h2 className="text-h3-md font-medium leading-[1.2]">
                 {p.name}
                 {soon && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
               </h2>
-              {p.description && <p className={`font-mono text-base leading-[1.4] tracking-[-0.02em] ${light ? "text-ink/90" : "text-[#fafaf8]"}`}>{p.description}</p>}
+              {p.description && (
+                <p className={`max-w-[34em] md:line-clamp-2 font-mono text-base leading-[1.4] tracking-[-0.02em] ${dark ? "text-ink/85" : "text-[#fafaf8]"}`}>{p.description}</p>
+              )}
             </div>
-            {p.href && (
+            {p.href ? (
               <ArrowLink href={p.href} srSuffix={`: ${p.name}`} className="self-start after:absolute after:inset-0 after:content-['']">
                 {WORKS.featured.cta}
               </ArrowLink>
+            ) : (
+              /* not out yet: the glass Coming Soon pill where Read More would be */
+              <span aria-hidden="true" className="wk-badge spot-pill self-start">
+                {WORKS.badge}
+              </span>
             )}
           </div>
         </article>

@@ -147,15 +147,21 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
         <div>
           <h3 className="text-h3 font-semibold leading-[1.5] tracking-[-0.02em] text-ink">
             {c.title}
-            {c.soon && <span className="sr-only"> (coming soon)</span>}
           </h3>
           <p className="mt-1 max-w-[397px] font-mono text-base font-medium leading-[1.4] tracking-[-0.02em] text-body">
             {c.description}
           </p>
         </div>
-        <ArrowLink href={c.href ?? "/works"} srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
-          {readMore}
-        </ArrowLink>
+        {c.soon ? (
+          /* not out yet: a plain grey label in Read More's place — not a link, no hover */
+          <p className="inline-flex min-h-11 items-center self-start text-base font-bold leading-[1.5] tracking-[-0.02em] text-[#8a8a8a]">
+            Coming Soon
+          </p>
+        ) : (
+          <ArrowLink href={c.href ?? "/works"} srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
+            {readMore}
+          </ArrowLink>
+        )}
       </div>
       {/* thumbnail column = 503/1853 of the card (502 frame + 1px to the card's right edge) */}
       {/* fills the card's height at every width (1.64px from the top, 1.36px from the bottom, 1px from
