@@ -139,7 +139,7 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
         {/* fill, then a 2px stroke clipped to the shape = Figma's 1px INSIDE stroke */}
         <path ref={pathRef} className="case-shape" clipPath={`url(#cc${id})`} strokeWidth="2" />
       </svg>
-      <p className="px-6 pt-6 font-mono text-[clamp(1rem,1.25vw,1.5rem)] font-medium uppercase leading-[1.3] tracking-[-0.01em] text-black/[0.54] md:px-[56px] md:pt-[49px]">
+      <p className="px-6 pt-6 max-md:pt-4 font-mono text-[clamp(1rem,1.25vw,1.5rem)] font-medium uppercase leading-[1.3] tracking-[-0.01em] text-black/[0.54] md:px-[56px] md:pt-[49px]">
         {c.label}
       </p>
       <div className="flex flex-col gap-[clamp(20px,2.9vw,55px)] px-6 pb-6 pt-3 md:pb-[30px] md:pl-0 md:pr-6 md:pt-[30px]">
@@ -166,7 +166,8 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
       {/* fills the card's height at every width (1.64px from the top, 1.36px from the bottom, 1px from
           the right, as Figma), so the gap around it is even whatever height the text gives the card;
           the picture crops to fit. At 1920 the card is 305px and this is exactly Figma's 502×302. */}
-      <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
+      {/* phones (< 768): the thumbnail leads the card, the text below it (max-md:order-first) */}
+      <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] max-md:order-first overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
         {/* z-[1] keeps the thumbnail above the card's full-card link */}
         {/* (the cursor ripple on the thumbnails was removed on feedback; the card's own hover stays) */}
         <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className={`object-cover ${c.soon ? "" : "case-img"}`} />

@@ -35,7 +35,19 @@ export function Footer({ variant }: { variant?: "careers" } = {}) {
         width={2451}
         height={1366}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[-250px] md:bottom-[-340px] left-[max(-30%,-577px)] -z-10 w-[max(1100px,127.7%)] lg:bottom-[min(-160px,-33.9vw)] max-w-none select-none 3xl:left-[calc(50%-1537px)] 3xl:w-[2451px]"
+        className="pointer-events-none absolute -z-10 max-w-none select-none max-md:hidden md:bottom-[-340px] md:left-[max(-30%,-577px)] md:w-[max(1100px,127.7%)] lg:bottom-[min(-160px,-33.9vw)] 3xl:left-[calc(50%-1537px)] 3xl:w-[2451px]"
+      />
+      {/* phones: Figma "HXmobile-footer" 5654:10931's own glow (Ellipse 1801 — a freeform shape, not an
+          ellipse, so its edge runs diagonally), exported as rendered in the 393 × 852 frame: the bottom
+          440px, flush with the frame's left and bottom edges; scaled with the screen's width */}
+      <Image
+        src="/images/brand/footer-glow-mobile.webp"
+        alt=""
+        aria-hidden="true"
+        width={524}
+        height={587}
+        sizes="100vw"
+        className="pointer-events-none absolute bottom-0 left-0 -z-10 h-auto w-full max-w-none select-none md:hidden"
       />
 
       <div className="container-page relative grid min-h-[clamp(620px,40vw,767px)] grid-cols-1 content-between gap-12 pb-6 pt-[clamp(40px,3.2vw,61px)] max-lg:flex max-lg:min-h-[min(100svh,852px)] max-lg:flex-col max-lg:justify-end max-lg:gap-0 max-lg:pb-[35px] max-lg:pl-[max(21px,env(safe-area-inset-left))] max-lg:pr-[max(21px,env(safe-area-inset-right))] max-lg:pt-16 lg:grid-cols-[minmax(0,610px)_1fr]">
