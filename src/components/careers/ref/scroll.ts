@@ -16,6 +16,29 @@ export const smoother = (t: number) => ((t = clamp(t)), t * t * t * (t * (t * 6 
 /** true when the Careers page has opted into motion (no reduced-motion preference) */
 export const motionOn = () => !!document.querySelector(".hxc[data-motion]")
 
+type LenisLike = { scrollTo(target: number, o?: { duration?: number }): void }
+/**
+ * In-page CTAs (See open roles, Find your X, Bring your X to HumanX) → a scroll-built section.
+ * Those sections open with the scroll, so landing on their top edge shows them unbuilt (the roles
+ * list empty, the gene still black). Go on to where the section stands fully open — `openVh`
+ * screens past its top while it is pinned — gliding there, so it opens as the page arrives.
+ * stopPropagation keeps the site-wide smooth scroll (Lenis, which catches "#" links on window) from
+ * re-aiming the scroll at the section's top edge.
+ */
+export function goToScene(e: { preventDefault(): void; stopPropagation(): void }, id: string, pinClass: string, openVh: number) {
+  const el = document.getElementById(id)
+  if (!el) return
+  e.preventDefault()
+  e.stopPropagation()
+  const top = el.getBoundingClientRect().top + window.scrollY
+  const target = top + (el.classList.contains(pinClass) ? window.innerHeight * openVh : 0)
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches
+  const lenis = (window as unknown as { lenis?: LenisLike }).lenis
+  if (lenis && !calm) lenis.scrollTo(target, { duration: 1.6 })
+  else window.scrollTo({ top: target, behavior: calm ? "auto" : "smooth" })
+  history.replaceState(null, "", `#${id}`)
+}
+
 type Sub = { measure?: () => void; update: (y: number) => void }
 const subs = new Set<Sub>()
 const TAU = 0.085

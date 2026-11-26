@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type MouseEvent } from 'react'
 import { measureEdges, revealConstruction } from './construction'
-import { onScrollFrame, ramp, registerScene, sceneProgress, smooth, smoother, motionOn } from './scroll'
+import { goToScene, onScrollFrame, ramp, registerScene, sceneProgress, smooth, smoother, motionOn } from './scroll'
 import { Arrow } from './Arrow'
 
 type Edge = 't' | 'r' | 'b' | 'l'
@@ -11,18 +11,11 @@ const E: Edge[] = ['t', 'r', 'b', 'l']
 const box = (): Box => ({ t: 0, r: 0, b: 0, l: 0 })
 
 
-/* Find your X: the gene section opens with the scroll, so landing on its top edge would show it
-   still dark; go on to where it stands fully open instead */
-function toGene(e: MouseEvent<HTMLAnchorElement>) {
-  const g = document.getElementById('gene')
-  if (!g) return
-  e.preventDefault()
-  const top = g.getBoundingClientRect().top + window.scrollY
-  const open = g.classList.contains('gn-pin') ? window.innerHeight * 0.95 : 0
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
-  window.scrollTo({ top: top + open, behavior: calm ? 'auto' : 'smooth' })
-  history.replaceState(null, '', '#gene')
-}
+/* Find your X / See open roles: both sections open with the scroll, so landing on their top edge
+   showed them unbuilt (the gene still dark, the openings list empty); go on to where each stands
+   fully open instead — the gene by 0.85 of a screen, the list by 0.9 (Gene.tsx / OpenRoles.tsx) */
+const toGene = (e: MouseEvent<HTMLAnchorElement>) => goToScene(e, 'gene', 'gn-pin', 0.95)
+const toRoles = (e: MouseEvent<HTMLAnchorElement>) => goToScene(e, 'roles', 'or-pin', 0.9)
 
 export default function Hero() {
   const sceneRef = useRef<HTMLDivElement>(null)
@@ -353,7 +346,7 @@ export default function Hero() {
             <span className="ln">never confined to a screen.</span>
           </p>
           <div className="ctas">
-            <a className="btn" id="cta" href="#roles">
+            <a className="btn" id="cta" href="#roles" onClick={toRoles}>
               <span className="ink">
                 See open roles{' '}
                 <span className="arr" aria-hidden="true">

@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { HUMAN, specimen, XS, YEAR_NAMES, YEARS } from './genome'
 import { Helix, type Anchor, type Pick } from './helix'
 import { Arrow } from './Arrow'
-import { onScrollFrame, ramp, smooth, motionOn } from './scroll'
+import { goToScene, onScrollFrame, ramp, smooth, motionOn } from './scroll'
 
 /* The mutant gene, in a darker chamber that opens out of the graphite the principles ended on. The
    specimen stands in the middle with a strand's traits on either side of it; hovering a trait turns
@@ -244,12 +244,9 @@ export default function Gene() {
      list stands open rather than on its first edge */
   const toRoles = (e: MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     if (!complete) return
-    const r = document.getElementById('roles')
-    if (!r) return
-    const top = r.getBoundingClientRect().top + window.scrollY
-    const open = r.classList.contains('or-pin') ? window.innerHeight * 0.9 : 0
-    window.scrollTo({ top: top + open, behavior: reduced() ? 'auto' : 'smooth' })
+    goToScene(e, 'roles', 'or-pin', 0.9)
   }
 
   /* one trait in the cloud: a pill to pick (and pick again to take out); "Other" opens a field */
