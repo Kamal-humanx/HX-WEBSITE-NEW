@@ -110,15 +110,12 @@ export default function WorksPage() {
             </p>
           </div>
 
-          {/* Filters (5740:94341, 81px under the title) + count */}
+          {/* Filters (5740:94341, 81px under the title); the project count was removed on feedback */}
           <div className="mt-[clamp(32px,4.219vw,81px)] flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             {/* -my-1 cancels the chip row's 4px tap padding so the pills sit exactly 81px under the title */}
             <div data-seq="wk-filters" className="-my-1 min-w-0">
               <FilterChips filters={WORKS.filters} available={available} targetId="all-work" variant="dark" label="Filter projects" />
             </div>
-            <p data-seq="wk-count" className="font-mono text-sm text-gray-2">
-              {WORKS.count}
-            </p>
           </div>
         </section>
 
