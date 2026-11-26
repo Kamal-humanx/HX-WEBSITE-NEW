@@ -3,6 +3,19 @@
 export type WorkLayer = { src: string; x: number; y: number; w: number; h: number; d: number };
 export type WorkCardLayers = { bg: string | null; overlay: string | null; layers: WorkLayer[] };
 export const WORK_LAYERS: Record<string, WorkCardLayers> = {
+  /* BIAL has no grid thumbnail in Figma (only the featured card 5740:95311, 1848 × 780). Its grid card
+     is the featured card's right-hand 912 × 640 window — x 936–1848, y 70–710 — where the phone and the
+     two cards sit: the same layers and purple, positions in % of that window. */
+  "bial": {
+    "bg": "linear-gradient(123deg, #1f1236 6%, #59339c 111%)",
+    "overlay": null,
+    "layers": [
+      { "src": "/images/work/bial-plane.webp", "x": -59.978, "y": -1.094, "w": 159.978, "h": 103.807, "d": 0.6 },
+      { "src": "/images/work/bial-phone.webp", "x": 22.094, "y": -0.625, "w": 57.621, "h": 117.19, "d": 1.6 },
+      { "src": "/images/work/bial-flight.webp", "x": 3.399, "y": 50, "w": 42.566, "h": 22.493, "d": 2.2 },
+      { "src": "/images/work/bial-care.webp", "x": 58.224, "y": 24.375, "w": 35.143, "h": 22.697, "d": 2.4 }
+    ]
+  },
   "aadhaar": {
     "bg": null,
     "overlay": null,

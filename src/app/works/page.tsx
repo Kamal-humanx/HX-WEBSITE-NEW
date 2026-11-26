@@ -28,7 +28,7 @@ const LAYER_BOX = {
    a slow CSS float on the nearest layers. The "Coming Soon" pill is live glass, as on the featured card. */
 /* hover border glow, tinted to each thumbnail's own background (light → its accent) */
 const GLOW: Record<string, string> = {
-  aadhaar: "255, 186, 140", momverse: "240, 214, 190", "amazon-now": "120, 225, 255", "juice-ai": "255, 226, 110",
+  bial: "176, 140, 255", aadhaar: "255, 186, 140", momverse: "240, 214, 190", "amazon-now": "120, 225, 255", "juice-ai": "255, 226, 110",
   quickplay: "255, 140, 80", "sbi-life": "196, 166, 255", aokah: "120, 196, 255", hurun: "226, 178, 98",
   ask: "222, 176, 90", minitv: "255, 96, 186", setu: "250, 182, 150", godrej: "245, 170, 80",
 };
@@ -230,14 +230,19 @@ export default function WorksPage() {
   type P = (typeof projects)[number];
   const pageFirst = (a: P, b: P) => Number(a.soon !== false) - Number(b.soon !== false);
   const spotlight: Record<string, string> = {};
-  for (const c of CATS) {
+  /* Feedback (Nov 2026): the hero card is for All only; every category is the two-column grid (an odd
+     one out simply sits alone on the last row). Flip to true to bring back a highlighted card on top
+     of odd-numbered categories (SpotCard). */
+  const HIGHLIGHT_IN_CATEGORIES = false;
+  for (const c of HIGHLIGHT_IN_CATEGORIES ? CATS : []) {
     const members = [...(featured.cats.includes(c) ? ["bial"] : []), ...projects.filter((p) => p.cats.includes(c)).sort(pageFirst).map((p) => p.key)];
     /* BIAL has no grid-size card, so wherever it belongs it's the one on top (whatever the count),
        with the rest of the category in the grid below */
     if (members[0] === "bial" || members.length % 2 === 1) spotlight[c] = members[0];
   }
   const bialTags = ["All", ...CATS.filter((c) => spotlight[c] === "bial")];
-  const gridTags = (p: P) => ["All", ...p.cats.filter((c) => spotlight[c] !== p.key)];
+  /* allHidden: BIAL's grid card, which only shows under its categories (All has the featured card) */
+  const gridTags = (p: P) => [...(p.allHidden ? [] : ["All"]), ...p.cats.filter((c) => spotlight[c] !== p.key)];
   const spots = projects.map((p) => ({ p, cats: CATS.filter((c) => spotlight[c] === p.key) })).filter((s) => s.cats.length);
   const available = CATS.filter((c) => featured.cats.includes(c) || projects.some((p) => p.cats.includes(c)));
 

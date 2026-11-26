@@ -32,6 +32,8 @@ export const WORKS = {
    *  the design's old tags, shown only for a project with no category yet. `description` is used
    *  when the project is the highlighted card of a category: two lines, about the BIAL card's length. */
   projects: [
+    /* BIAL's grid card: only under its categories — under All it's the featured card on top */
+    { name: "Bengaluru International Airport", meta: "Mobile · Travel  ·  2024", cats: ["Impact"], soon: false, allHidden: true, key: "bial", href: "/works/bengaluru-international-airport", image: "/images/work/bial-phone.webp", alt: "Bengaluru International Airport’s Pulse app: the “Welcome to Bengaluru” home screen with the EZPass security-slot and Care by BLR cards" },
     { name: "MyAadhaar", meta: "Mobile · Security  ·  2024", cats: ["Impact"], key: "aadhaar", image: "/images/work/w-aadhaar-2026.webp", alt: "myAadhaar on a laptop and phone: the Address Update page and its upload-document step",
       description: "Simplifying government digital identity through intuitive, trust-led design." },
     { name: "Apollo Momverse", meta: "AI · Enterprise  ·  2025", cats: ["Health"], soon: false, key: "momverse", href: "/works/apollo-momverse", image: "/images/work/w-momverse.webp", alt: "Apollo Momverse brand and app: a pregnant woman on her phone beside the community post screen",
@@ -56,7 +58,7 @@ export const WORKS = {
     /* no case study yet: description written from the project's screens (city explorer, scores, advisors) */
     { name: "Aokah", meta: "Consumer · Brand  ·  2025", cats: ["B2B", "AI"], key: "aokah", image: "/images/work/w-aokah.webp", alt: "Aokah location explorer dashboard with city recommendations and a “Need expert guidance?” card",
       description: "Helping companies choose where to build their next team, city by city." },
-  ] as { name: string; meta: string; cats: string[]; key: string; image: string; alt: string; soon?: boolean; href?: string; description?: string }[],
+  ] as { name: string; meta: string; cats: string[]; key: string; image: string; alt: string; soon?: boolean; href?: string; description?: string; allHidden?: boolean }[],
 };
 
 /** "Consumer · Brand  ·  2025" → { tags: ["Consumer", "Brand"], year: "2025" } */
