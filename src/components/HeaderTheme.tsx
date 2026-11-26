@@ -102,24 +102,8 @@ export function HeaderTheme() {
     let raf = 0;
     let until = 0;
 
-    /* a frame whose job is to hold a picture or video (e.g. the hero's dark box behind its video) */
-    const isMediaBox = (n: Element): boolean => {
-      if (/(^|[\s-])media([\s-]|$)/.test(String((n as HTMLElement).className))) return true;
-      const box = n.getBoundingClientRect();
-      if (!box.width || !box.height) return false;
-      for (const c of Array.from(n.children)) {
-        if (!/^(img|video|canvas|picture)$/i.test(c.tagName)) continue;
-        const r = c.getBoundingClientRect();
-        if (r.width * r.height >= 0.8 * box.width * box.height) return true;
-      }
-      return false;
-    };
-
     /* the element's own ground at height y (its gradient or colour), if solid */
     const ownLuminance = (n: Element, y: number): number | null => {
-      /* pictures and videos are content, not ground: the header follows the page's own colour,
-         so it doesn't flip as it passes over a photo or the hero video (or the box framing it) */
-      if (/^(img|video|canvas|picture|iframe|svg)$/i.test(n.tagName) || isMediaBox(n)) return null;
       const s = getComputedStyle(n);
       /* a gradient clipped to text colours the letters, not the ground */
       const clip = s.backgroundClip || s.getPropertyValue("-webkit-background-clip");
