@@ -22,7 +22,7 @@ export const CAPABILITIES = {
 };
 
 export const LEARNING = {
-  title: "We're constantly learning in public",
+  title: "We're constantly learning",
   posts: [
     {
       image: "/images/learning/join-the-conversation.webp",

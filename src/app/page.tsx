@@ -156,7 +156,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          <LearningSection title="We're constantly learning" />
+          <LearningSection />
           <LearnReveal />
         </div>
       </main>
