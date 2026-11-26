@@ -64,13 +64,13 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
  * Each card links to its post (content/shared.ts → href), opening in a new tab; the whole card is
  * clickable.
  */
-export function LearningSection({ id = "learning" }: { id?: string }) {
+export function LearningSection({ id = "learning", title = LEARNING.title }: { id?: string; title?: string }) {
   return (
     <section aria-labelledby={`${id}-title`} className="bg-night text-white">
       <div className="container-page pb-[var(--section-y)] lg:px-[clamp(36px,3.1vw,58px)]">
         {/* Figma 4887:5268: Uncut Sans 70 / 66.42px / -3% */}
         <DisplayHeading id={`${id}-title`} className="text-white leading-[0.9489]! tracking-[-0.03em]!">
-          {LEARNING.title}
+          {title}
         </DisplayHeading>
         <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {LEARNING.posts.map((post) => (
