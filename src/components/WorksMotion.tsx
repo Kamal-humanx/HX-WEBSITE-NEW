@@ -251,9 +251,11 @@ export function WorksMotion() {
         /* -1 (card low on screen) … 1 (card high): layers drift up as the card rises */
         it.par = clamp(((V / 2 - (r.top + r.height / 2)) / V) * 1.4, -1, 1) * -1;
         const col = r.left > W * 0.4 ? 1 : 0;
-        /* the build-in now runs over ~85% of a screen of scroll (was 60%), right column a beat later */
-        it.pT = ramp(V * 0.98 - r.top - col * V * 0.1, 0, V * 0.85);
-        if (it.cur < 0) it.cur = it.pT; // first paint: start where the page already is
+        /* the build-in plays once, all the way, when the card comes into view (right column a beat
+           lower). It used to follow the scroll position, so a card shown mid-screen by a filter or a
+           resize could sit half-built (cut at the top, looking a different size from its neighbour). */
+        if (it.pT < 1) it.pT = r.top < V * (0.9 - col * 0.04) ? 1 : 0;
+        if (it.cur < 0) it.cur = it.pT; // first paint: what's already on screen shows complete
         void media; void zoom; void cap;
       });
       if (!eraf) eraf = requestAnimationFrame(ease);
