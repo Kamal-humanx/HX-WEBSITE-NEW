@@ -211,7 +211,8 @@ export default function WorksPage() {
                       )}
                       {(p as { soon?: boolean }).soon !== false && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
                     </h3>
-                    <p className="whitespace-pre font-mono text-[15px] text-gray-2">{p.meta}</p>
+                    {/* tags only: the year is no longer shown */}
+                    <p className="whitespace-pre font-mono text-[15px] text-gray-2">{p.tags.join(" · ")}</p>
                   </div>
                 </article>
               </li>

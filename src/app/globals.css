@@ -693,21 +693,6 @@
 .pr.pr-armed .pr-i {
   will-change: transform, filter;
 }
-/* Once the icons have landed (.pr-live), hovering a keyword makes its icon hop again. */
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .pr.pr-live .pr-g:hover .pr-i {
-    animation: pr-hop 0.8s cubic-bezier(0.3, 0.7, 0.2, 1);
-  }
-}
-@keyframes pr-hop {
-  35% {
-    transform: translateY(-0.2em) rotate(-10deg) scale(1.12);
-  }
-  65% {
-    transform: translateY(0.03em) rotate(5deg) scale(0.97);
-  }
-}
-
 /* Testimonials — Logo Tab 4905:154 Default → Active, and the quote that follows it. */
 .logo-tab {
   background-color: transparent;
