@@ -21,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const c = caseStudy((await params).slug);
   if (!c) return {};
-  const title = `${c.client} — ${c.title.replace(/\n/g, " ")} | HumanX`;
+  const title = `${c.client} - ${c.title.replace(/\n/g, " ")} | HumanX`;
   const path = `/works/${c.slug}`;
   return {
     title: { absolute: title },

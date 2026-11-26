@@ -9,31 +9,31 @@ import { CAPABILITIES } from "@/content/shared";
 export const PAGE_META = {
   home: {
     path: "/",
-    title: "HumanX — CX Design and Tech Studio | Unmistakably Human",
+    title: "HumanX - CX Design and Tech Studio | Unmistakably Human",
     description:
       "HumanX is a CX Design and Tech studio that shapes digital experiences with a human edge. We partner with global CXOs who seek to build future ready experiences.",
   },
   about: {
     path: "/about",
-    title: "About HumanX — We Partner With Ambitious Brands",
+    title: "About HumanX - We Partner With Ambitious Brands",
     description:
       "We partner with ambitious brands and challenge convention. Meet the HumanX team, the principles behind every decision we make, and what we bring to the table.",
   },
   works: {
     path: "/works",
-    title: "Work — HumanX Projects and Case Studies",
+    title: "Work - HumanX Projects and Case Studies",
     description:
       "Work that starts with people: Bengaluru International Airport, Apollo Momverse, Juice AI, MyAdhaar, Quickplay, Stream Discovery and more from the HumanX studio.",
   },
   careers: {
     path: "/careers",
-    title: "Careers at HumanX — Open Design Roles in Mumbai",
+    title: "Careers at HumanX - Open Design Roles in Mumbai",
     description:
       "Research the problem, try it with AI, prototype it, write the code, ship it. Explore open design roles at HumanX in Mumbai, from Product Design Intern to Design Lead.",
   },
   contact: {
     path: "/contact",
-    title: "Contact HumanX — Start a Project",
+    title: "Contact HumanX - Start a Project",
     description:
       "Every great idea needs a co-conspirator. Tell us what brings you here, visit the HumanX studio in Goregaon East, Mumbai, or send us a message.",
   },
@@ -43,7 +43,7 @@ export type PageKey = keyof typeof PAGE_META;
 
 /** The share card shown when a HumanX link is pasted into WhatsApp, Slack, LinkedIn, X… (Figma 5896:40884).
  *  A small JPEG on purpose: WhatsApp silently drops preview images that are too heavy. */
-export const OG_IMAGE = { url: "/opengraph-image.jpg", width: 1200, height: 630, type: "image/jpeg", alt: "HumanX — Crafting Products That Are Unmistakably Human" };
+export const OG_IMAGE = { url: "/opengraph-image.jpg", width: 1200, height: 630, type: "image/jpeg", alt: "HumanX - Crafting Products That Are Unmistakably Human" };
 
 export function pageMetadata(key: PageKey): Metadata {
   const m = PAGE_META[key];
