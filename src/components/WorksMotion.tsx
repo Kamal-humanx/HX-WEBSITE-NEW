@@ -251,11 +251,11 @@ export function WorksMotion() {
         /* -1 (card low on screen) … 1 (card high): layers drift up as the card rises */
         it.par = clamp(((V / 2 - (r.top + r.height / 2)) / V) * 1.4, -1, 1) * -1;
         const col = r.left > W * 0.4 ? 1 : 0;
-        /* the build-in plays once, all the way, when the card comes into view (right column a beat
-           lower). It used to follow the scroll position, so a card shown mid-screen by a filter or a
-           resize could sit half-built (cut at the top, looking a different size from its neighbour). */
-        if (it.pT < 1) it.pT = r.top < V * (0.9 - col * 0.04) ? 1 : 0;
-        if (it.cur < 0) it.cur = it.pT; // first paint: what's already on screen shows complete
+        /* the build-in follows the scroll over ~85% of a screen, right column a beat later (as before);
+           it never runs backwards, and once scrolling stops any card on screen finishes (settle(),
+           below) — so a card shown mid-screen by a filter or a resize never sits half-built */
+        it.pT = Math.max(it.pT, ramp(V * 0.98 - r.top - col * V * 0.1, 0, V * 0.85));
+        if (it.cur < 0) it.cur = it.pT; // first paint: start where the page already is
         void media; void zoom; void cap;
       });
       if (!eraf) eraf = requestAnimationFrame(ease);
@@ -292,8 +292,22 @@ export function WorksMotion() {
       });
       if (moving) eraf = requestAnimationFrame(ease);
     };
+    /* scrolling has stopped (or a filter / resize changed the layout): every card on screen finishes
+       its build, easing the rest of the way */
+    let idle = 0;
+    const settle = () => {
+      const V = window.innerHeight;
+      items.forEach((it) => {
+        if (it.li.hidden) return;
+        const r = it.li.getBoundingClientRect();
+        if (r.top < V * 0.95 && r.bottom > 0) it.pT = 1;
+      });
+      if (!eraf) eraf = requestAnimationFrame(ease);
+    };
     const onScroll = () => {
       if (!sraf) sraf = requestAnimationFrame(paint);
+      window.clearTimeout(idle);
+      idle = window.setTimeout(settle, 450);
     };
     const onResize = () => {
       if (allWork) {
@@ -313,6 +327,7 @@ export function WorksMotion() {
       cancelAnimationFrame(sraf);
       cancelAnimationFrame(hraf);
       cancelAnimationFrame(eraf);
+      window.clearTimeout(idle);
       offPointer.forEach((off) => off());
       items.forEach((it) => it.layers.forEach(({ el }) => ((el.style.transform = ""), (el.style.opacity = ""))));
       stopIntro();
