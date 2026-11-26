@@ -63,8 +63,9 @@ export const HOME = {
         label: "Creative Intelligence",
         title: "Juice AI",
         description: "Bringing brand strategy and creative production together through an AI-powered platform.",
-        image: "/images/work/juice-ai-thumb.webp",
-        alt: "Juice AI platform interface with the Recipe insights panel on a yellow background",
+        image: "/images/work/juice-ai-thumb-2026.webp",
+        /* 2026 thumbnail (Figma 5740:99544), composed for this card from the Work page's layers */
+        alt: "Juice AI: “Rethinking Creative Production” — a “Glass lips beat matte” insight card over the app, on a yellow background",
         w: 998,
         h: 604,
       },
