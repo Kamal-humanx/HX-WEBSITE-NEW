@@ -43,7 +43,8 @@ export const WORKS = {
     { name: "Quickplay", meta: "Enterprise · Mobile  ·  2024", cats: ["New Age Platform"], soon: false, key: "quickplay", href: "/works/quickplay", image: "/images/work/w-quickplay.webp", alt: "Quickplay screens: a live basketball stream on a phone and the widget builder on a tablet" },
     /* not in the client list yet: shown under All only */
     { name: "SBI Life", meta: "Consumer · Mobile  ·  2024", cats: [], key: "sbi-life", image: "/images/work/w-sbi-life.webp", alt: "SBI Life eShield Next protection-plan screens on three phones" },
-    { name: "Aokah", meta: "Consumer · Brand  ·  2025", cats: ["B2B"], key: "aokah", image: "/images/work/w-aokah.webp", alt: "Aokah location explorer dashboard with city recommendations and a “Need expert guidance?” card" },
+    /* (Godrej Wealth and Aokah swapped places on feedback) */
+    { name: "Godrej Wealth", meta: "Consumer · Mobile  ·  2024", cats: ["New Age Platform"], key: "godrej", image: "/images/work/w-godrej.webp", alt: "Godrej wealth app portfolio screens and insight cards: “Opportunities that reflect your behaviour”" },
     { name: "Hurun India", meta: "AI · Enterprise  ·  2025", cats: ["Website"], soon: false, key: "hurun", href: "/works/hurun", image: "/images/work/w-hurun.webp", alt: "Hurun India website on a phone over gold line illustrations: “Promoting Indian Entrepreneurship”",
       description: "Hurun India focuses on promoting entrepreneurship through comprehensive lists and research. The facelift crafts a compelling narrative of the brand's story, values, and philosophy, with user-friendly navigation." },
     { name: "ASK", meta: "Mobile · Security  ·  2024", cats: ["Financial Services"], soon: false, key: "ask", href: "/works/ask-financials", image: "/images/work/w-ask.webp", alt: "ASK Wealth app “Investment Filters” screen over Mumbai’s sea link at night: “Led by foresight realized by expertise”",
@@ -52,7 +53,7 @@ export const WORKS = {
       description: "Reimagining entertainment streaming with smarter content discovery and experiences that drive engagement." },
     { name: "Setu App", meta: "Enterprise · Mobile  ·  2024", cats: ["D2C"], soon: false, key: "setu", href: "/works/setu-app", image: "/images/work/w-setu.webp", alt: "Setu wellness app held in hand: movement-days progress, supplement subscription and science cards",
       description: "Setu Nutrition is a leading new age nutrition brand. We worked with the team to create a companion app that helps customers stick to their supplements." },
-    { name: "Godrej Wealth", meta: "Consumer · Mobile  ·  2024", cats: ["New Age Platform"], key: "godrej", image: "/images/work/w-godrej.webp", alt: "Godrej wealth app portfolio screens and insight cards: “Opportunities that reflect your behaviour”" },
+    { name: "Aokah", meta: "Consumer · Brand  ·  2025", cats: ["B2B"], key: "aokah", image: "/images/work/w-aokah.webp", alt: "Aokah location explorer dashboard with city recommendations and a “Need expert guidance?” card" },
   ] as { name: string; meta: string; cats: string[]; key: string; image: string; alt: string; soon?: boolean; href?: string; description?: string }[],
 };
 

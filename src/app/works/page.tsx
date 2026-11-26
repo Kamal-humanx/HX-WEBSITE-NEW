@@ -32,32 +32,48 @@ const GLOW: Record<string, string> = {
   ask: "222, 176, 90", minitv: "255, 96, 186", setu: "250, 182, 150", godrej: "245, 170, 80",
 };
 
-function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: string; badge: string | null; glow: string }) {
+/* a thumbnail's layers, placed in % of its 912×640 box; `sizes` scales with the box's share of the screen */
+function Layers({ layers, scale = 1, still = false }: { layers: WorkCardLayers; scale?: number; still?: boolean }) {
   const base = layers.layers.filter((l) => l.d === 0);
   const rest = layers.layers.filter((l) => l.d > 0);
   const layer = (l: WorkCardLayers["layers"][number], i: number) => (
     <div
       key={l.src}
-      className="wk-l absolute"
-      data-d={l.d}
+      className={still ? "absolute" : "wk-l absolute"}
+      data-d={still ? undefined : l.d}
       style={{ left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, height: `${l.h}%`, ["--fd" as string]: `${(i * 0.9).toFixed(1)}s` }}
     >
-      <div className={`relative h-full w-full ${l.d >= 1.8 ? "wk-f" : ""}`}>
-        <Image src={l.src} alt="" fill sizes={`(min-width: 1920px) ${Math.round(9.12 * l.w)}px, (min-width: 768px) ${(0.48 * l.w).toFixed(1)}vw, ${(0.92 * l.w).toFixed(1)}vw`} className="object-fill" />
+      <div className={`relative h-full w-full ${!still && l.d >= 1.8 ? "wk-f" : ""}`}>
+        <Image
+          src={l.src}
+          alt=""
+          fill
+          sizes={`(min-width: 1920px) ${Math.round(9.12 * l.w * scale)}px, (min-width: 768px) ${(0.48 * l.w * scale).toFixed(1)}vw, ${(0.92 * l.w * scale).toFixed(1)}vw`}
+          className="object-fill"
+        />
       </div>
     </div>
   );
   return (
+    <>
+      {base.map(layer)}
+      {layers.overlay && <div aria-hidden="true" className="absolute inset-0" style={{ background: layers.overlay }} />}
+      {rest.map((l, i) => layer(l, i + 1))}
+    </>
+  );
+}
+
+function WorkThumb({ layers, alt, badge, glow, flush = false, scale = 1 }: { layers: WorkCardLayers; alt: string; badge: string | null; glow: string; flush?: boolean; scale?: number }) {
+  return (
     <div
       role="img"
       aria-label={alt}
-      className="wk-media relative aspect-[912/640] overflow-hidden rounded-panel bg-night-2 [container-type:inline-size]"
+      /* flush: square-cornered, to sit edge to edge inside a highlighted card */
+      className={`wk-media relative aspect-[912/640] overflow-hidden bg-night-2 [container-type:inline-size] ${flush ? "" : "rounded-panel"}`}
       style={{ ...(layers.bg ? { background: layers.bg } : {}), ["--glow" as string]: glow }}
     >
       <div className="wk-zoom absolute inset-0">
-        {base.map(layer)}
-        {layers.overlay && <div aria-hidden="true" className="absolute inset-0" style={{ background: layers.overlay }} />}
-        {rest.map((l, i) => layer(l, i + 1))}
+        <Layers layers={layers} scale={scale} />
       </div>
       {badge && (
         <span aria-hidden="true" className="wk-badge">
@@ -68,21 +84,39 @@ function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: 
   );
 }
 
-/* A category's highlighted project when it isn't BIAL: the featured card's layout (text bottom-left,
-   picture right) with the project's own thumbnail. Hidden until its filter is chosen. */
+/* light thumbnails get a pale wash and dark text on their highlighted card; the rest a dark wash, white text */
+const LIGHT = new Set(["juice-ai", "setu", "aokah", "aadhaar", "momverse", "amazon-now", "sbi-life"]);
+
+/* A category's highlighted project when it isn't BIAL, made one piece like the BIAL card: the card's
+   ground is the project's own thumbnail, enlarged and softly blurred to fill it; the thumbnail itself
+   sits flush on the right, full height, its left edge fading into that ground; a wash on the left
+   keeps the text readable (pale + dark text for light thumbnails). Hidden until its filter is chosen. */
 function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats: string[]; glow: string }) {
   const soon = p.soon !== false;
-  const thumb = <WorkThumb layers={WORK_LAYERS[p.key]} alt={p.alt} badge={soon ? WORKS.badge : null} glow={glow} />;
+  const L = WORK_LAYERS[p.key];
+  const light = LIGHT.has(p.key);
+  const thumb = <WorkThumb layers={L} alt={p.alt} badge={soon ? WORKS.badge : null} glow={glow} flush scale={1.25} />;
+  const wash = light
+    ? "linear-gradient(90deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 34%, rgba(255,255,255,0) 58%)"
+    : "linear-gradient(90deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.45) 34%, rgba(10,10,10,0) 58%)";
   return (
     <section data-tags={cats.join("|")} hidden aria-label={p.name} className="container-page mt-[clamp(32px,2.969vw,57px)]">
       {/* wk-item: the grid's build-in and hover (none for Coming Soon) */}
       <div className="wk-item" data-soon={soon ? "" : undefined}>
         <article
-          className="relative isolate overflow-hidden rounded-feature md:aspect-[1848/780]"
-          style={{ background: "linear-gradient(123deg, #161616 6%, #1f1f1f 111%)", boxShadow: "inset 14px 11px 84px rgba(244, 244, 244, 0.12)" }}
+          className={`spot-card relative isolate overflow-hidden rounded-feature md:aspect-[1848/780] md:[container-type:size] ${light ? "text-ink" : "text-white"}`}
+          style={{ background: L.bg ?? "#131313" }}
         >
-          {/* the thumbnail at its grid size (912 of 1848), centred on the right */}
-          <div className="relative p-3 md:absolute md:right-[2.5%] md:top-1/2 md:w-[49.35%] md:-translate-y-1/2 md:p-0">
+          {/* the ground: the same layers, enlarged to cover the card and blurred */}
+          <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+            <div className="spot-ground absolute left-1/2 top-1/2 aspect-[912/640] h-[130%] -translate-x-1/2 -translate-y-1/2 md:h-auto md:w-[max(100cqw,calc(100cqh*912/640))]">
+              <Layers layers={L} scale={0.5} still />
+            </div>
+            <div className="absolute inset-0 max-md:hidden" style={{ background: wash }} />
+            <div className="absolute inset-0 md:hidden" style={{ background: light ? "rgba(255,255,255,0.55)" : "rgba(10,10,10,0.5)" }} />
+          </div>
+          {/* the thumbnail, flush right and full height on desktop; its left edge melts into the ground */}
+          <div className="spot-thumb relative md:absolute md:inset-y-0 md:right-0 md:aspect-[912/640] md:h-full">
             {p.href ? (
               <Link href={p.href} tabIndex={-1} aria-hidden="true" className="block cursor-pointer">
                 {thumb}
@@ -91,14 +125,14 @@ function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats:
               thumb
             )}
           </div>
-          <div className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[40%] md:p-0">
+          <div className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[38%] md:p-0">
             <div className="flex flex-col gap-3">
-              <p className="font-mono text-xs uppercase leading-[1.2] tracking-[-0.015em] text-white">{cats[0]}</p>
+              <p className="font-mono text-xs uppercase leading-[1.2] tracking-[-0.015em]">{cats[0]}</p>
               <h2 className="text-h3-md font-medium leading-[1.2]">
                 {p.name}
                 {soon && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
               </h2>
-              {p.description && <p className="font-mono text-base leading-[1.4] tracking-[-0.02em] text-[#fafaf8]">{p.description}</p>}
+              {p.description && <p className={`font-mono text-base leading-[1.4] tracking-[-0.02em] ${light ? "text-ink/90" : "text-[#fafaf8]"}`}>{p.description}</p>}
             </div>
             {p.href && (
               <ArrowLink href={p.href} srSuffix={`: ${p.name}`} className="self-start after:absolute after:inset-0 after:content-['']">

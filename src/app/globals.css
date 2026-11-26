@@ -372,6 +372,11 @@
 .case-card.is-active .case-img {
   transform: scale(1.02);
 }
+/* homepage Coming Soon pill: the top-right corner of the thumbnail (the Work page's sits top-left) */
+.case-thumb .wk-badge {
+  left: auto;
+  right: clamp(7px, calc(2.857cqw - 3.06px), 23px);
+}
 
 /* Hero (HeroIntro.tsx): lines are drawn in by the Careers feathered mask; "Human" letters are
    boxes so each can hold its width while it is still a machine glyph. */
@@ -562,6 +567,24 @@
     linear-gradient(#000 0 0);
   opacity: var(--spot, 0);
   transition: opacity 0.4s ease;
+}
+
+/* Work page highlighted card (a category's single project; works/page.tsx SpotCard): the ground is the
+   thumbnail's own layers, enlarged and blurred; on desktop the crisp thumbnail sits flush right with its
+   left edge fading into it, and its Coming Soon pill moves to the top-right (clear of the fade). */
+.spot-ground {
+  filter: blur(42px) saturate(1.1);
+  scale: 1.12;
+}
+@media (min-width: 768px) {
+  .spot-thumb {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 36%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 36%);
+  }
+  .spot-thumb .wk-badge {
+    left: auto;
+    right: clamp(7px, calc(2.857cqw - 3.06px), 23px);
+  }
 }
 
 /* Work page project names: a soft grey at rest, white while the project is hovered (thumbnail or

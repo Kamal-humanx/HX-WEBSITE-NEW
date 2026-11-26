@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLink } from "@/components/ui";
 import { RippleImage } from "@/components/RippleImage";
@@ -125,8 +126,9 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
   return (
     <article
       ref={ref}
-      onMouseEnter={onEnter}
-      onFocus={onEnter}
+      /* Coming Soon cards don't take the hover (no notch, fill, zoom or ripple): their project isn't out yet */
+      onMouseEnter={c.soon ? undefined : onEnter}
+      onFocus={c.soon ? undefined : onEnter}
       className={`case-card group relative isolate grid md:min-h-[305px] md:grid-cols-[29.5%_1fr_minmax(0,27.145%)] ${active ? "is-active" : ""}`}
     >
       <svg aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 h-full w-full overflow-visible">
@@ -161,8 +163,12 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
           the picture crops to fit. At 1920 the card is 305px and this is exactly Figma's 502×302. */}
       <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
         {/* cursor-local liquid ripple (RippleImage); z-[1] keeps it above the card's full-card link */}
-        <RippleImage src={c.image} alt={c.alt} sizes="(min-width: 768px) 27vw, 100vw" className="case-img object-cover" />
-        {/* the Work page's pill (.wk-badge), sized by this thumbnail's width */}
+        {c.soon ? (
+          <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className="object-cover" />
+        ) : (
+          <RippleImage src={c.image} alt={c.alt} sizes="(min-width: 768px) 27vw, 100vw" className="case-img object-cover" />
+        )}
+        {/* the Work page's pill (.wk-badge), sized by this thumbnail's width, in the top-right corner */}
         {c.soon && (
           <span aria-hidden="true" className="wk-badge pointer-events-none z-[2]">
             Coming Soon
