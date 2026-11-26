@@ -118,15 +118,20 @@ export default function HomePage() {
           <SwapStage
             hold={90}
             lead={70}
-            first={<CapabilitiesSection />}
+            first={<CapabilitiesSection phoneList />}
             second={
               /* Testimonial (5376:2844 / Testimonials 4899:1434) */
-              <section aria-labelledby="testimonial-title" className="text-white">
+              /* testimonials-phone: Figma "testimonials-1" 5969:10826 on phones (globals.css) */
+              <section aria-labelledby="testimonial-title" className="testimonials-phone text-white">
                 {/* Testimonials block: x=38, 1856 wide on the 1920 frame → 38px left / 26px right. */}
                 <div className="container-page pb-[var(--section-y)] pt-[clamp(40px,4.4vw,85px)] lg:pl-[clamp(16px,1.979vw,38px)] lg:pr-[clamp(16px,1.354vw,26px)]">
                   <div data-swap-block="">
                     <DisplayHeading id="testimonial-title" className="text-white">
-                      {testimonial.title}
+                      {/* "co-conspirators" never splits at its hyphen; phones break before it, as Figma
+                          testimonials-1 ("From Our / Co-Conspirators") */}
+                      {testimonial.title.slice(0, testimonial.title.lastIndexOf(" "))}{" "}
+                      <br className="md:hidden" />
+                      <span className="whitespace-nowrap">{testimonial.title.slice(testimonial.title.lastIndexOf(" ") + 1)}</span>
                     </DisplayHeading>
                   </div>
                   <Testimonials />

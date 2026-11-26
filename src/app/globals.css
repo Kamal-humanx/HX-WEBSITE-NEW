@@ -1158,6 +1158,81 @@
   }
 }
 
+/* Homepage on phones — Figma "Services — Mobile" 5969:6729 (sections.tsx CapabilitiesSection phoneList):
+   title 40/44; each group: name 28/34 (the first orange), "Our Capabilities" 10/16 +1.94px #8b8b8b,
+   then one list (17/24 on a 45px pitch, white 22% dividers between items, none after the last),
+   closed 30px below by a white 55% rule; the next group's name 33px below it. */
+@media (max-width: 767px) {
+  .caps-list .caps-title {
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: -0.02em;
+  }
+  .caps-list .caps-rows {
+    margin-top: 40px;
+  }
+  .caps-list .group {
+    gap: 0;
+    padding-top: 33px;
+    padding-bottom: 19.5px;
+    border-bottom-color: rgba(255, 255, 255, 0.55);
+  }
+  .caps-list .group:first-child {
+    padding-top: 0;
+  }
+  .caps-list .group h3 {
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: -0.03em;
+  }
+  .caps-list .group:first-child h3 {
+    color: var(--color-accent);
+  }
+  .caps-list .caps-label {
+    margin-top: 20px;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 1.94px;
+    color: #8b8b8b;
+  }
+  .caps-list .caps-grid {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 11.5px;
+  }
+  .caps-list .cap-item {
+    padding-top: 10.5px;
+    padding-bottom: 10.5px;
+    font-size: 17px;
+    line-height: 24px;
+  }
+  .caps-list .cap-item::after {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .caps-list .caps-grid > ul:last-child > .cap-item:last-child::after {
+    display: none;
+  }
+
+  /* Homepage on phones — Figma "testimonials-1" 5969:10826: title 32 (breaks "From Our /
+     Co-Conspirators"), quote 24/118% 56px below it, the person 32px below the quote, then the logo
+     strip 63px below (155 × 105 tabs from the left edge, running off the right); no arrows. */
+  .testimonials-phone .testimonial-stage {
+    margin-top: 56px;
+  }
+  .testimonials-phone .testimonial-slide blockquote p {
+    font-size: 24px;
+    line-height: 1.18;
+  }
+  .testimonials-phone ul[aria-label="Clients"] {
+    margin-top: 63px;
+  }
+  .testimonials-phone ul[aria-label="Clients"] > li {
+    width: 155px;
+  }
+  .testimonials-phone .logo-tab {
+    height: 105px;
+  }
+}
+
 /* ---------- Thank-you pop-up (see components/ThankYouDialog.tsx) ---------- */
 .hx-thanks[open] {
   animation: hx-thanks-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);

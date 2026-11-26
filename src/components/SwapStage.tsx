@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
  * Two sections that share one held screen: the first is shown, then — while the page holds for
@@ -21,9 +21,19 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
   const stickRef = useRef<HTMLDivElement>(null);
   const aRef = useRef<HTMLDivElement>(null);
   const bRef = useRef<HTMLDivElement>(null);
+  /* phones (< 768): no shared screen — the two sections simply follow one another (Figma's phone
+     frames give the capabilities a full-length list, taller than a phone screen) */
+  const [phone, setPhone] = useState(false);
+  useEffect(() => {
+    const mq = matchMedia("(max-width: 767px)");
+    const f = () => setPhone(mq.matches);
+    f();
+    mq.addEventListener("change", f);
+    return () => mq.removeEventListener("change", f);
+  }, []);
 
   useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (phone || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const wrap = wrapRef.current!, stick = stickRef.current!, A = aRef.current!, B = bRef.current!;
     wrap.classList.add("swap-on");
 
@@ -94,7 +104,7 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       B.removeAttribute("aria-hidden");
       B.inert = false;
     };
-  }, [hold, lead]);
+  }, [hold, lead, phone]);
 
   return (
     <div ref={wrapRef} className="swap-stage relative">

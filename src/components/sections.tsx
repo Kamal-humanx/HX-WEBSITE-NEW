@@ -12,18 +12,20 @@ import { DisplayHeading } from "./ui";
  * is held in place for a screen while the testimonials take over, so it has to fit one phone
  * screen; as a single column it was ~1.5 screens tall and most of it was never on screen at once.
  */
-export function CapabilitiesSection({ id = "capabilities", reveal = false }: { id?: string; reveal?: boolean }) {
+export function CapabilitiesSection({ id = "capabilities", reveal = false, phoneList = false }: { id?: string; reveal?: boolean; phoneList?: boolean }) {
   /* `reveal`: soft scroll-in reveal (needs <CaseReveal /> on the page) — About, where nothing else animates it */
   const rv = reveal ? { "data-rv": "" } : {};
+  /* `phoneList` (homepage): on phones, Figma "Services — Mobile" 5969:6729 — one full-length list per
+     group with dividers (globals.css .caps-list); otherwise the compact two-column phone form */
   return (
-    <section aria-labelledby={`${id}-title`} className="bg-night text-white">
+    <section aria-labelledby={`${id}-title`} className={`bg-night text-white ${phoneList ? "caps-list" : ""}`}>
       <div className="container-page pb-[var(--section-y)] pt-[clamp(56px,5.5vw,104px)] lg:px-[clamp(36px,3.75vw,72px)]">
         <div data-swap-block="" {...rv}>
-          <DisplayHeading id={`${id}-title`} className="max-w-[440px] text-white">
+          <DisplayHeading id={`${id}-title`} className="caps-title max-w-[440px] text-white">
             {CAPABILITIES.title}
           </DisplayHeading>
         </div>
-        <div className="mt-[clamp(20px,5.4vw,103px)]">
+        <div className="caps-rows mt-[clamp(20px,5.4vw,103px)]">
           {CAPABILITIES.rows.map((row) => (
             <div
               key={row.title}
@@ -38,8 +40,8 @@ export function CapabilitiesSection({ id = "capabilities", reveal = false }: { i
               <div className="md:flex md:gap-[23px]">
                 <span aria-hidden="true" className="hidden w-px shrink-0 bg-white/10 md:block" />
                 <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-gray md:text-sm">{CAPABILITIES.label}</p>
-                  <div className="mt-1 grid grid-cols-2 gap-x-4 md:mt-2 md:gap-x-0">
+                  <p className="caps-label font-mono text-[11px] uppercase tracking-[0.12em] text-gray md:text-sm">{CAPABILITIES.label}</p>
+                  <div className="caps-grid mt-1 grid grid-cols-2 gap-x-4 md:mt-2 md:gap-x-0">
                     {row.columns.map((col, c) => (
                       <ul key={c}>
                         {col.map((item) => (

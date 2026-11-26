@@ -55,7 +55,32 @@ export function ToneShift() {
     sortItems();
     const dark = document.querySelector<HTMLElement>(".tone-dark");
     const stage = document.querySelector<HTMLElement>(".tone-dark .swap-stage");
-    dark?.classList.add("tone-on");
+    /* phones (< 768): the capabilities aren't pulled up onto the held screen (their Figma phone list is
+       taller than a phone screen): the dark block follows the work section in the normal flow, on the
+       night it has darkened to, and nothing fades in there — the work cards still dip out */
+    const phoneMq = matchMedia("(max-width: 767px)");
+    const capsEls = () => [title, ...rows.flatMap((r) => [r.h, r.rule, r.label, ...r.items])];
+    const showCaps = () => {
+      capsEls().forEach((el) => {
+        if (!el) return;
+        el.style.opacity = el.style.filter = el.style.transform = "";
+      });
+      rows.forEach((r) =>
+        r.items.forEach((li) => {
+          li.style.removeProperty("--line");
+          const txt = li.querySelector<HTMLElement>(".cap-txt");
+          if (txt) txt.style.opacity = "";
+        }),
+      );
+    };
+    const applyMode = () => {
+      dark?.classList.toggle("tone-on", !phoneMq.matches);
+      if (phoneMq.matches) {
+        showCaps();
+        if (stage) stage.style.pointerEvents = "";
+      }
+    };
+    applyMode();
     let raf = 0;
 
     /* the "in" look: fades in place — clears from a soft blur and settles from a hair smaller */
@@ -97,6 +122,9 @@ export function ToneShift() {
         window.dispatchEvent(new Event("hx:tone"));
       }
 
+      /* phones: the capabilities follow in the normal flow — nothing fades in on the held screen */
+      if (phoneMq.matches) return;
+
       /* — in: the capabilities are already in place on this same held screen; they fade in there
              with the darkening — title first, then each row, its items a beat apart — all done by
              the end of the hold — */
@@ -126,12 +154,19 @@ export function ToneShift() {
       sortItems();
       onScroll();
     };
+    const onMode = () => {
+      applyMode();
+      sortItems();
+      onScroll();
+    };
     paint();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+    phoneMq.addEventListener("change", onMode);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      phoneMq.removeEventListener("change", onMode);
       cancelAnimationFrame(raf);
       main.style.removeProperty("--tone");
       dark?.classList.remove("tone-on");

@@ -96,8 +96,9 @@ export function Testimonials() {
         ))}
       </div>
 
-      {/* Phones and tablets: previous / next arrows and a counter */}
-      <div data-swap-block="" className="mt-5 flex items-center justify-between lg:hidden">
+      {/* Tablets: previous / next arrows and a counter (phones follow Figma testimonials-1: none —
+          a tap on a logo or a swipe on the quote changes the testimonial) */}
+      <div data-swap-block="" className="mt-5 hidden items-center justify-between md:flex lg:hidden">
         <p className="font-mono text-sm tracking-[-0.03em] text-gray-5" aria-hidden="true">
           <span className="text-white">{String(active + 1).padStart(2, "0")}</span> / {String(count).padStart(2, "0")}
         </p>
