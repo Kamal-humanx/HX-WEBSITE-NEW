@@ -39,8 +39,9 @@
   --color-accent-2: #f07412; /* orange — philosophy highlights, chips */
   --color-accent-ink: #b84a08; /* WCAG AA orange for small text on light (5.2:1 on white, 4.9:1 on #fff8ed) */
   --color-apricot: #f7ad6b; /* accent/Apricot */
-  --color-btn-from: #c4500a; /* AA-adjusted pill gradient (Figma: #ff821f) */
-  --color-btn-to: #b65a24; /* AA-adjusted pill gradient (Figma: #eba772) */
+  /* main CTA pill: one colour site-wide, matching the careers "See open roles" button (Figma gradient) */
+  --color-btn-from: #ff821f;
+  --color-btn-to: #eba772;
 
   /* ---- Type ---- */
   --font-sans: var(--font-uncut), "Uncut Sans", ui-sans-serif, system-ui, sans-serif;
@@ -79,7 +80,7 @@
 
   /* ---- Shadow ---- */
   --shadow-tab: inset 0 -19px 47.6px -17px rgba(255, 255, 255, 0.41);
-  --shadow-pill: inset -1px -1px 12.3px 0 #ffffff;
+  --shadow-pill: inset -1px -1px 12.3px 3px rgba(255, 255, 255, 0.9); /* as the careers CTA */
   --shadow-thumb: inset 0 0 32.4px 0 #ffffff;
 
   /* ---- Breakpoints (mobile-first) ---- */
@@ -149,7 +150,7 @@
   .btn-pill {
     @apply relative inline-flex min-h-11 items-center gap-2 rounded-full font-mono font-medium text-white;
     background-image: linear-gradient(90deg, var(--color-btn-from), var(--color-btn-to));
-    border: 0.5px solid #fff;
+    border: 0.5px solid rgba(255, 255, 255, 0.85);
     box-shadow: var(--shadow-pill);
     overflow: hidden;
     isolation: isolate;
