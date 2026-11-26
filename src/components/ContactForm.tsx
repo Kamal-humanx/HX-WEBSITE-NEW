@@ -57,7 +57,10 @@ function TextField({
   required,
   autoComplete,
   multiline,
+  rv,
 }: {
+  /** reveals on its own as the page loads (CaseReveal); off for fields inside a row that reveals */
+  rv?: boolean;
   name: Field;
   label: string;
   placeholder: string;
@@ -81,7 +84,7 @@ function TextField({
     }`,
   };
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+    <div data-rv={rv ? "" : undefined} className="flex min-w-0 flex-1 flex-col gap-1.5">
       <label htmlFor={id} className="text-base font-medium text-ink-form">
         {label}
       </label>
@@ -217,14 +220,15 @@ export function ContactForm() {
       aria-labelledby="contact-title"
       className="flex flex-col gap-[clamp(36px,3.65vw,70px)] rounded-[28px] bg-white py-[clamp(8px,1.9vw,36px)] lg:pl-[36px] lg:pr-[30px]"
     >
-      <div className="flex flex-col gap-[clamp(36px,3.65vw,70px)] sm:flex-row sm:gap-7">
+      {/* data-rv: each row rises in softly, top to bottom, as the page loads (CaseReveal on /contact) */}
+      <div data-rv className="flex flex-col gap-[clamp(36px,3.65vw,70px)] sm:flex-row sm:gap-7">
         <TextField name="fullName" label={F.fullName.label} placeholder={F.fullName.placeholder} error={errors.fullName} required autoComplete="name" />
         <TextField name="contact" label={F.contact.label} placeholder={F.contact.placeholder} error={errors.contact} type="tel" autoComplete="tel" />
       </div>
-      <TextField name="email" label={F.email.label} placeholder={F.email.placeholder} error={errors.email} type="email" required autoComplete="email" />
-      <TextField name="company" label={F.company.label} placeholder={F.company.placeholder} error={errors.company} required autoComplete="organization" />
+      <TextField rv name="email" label={F.email.label} placeholder={F.email.placeholder} error={errors.email} type="email" required autoComplete="email" />
+      <TextField rv name="company" label={F.company.label} placeholder={F.company.placeholder} error={errors.company} required autoComplete="organization" />
 
-      <fieldset aria-describedby={errors.budget ? "cf-budget-err" : undefined} className="flex flex-col gap-3">
+      <fieldset data-rv aria-describedby={errors.budget ? "cf-budget-err" : undefined} className="flex flex-col gap-3">
         <legend className="mb-3 text-base font-medium text-ink-form">{F.budget.label}</legend>
         <div className="flex flex-wrap gap-2">
           {F.budget.options.map((opt, i) => (
@@ -243,7 +247,7 @@ export function ContactForm() {
         )}
       </fieldset>
 
-      <TextField name="message" label={F.message.label} placeholder={F.message.placeholder} error={errors.message} required multiline />
+      <TextField rv name="message" label={F.message.label} placeholder={F.message.placeholder} error={errors.message} required multiline />
 
       {/* Honeypot (spam trap) */}
       <div aria-hidden="true" className="absolute left-[-9999px]">
@@ -254,7 +258,7 @@ export function ContactForm() {
 
       {TURNSTILE_SITE_KEY && <div ref={widgetEl} className="empty:hidden" />}
 
-      <div className="flex flex-col items-start gap-5">
+      <div data-rv className="flex flex-col items-start gap-5">
         <button
           type="submit"
           disabled={status === "sending"}
