@@ -42,8 +42,10 @@ export const PAGE_META = {
 export type PageKey = keyof typeof PAGE_META;
 
 /** The share card shown when a HumanX link is pasted into WhatsApp, Slack, LinkedIn, X… (Figma 5896:40884).
+ *  The logo and tagline are scaled to sit inside the central square, because some apps show a small
+ *  square thumbnail cut from the middle of the image instead of the full card.
  *  A small JPEG on purpose: WhatsApp silently drops preview images that are too heavy. */
-export const OG_IMAGE = { url: "/opengraph-image.jpg", width: 1200, height: 630, type: "image/jpeg", alt: "HumanX - Crafting Products That Are Unmistakably Human" };
+export const OG_IMAGE = { url: "/share-card.jpg", width: 1200, height: 630, type: "image/jpeg", alt: "HumanX - Crafting Products That Are Unmistakably Human" };
 
 export function pageMetadata(key: PageKey): Metadata {
   const m = PAGE_META[key];
