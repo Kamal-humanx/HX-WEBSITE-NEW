@@ -107,9 +107,9 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
       },
       {
         "src": "/images/work/layers/juice-ai/99548.webp",
-        "x": 22.768,
-        "y": 10.266,
-        "w": 57.385,
+        "x": 30.875,
+        "y": 10.219,
+        "w": 40.974,
         "h": 15.125,
         "d": 0.6
       },
