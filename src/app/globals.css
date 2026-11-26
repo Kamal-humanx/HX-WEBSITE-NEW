@@ -645,6 +645,9 @@
 .swap-stage.swap-on .swap-stick {
   position: sticky;
   display: grid;
+  /* one screen-wide column: without this the column grows to fit the phone logo row's full scroll
+     length (a few px wider than the screen), and the whole homepage could be dragged sideways */
+  grid-template-columns: minmax(0, 1fr);
   min-height: 100svh;
 }
 .swap-stage.swap-on .swap-stick > * {
