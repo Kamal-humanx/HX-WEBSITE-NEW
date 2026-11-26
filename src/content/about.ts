@@ -6,16 +6,15 @@ export const ABOUT = {
     "Products remembered rarely come from following the expected. They come from asking better questions and building with intention from day one.",
   /** Studio carousel (5724:39129) — photographs only; the quotes were removed in the 2026 revision. */
   slides: [
-    { image: "/images/about/studio-1.webp", alt: "Two HumanX designers reviewing work together at a laptop in the studio" },
-    { image: "/images/about/studio-2.webp", alt: "A designer working on a laptop on an orange sofa in the HumanX studio" },
-    { image: "/images/about/studio-3.webp", alt: "Two team members in conversation on a yellow sofa" },
-    { image: "/images/about/studio-4.webp", alt: "Two colleagues discussing a problem across a meeting table" },
-    { image: "/images/about/studio-5.webp", alt: "A designer focused on her laptop at a desk against a yellow wall" },
-    { image: "/images/about/studio-6.webp", alt: "A team member working at a laptop in the open studio" },
+    { image: "/images/about/team-1.webp", alt: "Two HumanX designers reviewing work together at a laptop in the studio" },
+    { image: "/images/about/team-2.webp", alt: "A designer working on a laptop on an orange sofa in the HumanX studio" },
+    { image: "/images/about/team-3.webp", alt: "Two team members talking through work at a laptop by the studio window" },
+    { image: "/images/about/team-4.webp", alt: "The team gathered around a table covered in sticky notes during a workshop", position: "50% 33%" },
+    { image: "/images/about/team-5.webp", alt: "The team in discussion around the meeting room table" },
   ],
-  process: "Great products aren't created by following The Process. They're created by knowing when to challenge It.",
+  process: "Our journey and impact",
   stats: [
-    { value: "12+", caption: "What began as A brother sister duo has grown into a team working across sectors" },
+    { value: "12+ Years", caption: "What began as a brother sister duo has grown into a team working across sectors and across continents" },
     { value: "1Billion+", caption: "People who interact with the systems we’ve helped build" },
     { value: "50+", caption: "Strategists, designers, and operations managers bringing their unique perspectives" },
   ],

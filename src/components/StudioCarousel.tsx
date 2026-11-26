@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-type Slide = { image: string; alt: string };
+/** `position` is the photo's focal point (CSS object-position), for a photo whose subject is off-centre. */
+type Slide = { image: string; alt: string; position?: string };
 
 /** Auto-scroll speed, as a fraction of the carousel's width per second (≈ 65 px/s on a 1440 screen)… */
 const SPEED = 0.045;
@@ -154,6 +155,7 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
                   priority={i < 3}
                   fetchPriority={i === 1 ? "high" : undefined}
                   className="object-cover"
+                  style={s.position ? { objectPosition: s.position } : undefined}
                 />
               </li>
             );
