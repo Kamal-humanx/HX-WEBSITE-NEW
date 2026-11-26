@@ -16,7 +16,7 @@ export function Showreel() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <figure className="group/reel relative aspect-[1151/720] w-full overflow-hidden bg-black lg:self-start">
+    <figure className="group/reel relative aspect-[1151/720] w-full overflow-hidden bg-black lg:self-center">
       {playing ? (
         <iframe
           src={PLAYER_SRC}
