@@ -13,6 +13,8 @@ import { useEffect } from "react";
  *    pulled up over the hold, `.tone-dark.tone-on`) and fade in there with the darkening — clearing
  *    from a soft blur and settling from a hair smaller, title first, then each row and its items.
  *    Nothing scrolls in. Then the page carries straight on into the capabilities → testimonials swap.
+ * Phones: the cards leave upwards (rising and shrinking from their top edge, a stack folding
+ *    away), and the services list, pulled up one screen only, rises into place while it fades in.
  * Reduced motion: none of this; the sections simply follow one another.
  */
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -55,30 +57,15 @@ export function ToneShift() {
     sortItems();
     const dark = document.querySelector<HTMLElement>(".tone-dark");
     const stage = document.querySelector<HTMLElement>(".tone-dark .swap-stage");
-    /* phones (< 768): the capabilities aren't pulled up onto the held screen (their Figma phone list is
-       taller than a phone screen): the dark block follows the work section in the normal flow, on the
-       night it has darkened to, and nothing fades in there — the work cards still dip out */
+    /* phones (< 768): the Figma phone list is taller than a screen, so the dark block is pulled up
+       by one screen only (.tone-on-phone): the list rises in from below over the hold while it fades
+       in with the darkening; the work cards leave upwards instead of dipping */
     const phoneMq = matchMedia("(max-width: 767px)");
-    const capsEls = () => [title, ...rows.flatMap((r) => [r.h, r.rule, r.label, ...r.items])];
-    const showCaps = () => {
-      capsEls().forEach((el) => {
-        if (!el) return;
-        el.style.opacity = el.style.filter = el.style.transform = "";
-      });
-      rows.forEach((r) =>
-        r.items.forEach((li) => {
-          li.style.removeProperty("--line");
-          const txt = li.querySelector<HTMLElement>(".cap-txt");
-          if (txt) txt.style.opacity = "";
-        }),
-      );
-    };
     const applyMode = () => {
+      /* phones get a shorter pull-up (globals.css .tone-on-phone): the services list rises in from
+         below while the ground darkens and fades in as it comes, so there's no empty dark screen */
       dark?.classList.toggle("tone-on", !phoneMq.matches);
-      if (phoneMq.matches) {
-        showCaps();
-        if (stage) stage.style.pointerEvents = "";
-      }
+      dark?.classList.toggle("tone-on-phone", phoneMq.matches);
     };
     applyMode();
     let raf = 0;
@@ -110,11 +97,20 @@ export function ToneShift() {
         const onScreen = r.bottom > 0 && r.top < V;
         const p = smooth(ramp(e, (onScreen ? j : 0) * 0.07, 0.32 + (onScreen ? j : 0) * 0.07));
         if (onScreen) j++;
-        set(li, p ? `translateY(${(p * p * 72).toFixed(1)}px)` : "", 1 - p);
+        /* phones: they leave upwards instead, each rising and shrinking a little from its top
+           edge so it tucks in under the one above, like a stack folding away */
+        if (phoneMq.matches) {
+          li.style.transformOrigin = p ? "50% 0" : "";
+          set(li, p ? `translateY(${(-90 * p).toFixed(1)}px) scale(${(1 - 0.08 * p).toFixed(4)})` : "", 1 - p);
+        } else set(li, p ? `translateY(${(p * p * 72).toFixed(1)}px)` : "", 1 - p);
       });
 
+      /* phones: the dark and the services start a beat earlier, right as the last card goes, so
+         there's no blank white moment between them */
+      const o = phoneMq.matches ? 0.15 : 0;
+
       /* — ground: the stage darkens white → night over the second half of the hold — */
-      const k = smooth(ramp(e, 0.5, 0.95));
+      const k = smooth(ramp(e, 0.5 - o, 0.95 - o));
       if (Math.abs(k - lastTone) > 0.0005) {
         lastTone = k;
         const c = Math.round(255 + (14 - 255) * k);
@@ -122,15 +118,12 @@ export function ToneShift() {
         window.dispatchEvent(new Event("hx:tone"));
       }
 
-      /* phones: the capabilities follow in the normal flow — nothing fades in on the held screen */
-      if (phoneMq.matches) return;
-
       /* — in: the capabilities are already in place on this same held screen; they fade in there
              with the darkening — title first, then each row, its items a beat apart — all done by
              the end of the hold — */
-      fadeIn(title, smooth(ramp(e, 0.45, 0.8)));
+      fadeIn(title, smooth(ramp(e, 0.45 - o, 0.8 - o)));
       rows.forEach((r, i) => {
-        const base = 0.5 + i * 0.08;
+        const base = 0.5 - o + i * 0.08;
         fadeIn(r.h, smooth(ramp(e, base, base + 0.3)));
         fadeIn(r.rule, smooth(ramp(e, base + 0.03, base + 0.33)));
         fadeIn(r.label, smooth(ramp(e, base + 0.04, base + 0.32)));
@@ -169,7 +162,8 @@ export function ToneShift() {
       phoneMq.removeEventListener("change", onMode);
       cancelAnimationFrame(raf);
       main.style.removeProperty("--tone");
-      dark?.classList.remove("tone-on");
+      dark?.classList.remove("tone-on", "tone-on-phone");
+      cards.forEach((li) => (li.style.transformOrigin = ""));
       if (stage) stage.style.pointerEvents = "";
       [...cards, title, ...rows.flatMap((r) => [r.h, r.rule, r.label, ...r.items])].forEach((el) => {
         if (!el) return;

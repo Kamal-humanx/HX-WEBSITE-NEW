@@ -746,6 +746,25 @@
 .tone-dark.tone-on > :not(.swap-stage) {
   pointer-events: auto;
 }
+/* Phones: the services list is taller than a screen, so the block is pulled up by one screen only —
+   it starts 70% down the held screen and rises into place over the hold while it fades in with the
+   darkening, so the dark ground never arrives empty. Same see-through overlap as above. */
+@media (max-width: 767px) {
+  .tone-dark.tone-on-phone {
+    margin-top: calc(-100svh - 1px);
+    padding-top: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(100svh - 6px),
+      var(--tone, var(--color-night)) calc(100svh - 6px)
+    );
+  }
+  .tone-dark.tone-on-phone > :not(.swap-stage) {
+    pointer-events: auto;
+  }
+}
 .tone-dark .swap-a > section {
   background: transparent;
 }
