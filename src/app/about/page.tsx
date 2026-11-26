@@ -19,6 +19,23 @@ const FILL = ["#c5bfb5", "#a79e8f", "#898073"];
 /** Stagger index for the scroll reveal (see .rv in globals.css). */
 const stagger = (i: number) => ({ ["--i" as string]: i }) as CSSProperties;
 
+/** Text as one span per word (for AboutReveal's word-by-word rise); read as a whole via aria-label. */
+function Words({ text }: { text: string }) {
+  const words = text.split(" ");
+  return (
+    <span aria-hidden="true">
+      {words.map((w, i) => (
+        <span key={i}>
+          <span data-w className="inline-block">
+            {w}
+          </span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function AboutPage() {
   const { principles } = ABOUT;
 
@@ -28,17 +45,17 @@ export default function AboutPage() {
       <main id="main">
         {/* ---------- Intro (5376:13451 + 5376:10176) ---------- */}
         <section aria-labelledby="about-title" className="container-page grid gap-6 pb-[clamp(32px,2.9vw,56px)] pt-[clamp(24px,3.8vw,73px)] lg:grid-cols-[minmax(0,1292px)_minmax(0,472px)] lg:justify-between">
-          {/* both drawn in line by line on load, as the homepage hero (AboutReveal) */}
-          <h1 id="about-title" data-seq="about-title" className="text-h1 font-normal leading-[1.15] tracking-[-0.04em] text-ink">
-            {ABOUT.heading}
+          {/* on load (AboutReveal): the words rise in one by one, then the intro's, then the photos */}
+          <h1 id="about-title" data-seq="about-title" aria-label={ABOUT.heading} className="text-h1 font-normal leading-[1.15] tracking-[-0.04em] text-ink">
+            <Words text={ABOUT.heading} />
           </h1>
-          <p data-seq="about-intro" className="font-mono text-sm font-medium leading-[1.64] tracking-[-0.03em] text-ink-mono lg:pt-3">
-            {ABOUT.intro}
+          <p data-seq="about-intro" aria-label={ABOUT.intro} className="font-mono text-sm font-medium leading-[1.64] tracking-[-0.03em] text-ink-mono lg:pt-3">
+            <Words text={ABOUT.intro} />
           </p>
           <AboutReveal />
         </section>
 
-        <section aria-label="Life at the studio">
+        <section aria-label="Life at the studio" data-seq="about-media">
           <StudioCarousel slides={ABOUT.slides} />
         </section>
 
