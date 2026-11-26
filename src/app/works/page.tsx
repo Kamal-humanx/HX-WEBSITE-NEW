@@ -51,7 +51,7 @@ function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: 
     <div
       role="img"
       aria-label={alt}
-      className="wk-media relative aspect-[912/640] overflow-hidden rounded-panel bg-night-2"
+      className="wk-media relative aspect-[912/640] overflow-hidden rounded-panel bg-night-2 [container-type:inline-size]"
       style={{ ...(layers.bg ? { background: layers.bg } : {}), ["--glow" as string]: glow }}
     >
       <div className="wk-zoom absolute inset-0">
@@ -60,7 +60,7 @@ function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: 
         {rest.map((l, i) => layer(l, i + 1))}
       </div>
       {badge && (
-        <span aria-hidden="true" className="wk-badge absolute left-[6.25%] top-[7.34%] z-[1]">
+        <span aria-hidden="true" className="wk-badge">
           {badge}
         </span>
       )}

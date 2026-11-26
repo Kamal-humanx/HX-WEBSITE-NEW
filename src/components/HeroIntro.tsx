@@ -169,7 +169,6 @@ export function HeroIntro({ line1, line2, intro }: { line1: string; line2: strin
             ))}
           </span>
         </span>
-        <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[0.6em] bg-gradient-to-b from-white/0 to-white/70" />
       </h1>
       <p
         ref={introRef}

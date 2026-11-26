@@ -543,23 +543,56 @@
   transition: opacity 0.4s ease;
 }
 
-/* Work page "Coming Soon" pill (Figma Frame 2147240663, e.g. 5751:106884 on Juice AI): 167.58×41.16
-   at 1920, r23.52, fill #414141 @31% (no blur, so it reads as a tint of the card underneath — olive on
-   Juice AI's yellow); Uncut Sans Medium 17.64 / 23.52, −0.588px, white. Scales down with the card. */
+/* Work page "Coming Soon" pill (Figma 2026 update): desktop 5859:34198 on a 912px card — 176.71×40.88
+   at 23,19, padding 30.35 around 16px uppercase Uncut Sans Medium, inner glow 12px; phone 5850:34152 on
+   a ~352px card — 134×31 at 7,7, 23.5 / 12px, glow 9.1px. Same gradient + 2s shimmer sweep on both.
+   Every size runs linearly between those two by the CARD's width (cq units on .wk-media), clamped to
+   them, so the pill keeps its proportion to the thumbnail at any screen size. */
 .wk-badge {
+  position: absolute;
+  z-index: 1;
+  left: clamp(7px, calc(2.857cqw - 3.06px), 23px);
+  top: clamp(7px, calc(2.143cqw - 0.54px), 19px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: clamp(28px, 2.144vw, 41.16px);
-  padding-inline: clamp(14px, 1.72vw, 33.1px);
+  height: clamp(31px, calc(1.764cqw + 24.79px), 40.88px);
+  padding-inline: clamp(23.5px, calc(1.223cqw + 19.19px), 30.35px);
   border-radius: 999px;
-  background: rgba(65, 65, 65, 0.31);
-  font-size: clamp(12px, 0.919vw, 17.64px);
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(94.48deg, rgba(70, 70, 70, 0.714) 12.768%, rgba(134, 131, 131, 0.391) 99.713%);
+  box-shadow: inset 0 0 clamp(9.1px, calc(0.518cqw + 7.28px), 12px) 0 #fff;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  font-size: clamp(12px, calc(0.714cqw + 9.49px), 16px);
   font-weight: 500;
-  line-height: 1.3333;
-  letter-spacing: -0.0333em;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
   color: #fff;
   white-space: nowrap;
+}
+/* "Skeleton shimmer · 2s seamless sweep": a soft light band crossing the pill, behind the label */
+.wk-badge::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -57%;
+  width: 57%;
+  z-index: -1;
+  background: linear-gradient(119.74deg, rgba(255, 255, 255, 0) 10.94%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 255, 255, 0) 89.06%);
+  animation: wk-shimmer 2s linear infinite;
+}
+@keyframes wk-shimmer {
+  to {
+    transform: translateX(275%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-badge::before {
+    animation: none;
+    display: none;
+  }
 }
 
 /* Pinned statement + overtake (PinStage.tsx): stage 100svh + a short hold + 100svh of cover.
