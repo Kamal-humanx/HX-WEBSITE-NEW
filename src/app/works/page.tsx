@@ -101,6 +101,7 @@ const SPOT: Record<string, Spot> = {
   setu: { field: "linear-gradient(118deg, #f7f1eb 0%, #eee2d8 52%, #e2d1c4 100%)", ink: "dark", pattern: "arcs", tint: "196, 112, 80", blend: "haze", fw: 14 },
   "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20", blend: "haze" },
   ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112", blend: "extend", fw: 34 },
+  quickplay: { field: "linear-gradient(122deg, #0f0806 0%, #3a1a0c 52%, #8a3f17 100%)", ink: "light", pattern: "grid", tint: "255, 140, 80", blend: "haze" },
   minitv: { field: "linear-gradient(122deg, #12060f 0%, #2a0c24 45%, #4a1440 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196", blend: "fade", fw: 46, po: 0.5 },
   /* Hurun: the field is the thumbnail's own left-edge colours, row by row (red top, the laptop's
      near-black, dark red foot — sampled from the thumbnail), so the edge fades into matching colour */
