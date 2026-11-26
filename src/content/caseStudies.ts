@@ -155,10 +155,14 @@ export const CASE_STUDIES: CaseStudy[] = [
       body: "#5a5a5a",
       muted: "#8a8a8a",
       line: "rgba(0,0,0,0.1)",
-      panel: "#edf6f5",
-      accent: "#0ba5a8",
-      ink: "#08767a",
-      deep: "#0b3b3e",
+      /* the hero's pale lavender (its #f6f3fa → #ebe4f3 ground, mid-point) — the purple 2026 screens sat
+         oddly on the old teal-white #edf6f5 */
+      panel: "#f1ecf7",
+      /* Pulse purples (2026): the chart's violet for dots/lines/arrows, a deeper violet for small text
+         (7.1:1 on white), and the app's deep purple for the dark banner + testimonial */
+      accent: "#7050e0",
+      ink: "#5b3fc4",
+      deep: "#36245a",
     },
     chapters: [
       {
