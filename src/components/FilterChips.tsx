@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Progressive-enhancement filter: every item is server-rendered (crawlable); this only toggles
- * `hidden` on elements inside `targetId` whose `data-tags` don't include the chosen filter.
+ * `hidden` on elements inside `targetId` whose `data-tags` don't include the chosen filter. Each
+ * item lists every filter it shows under, the first ("All") included — so the page decides, per
+ * filter, which items show (e.g. a project highlighted on top under one filter and in the grid
+ * under another).
  * Every filter stays selectable; one with no matching items yet shows the page's empty note.
  * Changing the filter is animated: the current items sink and fade, then the matching set rises back
  * in one after another (reduced motion: instant).
@@ -30,7 +33,7 @@ export function FilterChips({
     const root = document.getElementById(targetId);
     if (!root) return;
     const items = Array.from(root.querySelectorAll<HTMLElement>("[data-tags]"));
-    const show = (el: HTMLElement) => active === filters[0] || (el.dataset.tags ?? "").split("|").includes(active);
+    const show = (el: HTMLElement) => (el.dataset.tags ?? "").split("|").includes(active);
     /* a filter with nothing under it yet shows the empty note (#<targetId>-empty) instead of a blank grid */
     const empty = document.getElementById(`${targetId}-empty`);
     const apply = () => {

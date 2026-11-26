@@ -68,10 +68,72 @@ function WorkThumb({ layers, alt, badge, glow }: { layers: WorkCardLayers; alt: 
   );
 }
 
+/* A category's highlighted project when it isn't BIAL: the featured card's layout (text bottom-left,
+   picture right) with the project's own thumbnail. Hidden until its filter is chosen. */
+function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats: string[]; glow: string }) {
+  const soon = p.soon !== false;
+  const thumb = <WorkThumb layers={WORK_LAYERS[p.key]} alt={p.alt} badge={soon ? WORKS.badge : null} glow={glow} />;
+  return (
+    <section data-tags={cats.join("|")} hidden aria-label={p.name} className="container-page mt-[clamp(32px,2.969vw,57px)]">
+      {/* wk-item: the grid's build-in and hover (none for Coming Soon) */}
+      <div className="wk-item" data-soon={soon ? "" : undefined}>
+        <article
+          className="relative isolate overflow-hidden rounded-feature md:aspect-[1848/780]"
+          style={{ background: "linear-gradient(123deg, #161616 6%, #1f1f1f 111%)", boxShadow: "inset 14px 11px 84px rgba(244, 244, 244, 0.12)" }}
+        >
+          {/* the thumbnail at its grid size (912 of 1848), centred on the right */}
+          <div className="relative p-3 md:absolute md:right-[2.5%] md:top-1/2 md:w-[49.35%] md:-translate-y-1/2 md:p-0">
+            {p.href ? (
+              <Link href={p.href} tabIndex={-1} aria-hidden="true" className="block cursor-pointer">
+                {thumb}
+              </Link>
+            ) : (
+              thumb
+            )}
+          </div>
+          <div className="relative flex flex-col gap-[clamp(16px,1.667vw,32px)] p-5 md:absolute md:bottom-[9.231%] md:left-[3.842%] md:w-[40%] md:p-0">
+            <div className="flex flex-col gap-3">
+              <p className="font-mono text-xs uppercase leading-[1.2] tracking-[-0.015em] text-white">{cats[0]}</p>
+              <h2 className="text-h3-md font-medium leading-[1.2]">
+                {p.name}
+                {soon && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
+              </h2>
+              {p.description && <p className="font-mono text-base leading-[1.4] tracking-[-0.02em] text-[#fafaf8]">{p.description}</p>}
+            </div>
+            {p.href && (
+              <ArrowLink href={p.href} srSuffix={`: ${p.name}`} className="self-start after:absolute after:inset-0 after:content-['']">
+                {WORKS.featured.cta}
+              </ArrowLink>
+            )}
+          </div>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 export default function WorksPage() {
   const { featured } = WORKS;
   const projects = WORKS.projects.map((p) => ({ ...p, ...parseMeta(p.meta) }));
-  const available = Array.from(new Set(projects.flatMap((p) => p.tags)));
+
+  /* Filters: All shows BIAL on top and every project below it. A category with an odd number of
+     projects highlights one on top (the same treatment) and lists the rest in the two-column grid;
+     an even number goes straight into the grid. The one on top is BIAL when it's in the category,
+     else the first with a project page (Coming Soon ones after), in grid order. Every card lists the
+     filters it shows under (data-tags; FilterChips). */
+  const CATS = WORKS.filters.slice(1);
+  type P = (typeof projects)[number];
+  const pageFirst = (a: P, b: P) => Number(a.soon !== false) - Number(b.soon !== false);
+  const spotlight: Record<string, string> = {};
+  for (const c of CATS) {
+    const members = [...(featured.cats.includes(c) ? ["bial"] : []), ...projects.filter((p) => p.cats.includes(c)).sort(pageFirst).map((p) => p.key)];
+    if (members.length % 2 === 1) spotlight[c] = members[0];
+  }
+  /* (BIAL has no grid card, so it must be highlighted wherever it appears: its categories are odd) */
+  const bialTags = ["All", ...CATS.filter((c) => spotlight[c] === "bial")];
+  const gridTags = (p: P) => ["All", ...p.cats.filter((c) => spotlight[c] !== p.key)];
+  const spots = projects.map((p) => ({ p, cats: CATS.filter((c) => spotlight[c] === p.key) })).filter((s) => s.cats.length);
+  const available = CATS.filter((c) => featured.cats.includes(c) || projects.some((p) => p.cats.includes(c)));
 
   // ItemList — unique projects as named in the design.
   const unique = [
@@ -114,13 +176,15 @@ export default function WorksPage() {
           <div className="mt-[clamp(32px,4.219vw,81px)] flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             {/* -my-1 cancels the chip row's 4px tap padding so the pills sit exactly 81px under the title */}
             <div data-seq="wk-filters" className="-my-1 min-w-0">
-              <FilterChips filters={WORKS.filters} available={available} targetId="all-work" variant="dark" label="Filter projects" />
+              <FilterChips filters={WORKS.filters} available={available} targetId="work-list" variant="dark" label="Filter projects" />
             </div>
           </div>
         </section>
 
+        {/* everything the filter shows and hides */}
+        <div id="work-list">
         {/* ---------- Featured (5740:95311, 57px under the filters): built from its layers ---------- */}
-        <section aria-labelledby="featured-title" className="container-page mt-[clamp(32px,2.969vw,57px)]">
+        <section aria-labelledby="featured-title" data-tags={bialTags.join("|")} className="container-page mt-[clamp(32px,2.969vw,57px)]">
           <article
             data-seq="wk-feat"
             className="wk-feat relative isolate overflow-hidden rounded-feature md:aspect-[1848/780]"
@@ -166,6 +230,11 @@ export default function WorksPage() {
           </article>
         </section>
 
+        {/* a category's highlighted project, when it isn't BIAL */}
+        {spots.map(({ p, cats }) => (
+          <SpotCard key={p.key} p={p} cats={cats} glow={GLOW[p.key] ?? "255, 255, 255"} />
+        ))}
+
         {/* ---------- All work grid: label 30px under the featured card, grid 42px under the label ---------- */}
         <section aria-labelledby="all-work-title" className="container-page pb-[clamp(80px,9.115vw,175px)] pt-[clamp(20px,1.5625vw,30px)]">
           {/* the visible "All Work" label was removed on feedback; kept for screen readers as the list's heading */}
@@ -186,7 +255,7 @@ export default function WorksPage() {
               );
               return (
               /* data-soon: "Coming Soon" — not clickable, so no hover (WorksMotion) */
-              <li key={`${p.name}-${i}`} data-tags={p.tags.join("|")} data-soon={soon ? "" : undefined} className="wk-item">
+              <li key={`${p.name}-${i}`} data-tags={gridTags(p).join("|")} hidden={!gridTags(p).includes("All")} data-soon={soon ? "" : undefined} className="wk-item">
                 <article>
                   {/* thumbnail 912×640, r16 — built from its Figma layers so each can float on its own.
                       With a project page, the thumbnail and the name both open it (the name is the
@@ -212,8 +281,8 @@ export default function WorksPage() {
                       )}
                       {soon && <span className="sr-only"> ({WORKS.badge.toLowerCase()})</span>}
                     </h3>
-                    {/* tags only: the year is no longer shown */}
-                    <p className="whitespace-pre font-mono text-[15px] text-gray-2">{p.tags.join(" · ")}</p>
+                    {/* its category (the filter it's under); the design's old tags only if it has none yet */}
+                    <p className="whitespace-pre font-mono text-[15px] text-gray-2">{(p.cats.length ? p.cats : p.tags).join(" · ")}</p>
                   </div>
                 </article>
               </li>
@@ -221,10 +290,11 @@ export default function WorksPage() {
             })}
           </ul>
           {/* shown by the filter when a category has no projects yet (not in Figma: the design shows "All" only) */}
-          <p id="all-work-empty" hidden className="py-[clamp(48px,6vw,120px)] font-mono text-sm text-gray-2">
+          <p id="work-list-empty" hidden className="py-[clamp(48px,6vw,120px)] font-mono text-sm text-gray-2">
             New work in this category is on its way.
           </p>
         </section>
+        </div>
       </main>
       <Footer />
       <WorksMotion />
