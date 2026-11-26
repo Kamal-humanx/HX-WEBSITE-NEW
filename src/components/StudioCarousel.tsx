@@ -46,11 +46,17 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
 
     /* Layout is measured once and again only on resize — never inside the frame loop. */
     let span = 0; // width of one full set of slides = distance from slide 1 to its copy
+    let start = 0; // left edge of slide 1 (the track's side padding)
     let width = 0;
     const measure = () => {
-      span = (items[slides.length] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft;
+      start = (items[0] as HTMLElement).offsetLeft;
+      span = (items[slides.length] as HTMLElement).offsetLeft - start;
       width = scroller.clientWidth;
     };
+    /* Keep the view inside [start, start + span): left of `start` is only the track's padding, so a
+       view there has no slide on its left — the slide leaving on the left used to vanish at the wrap.
+       From `start` on there is always a real slide (or its copy) on both sides. */
+    const wrap = (p: number) => (span > 0 ? (p < start ? p + span : p >= start + span ? p - span : p) : p);
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(scroller);
@@ -81,14 +87,14 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
         } else {
           // Take over from wherever the visitor left it.
           base = scroller.scrollLeft;
-          pos = base;
+          pos = wrap(base);
         }
         wasPaused = paused;
       }
       if (paused) return;
 
       pos += Math.max(MIN_SPEED_PX, width * SPEED) * dt;
-      if (span > 0 && pos >= span) pos -= span; // the copy set looks identical, so the wrap is invisible
+      pos = wrap(pos); // the copy set looks identical, so the wrap is invisible
       track.style.transform = `translate3d(${(base - pos).toFixed(3)}px, 0, 0)`;
     };
 
