@@ -44,7 +44,7 @@ export const WORKS = {
     /* not in the client list yet: shown under All only */
     { name: "SBI Life", meta: "Consumer · Mobile  ·  2024", cats: [], key: "sbi-life", image: "/images/work/w-sbi-life.webp", alt: "SBI Life eShield Next protection-plan screens on three phones" },
     /* (Godrej Wealth and Aokah swapped places on feedback) */
-    { name: "Godrej Wealth", meta: "Consumer · Mobile  ·  2024", cats: ["New Age Platform"], key: "godrej", image: "/images/work/w-godrej.webp", alt: "Godrej wealth app portfolio screens and insight cards: “Opportunities that reflect your behaviour”" },
+    { name: "Godrej Wealth", meta: "Consumer · Mobile  ·  2024", cats: ["New Age Platform", "AI"], key: "godrej", image: "/images/work/w-godrej.webp", alt: "Godrej wealth app portfolio screens and insight cards: “Opportunities that reflect your behaviour”" },
     { name: "Hurun India", meta: "AI · Enterprise  ·  2025", cats: ["Website"], soon: false, key: "hurun", href: "/works/hurun", image: "/images/work/w-hurun.webp", alt: "Hurun India website on a phone over gold line illustrations: “Promoting Indian Entrepreneurship”",
       description: "A facelift telling Hurun's story of championing Indian entrepreneurship." },
     { name: "ASK", meta: "Mobile · Security  ·  2024", cats: ["Financial Services"], soon: false, key: "ask", href: "/works/ask-financials", image: "/images/work/w-ask.webp", alt: "ASK Wealth app “Investment Filters” screen over Mumbai’s sea link at night: “Led by foresight realized by expertise”",

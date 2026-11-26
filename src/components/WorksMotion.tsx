@@ -153,9 +153,19 @@ export function WorksMotion() {
 
     /* each layer: build-in rise (nearer layers arrive a beat later and from further), scroll parallax
        (nearer layers travel more) and pointer drift — all subtle, in px scaled to the card's width */
-    /* the thumbnail moves as one piece (feedback): its layers no longer build in, drift with the scroll
-       or follow the pointer on their own — the card's unmask + settle (applyCard) is its only motion */
-    const setLayers = (it: (typeof items)[number]) => void it;
+    /* the layers no longer build in, drift with the scroll or bob on their own; they only lean toward
+       the pointer while it's over the card (nearer layers more). The hovered thumbnail is drawn 4%
+       larger (globals.css .wk-item[data-hot] .wk-zoom), which keeps the moving layers' cut edges
+       outside the card. */
+    const setLayers = (it: (typeof items)[number]) => {
+      const k = (it.media?.offsetWidth ?? 912) / 912;
+      it.layers.forEach(({ el, d }) => {
+        if (!d) return;
+        const x = it.hx * d * 6 * k;
+        const y = it.hy * d * 4 * k;
+        el.style.transform = x || y ? `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)` : "";
+      });
+    };
     let hraf = 0;
     const drift = () => {
       hraf = 0;
@@ -176,7 +186,8 @@ export function WorksMotion() {
     const offPointer = items.map((it) => {
       const m = it.media;
       const card = it.li.querySelector<HTMLElement>("article");
-      if (!m || !card || it.li.hasAttribute("data-soon")) return () => {};
+      /* no hover at all for Coming Soon projects, nor for a category's single highlighted card */
+      if (!m || !card || it.li.hasAttribute("data-soon") || it.li.hasAttribute("data-spot")) return () => {};
       const move = (e: PointerEvent) => {
         if (e.pointerType !== "mouse") return;
         const r = m.getBoundingClientRect();

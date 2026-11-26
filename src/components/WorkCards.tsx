@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLink } from "@/components/ui";
-import { RippleImage } from "@/components/RippleImage";
 
 /** soon: the project page isn't out yet — the Work page's glass "Coming Soon" pill on the thumbnail */
 type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string; soon?: boolean };
@@ -168,12 +167,9 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
           the right, as Figma), so the gap around it is even whatever height the text gives the card;
           the picture crops to fit. At 1920 the card is 305px and this is exactly Figma's 502×302. */}
       <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
-        {/* cursor-local liquid ripple (RippleImage); z-[1] keeps it above the card's full-card link */}
-        {c.soon ? (
-          <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className="object-cover" />
-        ) : (
-          <RippleImage src={c.image} alt={c.alt} sizes="(min-width: 768px) 27vw, 100vw" className="case-img object-cover" />
-        )}
+        {/* z-[1] keeps the thumbnail above the card's full-card link */}
+        {/* (the cursor ripple on the thumbnails was removed on feedback; the card's own hover stays) */}
+        <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className={`object-cover ${c.soon ? "" : "case-img"}`} />
         {/* the Work page's pill (.wk-badge), sized by this thumbnail's width, in the top-right corner */}
         {c.soon && (
           <span aria-hidden="true" className="wk-badge pointer-events-none z-[2]">

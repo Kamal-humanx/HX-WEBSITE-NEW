@@ -457,7 +457,14 @@
 }
 
 /* (Work page thumbnails used to bob their nearest layers on their own; removed so each thumbnail
-   reads and moves as one picture.) */
+   reads and moves as one picture.) While hovered, a grid thumbnail is drawn 4% larger so its layers
+   can lean toward the pointer (WorksMotion) without their cut edges coming into view. */
+.wk-zoom {
+  transition: scale 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wk-item[data-hot]:not([data-spot]) .wk-zoom {
+  scale: 1.04;
+}
 
 /* Project detail pages (CaseReveal.tsx): text rises and sharpens out of a blur; media unmask upward
    and settle from a slight zoom. Pieces revealed together are staggered by --rv-i. */
