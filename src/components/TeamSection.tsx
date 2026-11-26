@@ -17,9 +17,8 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(4)}%`;
  * size a share of the stage, so the arrangement holds at any width; padding and type scale with
  * the stage (cq units) down to a readable floor. Phones / tablets: the same cards in a 2 / 3 column
  * grid, co-founders first.
- * Borders: Figma's gradient stroke (dark at the top, lit along the bottom) plus the testimonial
- * tabs' cursor spotlight — the stretch of border nearest the pointer glows, across neighbouring
- * cards too. Each card rises in softly as it's scrolled to (CaseReveal, data-rv).
+ * Borders: a quiet solid 1px line; on hover, the testimonial tabs' cursor spotlight — the stretch
+ * of border nearest the pointer glows, across neighbouring cards too. Each card rises in softly as it's scrolled to (CaseReveal, data-rv).
  */
 export function TeamSection() {
   return (

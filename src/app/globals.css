@@ -765,8 +765,8 @@
   opacity: var(--spot, 0);
   transition: opacity 0.35s ease;
 }
-/* About team cards (TeamSection.tsx, Figma 5880:35949): #131313 card, 0.86px gradient stroke inside
-   (black at the top → #666 along the bottom), and the logo tabs' cursor spotlight on the border.
+/* About team cards (TeamSection.tsx, Figma 5880:35949): #131313 card, a subtle solid 1px border, and
+   the logo tabs' cursor spotlight on the border — lit only while the pointer is over the cards.
    Phones/tablets: a grid of equal cards. ≥ 1024: placed on the stage by --x/--y/--w (shares of
    1856 × 677); padding/gaps/type in cq units of the stage (1cqw = 18.56px at 1920), floored. */
 .team-card {
@@ -794,8 +794,10 @@
     linear-gradient(#000 0 0) content-box exclude,
     linear-gradient(#000 0 0);
 }
+/* a plain, quiet 1px line at rest (no lit edge); the only highlight is the hover spotlight below */
 .team-card::before {
-  background: linear-gradient(180deg, #000 0%, #666 100%);
+  padding: 1px;
+  background: rgba(255, 255, 255, 0.08);
 }
 .team-card::after {
   inset: -0.5px;
