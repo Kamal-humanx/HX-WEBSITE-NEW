@@ -43,7 +43,7 @@ export default function AboutPage() {
             desktop width, and the last stat rule sits level with the showreel's lower edge. */}
         <section aria-labelledby="process-title" className="container-page grid gap-10 pb-[clamp(72px,10.4vw,200px)] pt-[clamp(72px,8.8vw,170px)] lg:grid-cols-[681fr_1151fr] lg:gap-[1.25vw] 3xl:gap-6">
           <div className="flex flex-col lg:justify-between">
-            <h2 id="process-title" className="text-h3 font-normal leading-[1.2] tracking-[-0.02em] text-ink">
+            <h2 id="process-title" className="text-h3-sm font-medium leading-[1.2] tracking-[-0.02em] text-ink">
               {ABOUT.process}
             </h2>
             <dl className="mt-[clamp(32px,3vw,58px)] lg:mt-6">
