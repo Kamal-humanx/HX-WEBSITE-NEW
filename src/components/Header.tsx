@@ -68,11 +68,13 @@ export function Header({ current, theme = "light" }: { current: string; theme?: 
           </nav>
           {/* Pill 4887:5246: 152×42, r21, 1px centre-aligned stroke (box-shadow ±0.5px keeps the 152×42 box);
               label 4887:5245 Uncut Sans Semibold 15.548/150%, 24px from the left, 9.15px from the top. */}
+          {/* the one way to the contact form (the separate "Contact" nav item was removed) */}
           <Link
             href="/contact"
-            className="header-pill hidden h-[42px] w-[152px] -translate-y-[0.88px] items-start justify-start rounded-[21px] pl-[24px] pt-[9.15px] text-[15.548px] font-semibold leading-[1.5] tracking-normal transition-colors sm:inline-flex"
+            aria-current={current === "/contact" ? "page" : undefined}
+            className="header-pill hidden h-[42px] w-[152px] -translate-y-[0.88px] items-center justify-center rounded-[21px] text-[15.548px] font-semibold leading-[1.5] tracking-normal transition-colors sm:inline-flex"
           >
-            Start a Project
+            Get in Touch
           </Link>
           <MobileMenu current={current} />
         </div>

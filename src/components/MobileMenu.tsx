@@ -133,7 +133,7 @@ export function MobileMenu({ current }: { current: string }) {
                 onClick={() => setOpen(false)}
                 className="mt-10 inline-flex h-12 w-max items-center justify-center rounded-full border border-white px-7 text-base font-semibold"
               >
-                Start a Project
+                Get in Touch
               </Link>
             </nav>
           </div>,

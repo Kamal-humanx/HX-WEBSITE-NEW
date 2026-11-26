@@ -39,7 +39,7 @@ export const NAV = [
   { href: "/about", label: "About" },
   { href: "/works", label: "Work" },
   { href: "/careers", label: "Careers" },
-  { href: "/contact", label: "Contact" },
+  /* Contact is reached by the header's "Get in Touch" pill (it led to the same form) */
 ] as const;
 
 export const FOOTER_COPY = {
