@@ -92,16 +92,17 @@ function WorkThumb({ layers, alt, badge, glow, flush = false, scale = 1 }: { lay
      haze:   a heavily blurred copy of it spills left beneath it (Momverse, Aokah, Setu, Juice)
      extend: its left edge stretched across the card (ASK: the bridge runs on behind the text)
      fade:   nothing of it is copied; it simply fades into a field matched to its edge (miniTV, Hurun)
-   fw — how much of the thumbnail's width its left-edge fade takes (Setu: short, so its logo stays whole) */
-type Spot = { field: string; ink: "dark" | "light"; pattern: "dots" | "grid" | "arcs" | "lines"; tint: string; blend: "haze" | "extend" | "fade"; fw?: number };
+   fw — how much of the thumbnail's width its left-edge fade takes (Setu: short, so its logo stays whole;
+   Hurun: short, so its laptop screen keeps its edge instead of dissolving); po — the pattern's strength */
+type Spot = { field: string; ink: "dark" | "light"; pattern: "dots" | "grid" | "arcs" | "lines"; tint: string; blend: "haze" | "extend" | "fade"; fw?: number; po?: number };
 const SPOT: Record<string, Spot> = {
   momverse: { field: "linear-gradient(118deg, #f5f2ef 0%, #e9e3dd 52%, #d3cbc4 100%)", ink: "dark", pattern: "dots", tint: "120, 96, 84", blend: "haze" },
   aokah: { field: "linear-gradient(122deg, #0b1f4a 0%, #173f8e 52%, #3375d6 100%)", ink: "dark", pattern: "dots", tint: "20, 52, 120", blend: "haze" },
   setu: { field: "linear-gradient(118deg, #f7f1eb 0%, #eee2d8 52%, #e2d1c4 100%)", ink: "dark", pattern: "arcs", tint: "196, 112, 80", blend: "haze", fw: 14 },
   "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20", blend: "haze" },
   ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112", blend: "extend", fw: 34 },
-  minitv: { field: "linear-gradient(122deg, #12060f 0%, #2a0c24 45%, #4a1440 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196", blend: "fade", fw: 46 },
-  hurun: { field: "linear-gradient(122deg, #0c0606 0%, #1a0a0b 50%, #3a0e11 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98", blend: "fade", fw: 46 },
+  minitv: { field: "linear-gradient(122deg, #12060f 0%, #2a0c24 45%, #4a1440 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196", blend: "fade", fw: 46, po: 0.5 },
+  hurun: { field: "linear-gradient(122deg, #0c0606 0%, #1a0a0b 50%, #3a0e11 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98", blend: "fade", fw: 13 },
 };
 const SPOT_DEFAULT: Spot = { field: "linear-gradient(122deg, #111 0%, #1c1c1c 100%)", ink: "light", pattern: "dots", tint: "255, 255, 255", blend: "fade" };
 /* patterns: noticeable on a second look, never competing with the text (mask keeps them top-left) */
@@ -126,7 +127,8 @@ function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats:
   const L = WORK_LAYERS[p.key];
   const s = SPOT[p.key] ?? SPOT_DEFAULT;
   const dark = s.ink === "dark";
-  const thumb = <WorkThumb layers={L} alt={p.alt} badge={soon ? WORKS.badge : null} glow={glow} flush scale={1.25} />;
+  /* no pill on the thumbnail here: the Coming Soon pill sits under the description instead */
+  const thumb = <WorkThumb layers={L} alt={p.alt} badge={null} glow={glow} flush scale={1.25} />;
   return (
     <section data-tags={cats.join("|")} hidden aria-label={p.name} className="container-page mt-[clamp(32px,2.969vw,57px)]">
       {/* wk-item: the grid's hover (none for Coming Soon); data-spot: no unmask build (WorksMotion) */}
@@ -152,7 +154,7 @@ function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats:
               </>
             )}
             {/* the pattern, in the empty top-left and fading away toward the text and the picture */}
-            <div className="spot-pattern absolute inset-0" style={pattern(s)} />
+            <div className="spot-pattern absolute inset-0" style={{ ...pattern(s), opacity: s.po ?? 1 }} />
           </div>
           <div
             className="spot-thumb relative md:absolute md:inset-y-0 md:right-0 md:aspect-[912/640] md:h-full"
