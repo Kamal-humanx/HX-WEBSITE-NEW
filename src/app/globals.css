@@ -564,9 +564,28 @@
    blurred and spilling left beneath it, then the untouched thumbnail flush right whose left edge fades
    out along an eased curve (many stops, so the fade has no visible start or end). Phones: thumbnail on
    top, fading the same way into the field below it. */
+/* the pattern sits in the empty top-left (desktop) / under the text (phones), fading out before the
+   text block and the picture */
 .spot-pattern {
-  -webkit-mask-image: radial-gradient(ellipse 62% 95% at 16% 62%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
-  mask-image: radial-gradient(ellipse 62% 95% at 16% 62%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 10% 100%, #000 0%, rgba(0, 0, 0, 0.5) 40%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 10% 100%, #000 0%, rgba(0, 0, 0, 0.5) 40%, transparent 75%);
+}
+@media (min-width: 768px) {
+  .spot-pattern {
+    -webkit-mask-image: radial-gradient(ellipse 46% 78% at 6% 4%, #000 0%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.25) 62%, transparent 86%);
+    mask-image: radial-gradient(ellipse 46% 78% at 6% 4%, #000 0%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.25) 62%, transparent 86%);
+  }
+}
+/* "extend" blend (ASK): a copy under the thumbnail, stretched hugely about a point 1.5% in from its left
+   edge, so that edge strip runs on across the card; blurred first, so it only softens along the edge.
+   Phones: the bottom edge stretched down under the text. */
+.spot-ext {
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform-origin: 50% 98.5%;
+  scale: 1 80;
+  filter: blur(14px);
 }
 .spot-haze {
   left: 0;
@@ -597,8 +616,28 @@
     transform-origin: 100% 50%;
     scale: 1.75 1.08;
   }
+  .spot-ext {
+    left: auto;
+    right: 0;
+    width: auto;
+    height: 100%;
+    transform-origin: 1.5% 50%;
+    scale: 60 1;
+  }
+  /* eased left-edge fade over --fw of the thumbnail's width (41% unless a card sets it) */
   .spot-thumb {
-    --fade: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.04) 5%, rgba(0, 0, 0, 0.12) 10%, rgba(0, 0, 0, 0.26) 15%, rgba(0, 0, 0, 0.44) 20%, rgba(0, 0, 0, 0.64) 25%, rgba(0, 0, 0, 0.82) 30%, rgba(0, 0, 0, 0.94) 35%, #000 41%);
+    --fade: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.04) calc(var(--fw, 41%) * 0.12),
+      rgba(0, 0, 0, 0.12) calc(var(--fw, 41%) * 0.24),
+      rgba(0, 0, 0, 0.26) calc(var(--fw, 41%) * 0.37),
+      rgba(0, 0, 0, 0.44) calc(var(--fw, 41%) * 0.49),
+      rgba(0, 0, 0, 0.64) calc(var(--fw, 41%) * 0.61),
+      rgba(0, 0, 0, 0.82) calc(var(--fw, 41%) * 0.73),
+      rgba(0, 0, 0, 0.94) calc(var(--fw, 41%) * 0.85),
+      #000 var(--fw, 41%)
+    );
   }
   .spot-thumb .wk-badge {
     left: auto;

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
@@ -87,26 +88,32 @@ function WorkThumb({ layers, alt, badge, glow, flush = false, scale = 1 }: { lay
 /* Each highlighted card's ground, in its thumbnail's own palette: a colour field, a very faint pattern
    echoing the artwork (Aokah's dots, Juice's interface grid, Setu's progress rings, ASK's light
    streaks, Hurun's line art, miniTV's glow rings), and light or dark text to suit. */
-type Spot = { field: string; ink: "dark" | "light"; pattern: "dots" | "grid" | "arcs" | "lines"; tint: string };
+/* blend — how the thumbnail joins its field:
+     haze:   a heavily blurred copy of it spills left beneath it (Momverse, Aokah, Setu, Juice)
+     extend: its left edge stretched across the card (ASK: the bridge runs on behind the text)
+     fade:   nothing of it is copied; it simply fades into a field matched to its edge (miniTV, Hurun)
+   fw — how much of the thumbnail's width its left-edge fade takes (Setu: short, so its logo stays whole) */
+type Spot = { field: string; ink: "dark" | "light"; pattern: "dots" | "grid" | "arcs" | "lines"; tint: string; blend: "haze" | "extend" | "fade"; fw?: number };
 const SPOT: Record<string, Spot> = {
-  momverse: { field: "linear-gradient(118deg, #f5f2ef 0%, #e9e3dd 52%, #d3cbc4 100%)", ink: "dark", pattern: "dots", tint: "120, 96, 84" },
-  aokah: { field: "linear-gradient(122deg, #0b1f4a 0%, #173f8e 52%, #3375d6 100%)", ink: "dark", pattern: "dots", tint: "20, 52, 120" },
-  setu: { field: "linear-gradient(118deg, #f7f1eb 0%, #eee2d8 52%, #e2d1c4 100%)", ink: "dark", pattern: "arcs", tint: "196, 112, 80" },
-  "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20" },
-  ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112" },
-  minitv: { field: "linear-gradient(122deg, #10050e 0%, #33102c 52%, #6e1c58 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196" },
-  hurun: { field: "linear-gradient(122deg, #0c0505 0%, #260a0c 52%, #561216 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98" },
+  momverse: { field: "linear-gradient(118deg, #f5f2ef 0%, #e9e3dd 52%, #d3cbc4 100%)", ink: "dark", pattern: "dots", tint: "120, 96, 84", blend: "haze" },
+  aokah: { field: "linear-gradient(122deg, #0b1f4a 0%, #173f8e 52%, #3375d6 100%)", ink: "dark", pattern: "dots", tint: "20, 52, 120", blend: "haze" },
+  setu: { field: "linear-gradient(118deg, #f7f1eb 0%, #eee2d8 52%, #e2d1c4 100%)", ink: "dark", pattern: "arcs", tint: "196, 112, 80", blend: "haze", fw: 14 },
+  "juice-ai": { field: "linear-gradient(118deg, #fffbe2 0%, #fff2ab 50%, #ffe38f 100%)", ink: "dark", pattern: "grid", tint: "150, 116, 20", blend: "haze" },
+  ask: { field: "linear-gradient(122deg, #06070d 0%, #0d1229 55%, #1a2350 100%)", ink: "light", pattern: "lines", tint: "214, 178, 112", blend: "extend", fw: 34 },
+  minitv: { field: "linear-gradient(122deg, #12060f 0%, #2a0c24 45%, #4a1440 100%)", ink: "light", pattern: "arcs", tint: "255, 110, 196", blend: "fade", fw: 46 },
+  hurun: { field: "linear-gradient(122deg, #0c0606 0%, #1a0a0b 50%, #3a0e11 100%)", ink: "light", pattern: "grid", tint: "226, 178, 98", blend: "fade", fw: 46 },
 };
-const SPOT_DEFAULT: Spot = { field: "linear-gradient(122deg, #111 0%, #1c1c1c 100%)", ink: "light", pattern: "dots", tint: "255, 255, 255" };
+const SPOT_DEFAULT: Spot = { field: "linear-gradient(122deg, #111 0%, #1c1c1c 100%)", ink: "light", pattern: "dots", tint: "255, 255, 255", blend: "fade" };
+/* patterns: noticeable on a second look, never competing with the text (mask keeps them top-left) */
 const pattern = (s: Spot) =>
   ({
-    dots: { backgroundImage: `radial-gradient(rgba(${s.tint}, 0.16) 1.1px, transparent 1.6px)`, backgroundSize: "22px 22px" },
+    dots: { backgroundImage: `radial-gradient(rgba(${s.tint}, 0.3) 1.2px, transparent 1.7px)`, backgroundSize: "22px 22px" },
     grid: {
-      backgroundImage: `linear-gradient(rgba(${s.tint}, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(${s.tint}, 0.08) 1px, transparent 1px)`,
+      backgroundImage: `linear-gradient(rgba(${s.tint}, 0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(${s.tint}, 0.14) 1px, transparent 1px)`,
       backgroundSize: "56px 56px",
     },
-    arcs: { backgroundImage: `repeating-radial-gradient(circle at 6% 112%, rgba(${s.tint}, 0.1) 0 1px, transparent 1px 38px)` },
-    lines: { backgroundImage: `repeating-linear-gradient(112deg, rgba(${s.tint}, 0.07) 0 1px, transparent 1px 30px)` },
+    arcs: { backgroundImage: `repeating-radial-gradient(circle at 0% 0%, rgba(${s.tint}, 0.17) 0 1px, transparent 1px 36px)` },
+    lines: { backgroundImage: `repeating-linear-gradient(112deg, rgba(${s.tint}, 0.13) 0 1px, transparent 1px 28px)` },
   })[s.pattern];
 
 /* A category's highlighted project when it isn't BIAL, built like the BIAL card — eyebrow, title, a
@@ -126,17 +133,31 @@ function SpotCard({ p, cats, glow }: { p: (typeof WORKS.projects)[number]; cats:
       <div className="wk-item" data-spot="" data-soon={soon ? "" : undefined}>
         <article
           className={`spot-card relative isolate overflow-hidden rounded-feature md:aspect-[1848/780] md:[container-type:size] ${dark ? "text-ink" : "text-white"}`}
-          style={{ background: s.field, boxShadow: "inset 14px 11px 84px rgba(244, 244, 244, 0.18)" }}
+          style={{ background: s.field, boxShadow: `inset 14px 11px 84px rgba(244, 244, 244, ${dark ? 0.18 : 0.07})` }}
         >
           <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-            {/* the faint pattern, strongest behind the text and fading away toward the picture */}
+            {s.blend === "haze" && (
+              /* the thumbnail's own colours, blurred and spilling left beneath it */
+              <div className="spot-haze absolute aspect-[912/640]" style={{ background: L.bg ?? undefined }}>
+                <Layers layers={L} scale={0.3} still />
+              </div>
+            )}
+            {s.blend === "extend" && (
+              <>
+                {/* its left edge, stretched across the card and softened; a dark wash keeps the text clear */}
+                <div className="spot-ext absolute aspect-[912/640]" style={{ background: L.bg ?? undefined }}>
+                  <Layers layers={L} scale={0.4} still />
+                </div>
+                <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,8,14,0.7) 0%, rgba(8,8,14,0.45) 34%, rgba(8,8,14,0) 60%)" }} />
+              </>
+            )}
+            {/* the pattern, in the empty top-left and fading away toward the text and the picture */}
             <div className="spot-pattern absolute inset-0" style={pattern(s)} />
-            {/* the thumbnail's own colours, blurred and spilling left beneath it */}
-            <div className="spot-haze absolute aspect-[912/640]" style={{ background: L.bg ?? undefined }}>
-              <Layers layers={L} scale={0.3} still />
-            </div>
           </div>
-          <div className="spot-thumb relative md:absolute md:inset-y-0 md:right-0 md:aspect-[912/640] md:h-full">
+          <div
+            className="spot-thumb relative md:absolute md:inset-y-0 md:right-0 md:aspect-[912/640] md:h-full"
+            style={s.fw ? ({ ["--fw" as string]: `${s.fw}%` } as CSSProperties) : undefined}
+          >
             {p.href ? (
               <Link href={p.href} tabIndex={-1} aria-hidden="true" className="block cursor-pointer">
                 {thumb}
