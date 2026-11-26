@@ -222,9 +222,10 @@ export default function WorksPage() {
   const spotlight: Record<string, string> = {};
   for (const c of CATS) {
     const members = [...(featured.cats.includes(c) ? ["bial"] : []), ...projects.filter((p) => p.cats.includes(c)).sort(pageFirst).map((p) => p.key)];
-    if (members.length % 2 === 1) spotlight[c] = members[0];
+    /* BIAL has no grid-size card, so wherever it belongs it's the one on top (whatever the count),
+       with the rest of the category in the grid below */
+    if (members[0] === "bial" || members.length % 2 === 1) spotlight[c] = members[0];
   }
-  /* (BIAL has no grid card, so it must be highlighted wherever it appears: its categories are odd) */
   const bialTags = ["All", ...CATS.filter((c) => spotlight[c] === "bial")];
   const gridTags = (p: P) => ["All", ...p.cats.filter((c) => spotlight[c] !== p.key)];
   const spots = projects.map((p) => ({ p, cats: CATS.filter((c) => spotlight[c] === p.key) })).filter((s) => s.cats.length);
