@@ -7,6 +7,7 @@ import { AboutReveal } from "@/components/AboutReveal";
 import { CaseReveal } from "@/components/CaseReveal";
 import { Showreel } from "@/components/Showreel";
 import { StudioCarousel } from "@/components/StudioCarousel";
+import { TeamSection } from "@/components/TeamSection";
 import { DisplayHeading } from "@/components/ui";
 import { CapabilitiesSection, LearningSection } from "@/components/sections";
 import { ABOUT } from "@/content/about";
@@ -138,6 +139,8 @@ export default function AboutPage() {
 
         <div className="bg-night">
           <CapabilitiesSection reveal />
+
+          <TeamSection />
 
           <LearningSection id="about-learning" reveal />
         </div>

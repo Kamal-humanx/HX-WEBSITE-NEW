@@ -562,7 +562,7 @@
 
 /* Work page "Coming Soon" pill (Figma 2026 update): desktop 5859:34198 on a 912px card — 176.71×40.88
    at 23,19, padding 30.35 around 16px uppercase Uncut Sans Medium, inner glow 12px; phone 5850:34152 on
-   a ~352px card — 134×31 at 7,7, 23.5 / 12px, glow 9.1px. Same gradient + 2s shimmer sweep on both.
+   a ~352px card — 134×31 at 7,7, 23.5 / 12px, glow 9.1px. Same gradient on both (static, no shimmer).
    Every size runs linearly between those two by the CARD's width (cq units on .wk-media), clamped to
    them, so the pill keeps its proportion to the thumbnail at any screen size. */
 .wk-badge {
@@ -590,27 +590,7 @@
   color: #fff;
   white-space: nowrap;
 }
-/* "Skeleton shimmer · 2s seamless sweep": a soft light band crossing the pill, behind the label */
-.wk-badge::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 -57%;
-  width: 57%;
-  z-index: -1;
-  background: linear-gradient(119.74deg, rgba(255, 255, 255, 0) 10.94%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 255, 255, 0) 89.06%);
-  animation: wk-shimmer 2s linear infinite;
-}
-@keyframes wk-shimmer {
-  to {
-    transform: translateX(275%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wk-badge::before {
-    animation: none;
-    display: none;
-  }
-}
+/* static: the Figma shimmer sweep was dropped on request — the pill is just the glass label */
 
 /* Pinned statement + overtake (PinStage.tsx): stage 100svh + a short hold + 100svh of cover.
    The next section climbs 100svh back up over the pinned stage, on its own white ground. */
@@ -785,6 +765,113 @@
   opacity: var(--spot, 0);
   transition: opacity 0.35s ease;
 }
+/* About team cards (TeamSection.tsx, Figma 5880:35949): #131313 card, 0.86px gradient stroke inside
+   (black at the top → #666 along the bottom), and the logo tabs' cursor spotlight on the border.
+   Phones/tablets: a grid of equal cards. ≥ 1024: placed on the stage by --x/--y/--w (shares of
+   1856 × 677); padding/gaps/type in cq units of the stage (1cqw = 18.56px at 1920), floored. */
+.team-card {
+  --pad: 10px;
+  --gap: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--pad);
+  background: var(--color-night-2);
+}
+.team-card::before,
+.team-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 0.86px;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.team-card::before {
+  background: linear-gradient(180deg, #000 0%, #666 100%);
+}
+.team-card::after {
+  inset: -0.5px;
+  padding: 1.3px;
+  background: radial-gradient(
+    200px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.35) 40%,
+    rgba(255, 255, 255, 0) 72%
+  );
+  opacity: var(--spot, 0);
+  transition: opacity 0.35s ease;
+}
+.team-photo {
+  aspect-ratio: 325 / 372;
+}
+.team-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 8px;
+  row-gap: 2px;
+  margin-top: auto;
+}
+.team-name {
+  font-size: 14px;
+  line-height: 1.38;
+  letter-spacing: -0.03em;
+}
+.team-role {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.38;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.32);
+}
+@media (min-width: 1024px) {
+  .team-card {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+  }
+  .team-lg {
+    --pad: max(8px, 0.7cqw); /* 13 */
+    --gap: max(10px, 0.97cqw); /* 18 */
+  }
+  .team-sm {
+    --pad: max(6px, 0.539cqw); /* 10 */
+    --gap: max(8px, 0.7cqw); /* 13 */
+  }
+  .team-photo {
+    aspect-ratio: var(--pa);
+  }
+  .team-meta {
+    margin-top: 0;
+  }
+  .team-name {
+    font-size: clamp(12px, 0.862cqw, 16px);
+  }
+  .team-role {
+    font-size: clamp(10px, 0.6466cqw, 12px);
+  }
+}
+/* below a ~1600px-wide stage the small cards are too narrow for name + role on one line: stack them,
+   every small card alike (rather than some wrapping and some not) */
+@media (min-width: 1024px) {
+  @container (max-width: 1599px) {
+    .team-sm .team-meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}
+
 /* the selected (highlighted) tab keeps its own look; only the others glow under the cursor */
 .logo-tab.is-active::after {
   opacity: 0;

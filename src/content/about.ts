@@ -1,5 +1,24 @@
 /** About page copy — verbatim from Figma frame 5724:36157 ("About - Copy", 2026 revision). */
 
+/**
+ * Team (Figma 5880:35949, "new"): the scattered cards on the 1856 × 677 stage of the 1920 frame.
+ * x / y / w = the card's box in Figma px on that stage; `size` = the card kind (large 351 wide with a
+ * 325 × 372 photo; small 199–222 wide with a 179 × 189 photo, Jay's 204 × 188). Listed co-founders
+ * first: the order phones and tablets show them in.
+ */
+export const TEAM = {
+  title: "Different Perspectives. Shared Obsession.",
+  cta: { label: "Join Our Team", href: "/careers" },
+  members: [
+    { name: "Devang Raiyani", role: "Co-Founder", image: "/images/team/devang-2026.webp", w: 720, h: 826, size: "lg", x: 0, y: 0, cw: 351, photo: [325, 372] },
+    { name: "Krupali Raiyani", role: "Co-Founder", image: "/images/team/krupali-2026.webp", w: 720, h: 826, size: "lg", x: 883, y: 229, cw: 351, photo: [325, 372] },
+    { name: "Shreya Gulati", role: "Design Director", image: "/images/team/shreya-2026.webp", w: 720, h: 826, size: "lg", x: 1271, y: 0, cw: 351, photo: [325, 372] },
+    { name: "Jay Khut", role: "Sr. Project Manager", image: "/images/team/jay-2026.webp", w: 612, h: 564, size: "sm", x: 388, y: 0, cw: 222, photo: [204, 188] },
+    { name: "Abhishek", role: "Project Manager", image: "/images/team/abhishek-2026.webp", w: 537, h: 566, size: "sm", x: 647, y: 229, cw: 199, photo: [179, 189] },
+    { name: "Sakshi", role: "Project Manager", image: "/images/team/sakshi-2026.webp", w: 537, h: 566, size: "sm", x: 1659, y: 0, cw: 199, photo: [179, 189] },
+  ],
+} as const;
+
 export const ABOUT = {
   heading: "We partner with ambitious brands and challenge convention",
   intro:
