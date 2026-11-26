@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { PhilosophyReveal } from "@/components/PhilosophyReveal";
 import { WorkCards } from "@/components/WorkCards";
 import { HeroIntro } from "@/components/HeroIntro";
+import { HeroVideo } from "@/components/HeroVideo";
 import { PinStage } from "@/components/PinStage";
 import { ToneShift } from "@/components/ToneShift";
 import { PinCover } from "@/components/PinCover";
@@ -29,24 +30,9 @@ export default function HomePage() {
         {/* ---------- Hero (5376:1439 image, 5376:1843 heading, 5376:1847 intro) ---------- */}
         <section aria-labelledby="hero-title" className="relative">
           <div className="hero-media relative h-[clamp(360px,27.66vw,531px)] w-full overflow-hidden bg-night">
-            <Image
-              src={hero.image.src}
-              alt="A woman and a young girl sharing a quiet moment, lit by warm window light"
-              fill
-              priority
-              fetchPriority="high"
-              sizes="100vw"
-              className="object-cover"
-            />
+            {/* looping video in the hero's existing box; no play button, it plays by itself */}
+            <HeroVideo />
             <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[127px] bg-gradient-to-b from-black/35 to-transparent" />
-            <Image
-              src="/images/icons/play.svg"
-              alt=""
-              width={52}
-              height={52}
-              aria-hidden="true"
-              className="absolute left-1/2 top-[45%] size-[clamp(40px,2.73vw,52px)] -translate-x-1/2"
-            />
           </div>
 
           <div className="container-page relative grid gap-6 pb-10 pt-[clamp(28px,3.1vw,60px)] lg:grid-cols-[1fr_auto] lg:items-start">
