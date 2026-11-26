@@ -91,7 +91,9 @@ export type CaseStudy = {
    *  colour given) */
   logo: { img: Img; plate?: boolean | string; h: number };
   intro: string[];
-  hero: { imgs: Img[]; bleed?: boolean };
+  /** `ground`: the hero panel's own background (CSS), in place of the theme panel + glow — for a hero
+   *  whose screens don't sit well on the case colour */
+  hero: { imgs: Img[]; bleed?: boolean; ground?: string };
   theme: Theme;
   chapters: Chapter[];
   closing?: string;
@@ -142,6 +144,9 @@ export const CASE_STUDIES: CaseStudy[] = [
           alt: "Pulse, the BLR Airport app: the Welcome to Bengaluru home screen, with an IndiGo flight card and Care by BLR services beside it",
         },
       ],
+      /* the 2026 Pulse screens are purple: a pale lavender ground (from the cards' #d4c9e1) with a soft
+         glow of the app's deep purple (#36245a), instead of the case's teal panel */
+      ground: "radial-gradient(70% 85% at 50% 115%, rgba(54,36,90,0.16), rgba(54,36,90,0) 72%), linear-gradient(180deg, #f6f3fa 0%, #ebe4f3 100%)",
     },
     theme: {
       mode: "light",

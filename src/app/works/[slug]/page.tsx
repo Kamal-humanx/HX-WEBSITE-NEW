@@ -839,8 +839,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <Pic img={c.hero.imgs[0]} sizes="(min-width: 1920px) 1848px, 96vw" className="h-auto w-full" />
             </figure>
           ) : (
-            <figure data-rv="media" className="relative isolate mt-[clamp(32px,4vw,80px)] overflow-hidden rounded-panel bg-[var(--c-panel)] p-[clamp(16px,2.6vw,48px)]">
-              <span aria-hidden="true" className="case-glow absolute inset-0 -z-10" />
+            <figure
+              data-rv="media"
+              className="relative isolate mt-[clamp(32px,4vw,80px)] overflow-hidden rounded-panel bg-[var(--c-panel)] p-[clamp(16px,2.6vw,48px)]"
+              style={c.hero.ground ? { background: c.hero.ground } : undefined}
+            >
+              {!c.hero.ground && <span aria-hidden="true" className="case-glow absolute inset-0 -z-10" />}
               {c.hero.imgs.length > 1 ? (
                 <div
                   className="mx-auto flex items-center justify-center gap-[clamp(8px,1vw,16px)]"
