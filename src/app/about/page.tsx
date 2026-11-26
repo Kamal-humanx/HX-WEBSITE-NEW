@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { AboutReveal } from "@/components/AboutReveal";
+import { CaseReveal } from "@/components/CaseReveal";
 import { Showreel } from "@/components/Showreel";
 import { StudioCarousel } from "@/components/StudioCarousel";
 import { DisplayHeading } from "@/components/ui";
@@ -42,7 +43,9 @@ export default function AboutPage() {
   return (
     <>
       <Header current="/about" theme="light" />
-      <main id="main">
+      {/* rv-soft: the sections below the photos rise in gently as they're scrolled to (CaseReveal, softer
+          than the case pages); the intro, photos and staircase keep their own animations */}
+      <main id="main" className="rv-soft">
         {/* ---------- Intro (5376:13451 + 5376:10176) ---------- */}
         <section aria-labelledby="about-title" className="container-page grid gap-6 pb-[clamp(32px,2.9vw,56px)] pt-[clamp(24px,3.8vw,73px)] lg:grid-cols-[minmax(0,1292px)_minmax(0,472px)] lg:justify-between">
           {/* on load (AboutReveal): the words rise in one by one, then the intro's, then the photos */}
@@ -65,13 +68,14 @@ export default function AboutPage() {
             desktop width, and the last stat rule sits level with the showreel's lower edge. */}
         <section aria-labelledby="process-title" className="container-page grid gap-10 pb-[clamp(72px,10.4vw,200px)] pt-[clamp(72px,8.8vw,170px)] lg:grid-cols-[681fr_1151fr] lg:gap-[1.25vw] 3xl:gap-6">
           <div className="flex flex-col lg:justify-between">
-            <h2 id="process-title" className="text-h3-sm font-medium leading-[1.2] tracking-[-0.02em] text-ink">
+            <h2 id="process-title" data-rv className="text-h3-sm font-medium leading-[1.2] tracking-[-0.02em] text-ink">
               {ABOUT.process}
             </h2>
             <dl className="mt-[clamp(32px,3vw,58px)] lg:mt-6">
               {ABOUT.stats.map((s, i) => (
                 <div
                   key={s.value}
+                  data-rv
                   className={`flex flex-col gap-1 border-b border-[#bdbdbd] pb-3 pt-6 ${i === 1 ? "items-end text-right" : ""} ${i === 2 ? "lg:pb-0" : ""}`}
                 >
                   <dt className="order-2 font-mono text-xs leading-normal tracking-[-0.03em] text-muted-warm">{s.caption}</dt>
@@ -80,14 +84,19 @@ export default function AboutPage() {
               ))}
             </dl>
           </div>
-          <Showreel />
+          {/* unmasks upward and settles from a slight zoom, like the case-page media (square corners) */}
+          <div data-rv="media" className="lg:self-center" style={{ ["--rv-r" as string]: "0px" }}>
+            <Showreel />
+          </div>
         </section>
 
         {/* ---------- Principles staircase (5376:13259) ---------- */}
         <section aria-labelledby="principles-title" className="container-page pb-[clamp(72px,7vw,140px)]">
-          <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
-            {principles.title}
-          </DisplayHeading>
+          <div data-rv>
+            <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
+              {principles.title}
+            </DisplayHeading>
+          </div>
 
           {/* The staircase builds itself as it scrolls into view, one step at a time from left to
               right: each riser draws upward, its step fades in and its bar wipes across. It replays
@@ -128,11 +137,12 @@ export default function AboutPage() {
         </section>
 
         <div className="bg-night">
-          <CapabilitiesSection />
+          <CapabilitiesSection reveal />
 
-          <LearningSection id="about-learning" />
+          <LearningSection id="about-learning" reveal />
         </div>
       </main>
+      <CaseReveal />
       <Footer />
       <JsonLd data={[webPageSchema("about", "AboutPage"), breadcrumbSchema("about", "About")]} />
     </>

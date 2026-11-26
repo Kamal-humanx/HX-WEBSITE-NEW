@@ -12,11 +12,13 @@ import { DisplayHeading } from "./ui";
  * is held in place for a screen while the testimonials take over, so it has to fit one phone
  * screen; as a single column it was ~1.5 screens tall and most of it was never on screen at once.
  */
-export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
+export function CapabilitiesSection({ id = "capabilities", reveal = false }: { id?: string; reveal?: boolean }) {
+  /* `reveal`: soft scroll-in reveal (needs <CaseReveal /> on the page) — About, where nothing else animates it */
+  const rv = reveal ? { "data-rv": "" } : {};
   return (
     <section aria-labelledby={`${id}-title`} className="bg-night text-white">
       <div className="container-page pb-[var(--section-y)] pt-[clamp(56px,5.5vw,104px)] lg:px-[clamp(36px,3.75vw,72px)]">
-        <div data-swap-block="">
+        <div data-swap-block="" {...rv}>
           <DisplayHeading id={`${id}-title`} className="max-w-[440px] text-white">
             {CAPABILITIES.title}
           </DisplayHeading>
@@ -26,6 +28,7 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
             <div
               key={row.title}
               data-swap-block=""
+              {...rv}
               className="group grid gap-2 border-b border-white/10 py-[14px] md:grid-cols-[minmax(0,39.5%)_1fr] md:gap-0 md:py-[23px]"
             >
               {/* orange only while the row is hovered */}
@@ -64,17 +67,21 @@ export function CapabilitiesSection({ id = "capabilities" }: { id?: string }) {
  * Each card links to its post (content/shared.ts → href), opening in a new tab; the whole card is
  * clickable.
  */
-export function LearningSection({ id = "learning" }: { id?: string }) {
+export function LearningSection({ id = "learning", reveal = false }: { id?: string; reveal?: boolean }) {
+  /* `reveal`: soft scroll-in reveal (needs <CaseReveal />) — About; the homepage has LearnReveal */
+  const rv = reveal ? { "data-rv": "" } : {};
   return (
     <section aria-labelledby={`${id}-title`} className="bg-night text-white">
       <div className="container-page pb-[var(--section-y)] lg:px-[clamp(36px,3.1vw,58px)]">
         {/* Figma 4887:5268: Uncut Sans 70 / 66.42px / -3% */}
-        <DisplayHeading id={`${id}-title`} className="text-white leading-[0.9489]! tracking-[-0.03em]!">
-          {LEARNING.title}
-        </DisplayHeading>
+        <div {...rv}>
+          <DisplayHeading id={`${id}-title`} className="text-white leading-[0.9489]! tracking-[-0.03em]!">
+            {LEARNING.title}
+          </DisplayHeading>
+        </div>
         <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {LEARNING.posts.map((post) => (
-            <li key={post.cta}>
+            <li key={post.cta} {...rv}>
               <article className="group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
                 {/* the frame keeps the reveal's slight zoom inside the card */}
                 <div className="post-media overflow-hidden">

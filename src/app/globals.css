@@ -497,6 +497,23 @@
   [data-rv="media"].rv-in > * {
     transform: none;
   }
+  /* About (.rv-soft): the same reveal, gentler — a shorter rise, a lighter blur, a smaller zoom */
+  .rv-soft [data-rv] {
+    transform: translateY(14px);
+    filter: blur(3px);
+  }
+  .rv-soft [data-rv="media"] {
+    transform: none;
+    filter: none;
+  }
+  .rv-soft [data-rv="media"] > * {
+    transform: scale(1.03);
+  }
+  .rv-soft [data-rv].rv-in,
+  .rv-soft [data-rv="media"].rv-in > * {
+    transform: none;
+    filter: none;
+  }
 }
 
 /* Project pages: a soft glow of the case's brand colour (hero panel, testimonial) */
