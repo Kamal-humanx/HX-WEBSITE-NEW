@@ -56,8 +56,9 @@ export function Header({ current, theme = "light" }: { current: string; theme?: 
                     <Link
                       href={item.href}
                       aria-current={active ? "page" : undefined}
-                      className={`inline-flex min-h-11 items-center leading-[1.5] tracking-normal transition-opacity [text-decoration-skip-ink:none] hover:opacity-70 ${
-                        active ? "font-bold underline decoration-from-font underline-offset-auto" : "font-normal"
+                      /* hover: orange (the current page keeps its bold + underline and doesn't change) */
+                      className={`inline-flex min-h-11 items-center leading-[1.5] tracking-normal transition-colors duration-300 [text-decoration-skip-ink:none] ${
+                        active ? "font-bold underline decoration-from-font underline-offset-auto" : "font-normal hover:text-accent focus-visible:text-accent"
                       }`}
                     >
                       {item.label}

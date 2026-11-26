@@ -329,16 +329,20 @@
 .site-header .header-pill:active {
   scale: 0.97;
 }
-.site-header .header-pill:hover {
-  background: currentColor;
-}
-.site-header[data-theme="light"] .header-pill:hover {
+/* hover: the site's orange CTA fill (the careers "See open roles" pill gradient), white label */
+.site-header .header-pill:not([aria-current="page"]):is(:hover, :focus-visible) {
   color: #fff;
-  background: var(--color-ink);
+  background-image: linear-gradient(90deg, var(--color-btn-from), var(--color-btn-to));
+  box-shadow: 0 0 0 0.5px var(--color-btn-from), inset 0 0 0 0.5px var(--color-btn-from);
 }
-.site-header[data-theme="dark"] .header-pill:hover {
-  color: var(--color-night);
-  background: #fff;
+/* selected (on the contact page): a black pill, white label — it stays so under the pointer */
+.site-header .header-pill[aria-current="page"] {
+  color: #fff;
+  background: var(--color-night);
+  box-shadow: 0 0 0 0.5px var(--color-night), inset 0 0 0 0.5px var(--color-night);
+}
+.site-header[data-theme="dark"] .header-pill[aria-current="page"] {
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.5), inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
 }
 
 /* Work cards (WorkCards.tsx; thumbnail explo 5253:31321 active vs 5253:31411 rest). The outline is
