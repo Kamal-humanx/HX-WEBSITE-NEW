@@ -309,6 +309,17 @@ export function WorksMotion() {
       window.clearTimeout(idle);
       idle = window.setTimeout(settle, 450);
     };
+    /* a filter (tab) was chosen: its cards enter with the filter's own rise (FilterChips), so they're
+       shown complete at once — nothing waits on the scroll or sits half-built while rising */
+    const onFilter = () => {
+      items.forEach((it) => {
+        if (it.li.hidden) return;
+        it.pT = 1;
+        it.cur = 1;
+        applyCard(it);
+      });
+    };
+    window.addEventListener("filterchange", onFilter);
     const onResize = () => {
       if (allWork) {
         resetMask(allWork);
@@ -328,6 +339,7 @@ export function WorksMotion() {
       cancelAnimationFrame(hraf);
       cancelAnimationFrame(eraf);
       window.clearTimeout(idle);
+      window.removeEventListener("filterchange", onFilter);
       offPointer.forEach((off) => off());
       items.forEach((it) => it.layers.forEach(({ el }) => ((el.style.transform = ""), (el.style.opacity = ""))));
       stopIntro();

@@ -55,18 +55,34 @@ export function FilterChips({
     const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
     const leaving = items.filter((el) => !el.hidden);
     leaving.forEach((el) => el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(16px)" }], { duration: OUT_MS, easing: "ease-in", fill: "forwards" }));
-    const t = window.setTimeout(() => {
+    let alive = true;
+    const t = window.setTimeout(async () => {
       apply();
+      /* the shown items enter with the rise below only: scroll-driven reveals show them complete
+         at once (no waiting on the scroll) */
+      window.dispatchEvent(new Event("filterchange"));
       leaving.forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
-      items
-        .filter((el) => !el.hidden)
-        .forEach((el, i) =>
-          el.animate([{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "none" }], { duration: 650, delay: i * 70, easing: ease, fill: "backwards" }),
-        );
-      /* the grid has re-flowed: let scroll-driven reveals re-measure */
+      const shown = items.filter((el) => !el.hidden);
+      /* items lower in the list may not have their pictures yet: hold them unseen for a moment (at
+         most ~350 ms) so each rises in with its picture rather than filling in mid-rise */
+      shown.forEach((el) => (el.style.opacity = "0"));
+      const imgs = shown.flatMap((el) => Array.from(el.querySelectorAll("img")));
+      await Promise.race([
+        Promise.all(imgs.map((img) => (img.complete && img.naturalWidth ? Promise.resolve() : img.decode().catch(() => {})))),
+        new Promise((r) => window.setTimeout(r, 350)),
+      ]);
+      if (!alive) return;
+      shown.forEach((el, i) => {
+        el.style.opacity = "";
+        el.animate([{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "none" }], { duration: 650, delay: i * 70, easing: ease, fill: "backwards" });
+      });
+      /* the grid has re-flowed: let scroll-driven pieces re-measure */
       window.dispatchEvent(new Event("scroll"));
     }, OUT_MS);
-    return () => window.clearTimeout(t);
+    return () => {
+      alive = false;
+      window.clearTimeout(t);
+    };
   }, [active, filters, targetId]);
 
   const base =
