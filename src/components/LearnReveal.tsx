@@ -24,7 +24,7 @@ export function LearnReveal() {
       a,
       img: a.querySelector<HTMLElement>("img"),
       /* the image sits in a clipping frame (.post-media) so its zoom never spills past the card */
-      rest: Array.from(a.children).filter((c) => c.tagName !== "IMG" && !c.classList.contains("post-media")) as HTMLElement[],
+      rest: Array.from(a.children).filter((c) => c.tagName !== "IMG" && !c.classList.contains("post-media") && !c.hasAttribute("data-stretch")) as HTMLElement[],
     }));
     let bands: Band[] = title ? lineBands(title) : [];
     let raf = 0;

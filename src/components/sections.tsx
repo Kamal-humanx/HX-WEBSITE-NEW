@@ -80,7 +80,7 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
         <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {LEARNING.posts.map((post) => (
             <li key={post.cta} {...rv}>
-              <article className="group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
+              <article className="post-card group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
                 {/* the frame keeps the reveal's slight zoom inside the card */}
                 <div className="post-media overflow-hidden">
                 <Image
@@ -97,17 +97,22 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
                   <span>{post.type}</span>
                 </p>
                 <p className="text-base leading-[1.4] text-white/80">{post.excerpt}</p>
-                {/* opens the post in a new tab; the link stretches over the whole card */}
+                {/* opens the post in a new tab (the card's hover lights it: globals.css .post-card) */}
                 <a
                   href={post.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-arrow mt-auto inline-flex items-center gap-2 self-start pt-[16px] text-base font-bold capitalize leading-[1.5] tracking-[-0.02em] after:absolute after:inset-0 after:content-['']"
+                  className="link-arrow mt-auto inline-flex items-center gap-2 self-start pt-[16px] text-base font-bold capitalize leading-[1.5] tracking-[-0.02em]"
                 >
                   <span className="la">{post.cta}</span>
                   <span className="sr-only"> (opens in a new tab)</span>
                   <Image className="arrow" src="/images/icons/arrow-white.svg" alt="" width={11} height={11} />
                 </a>
+                {/* the whole card opens the post too: its own layer, never animated (the reveals move
+                    the text link, and a moved link's stretched ::after shrank to the link's own box —
+                    the picture went unclickable until the reveal was done); hidden from assistive
+                    tech and the tab order, which have the link above */}
+                <a href={post.href} target="_blank" rel="noopener noreferrer" tabIndex={-1} aria-hidden="true" data-stretch="" className="absolute inset-0 z-[1]" />
               </article>
             </li>
           ))}

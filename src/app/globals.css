@@ -193,11 +193,13 @@
     background: linear-gradient(currentColor, currentColor) no-repeat right 100% / 0 1px;
     transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .link-arrow:is(:hover, :focus-visible) .la {
+  .link-arrow:is(:hover, :focus-visible) .la,
+  .post-card:hover .link-arrow .la {
     background-position: left 100%;
     background-size: 100% 1px;
   }
-  .link-arrow:is(:hover, :focus-visible) .arrow {
+  .link-arrow:is(:hover, :focus-visible) .arrow,
+  .post-card:hover .link-arrow .arrow {
     animation: arrow-loop 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
   @keyframes arrow-loop {
@@ -565,6 +567,15 @@
   --c-muted: rgba(255, 255, 255, 0.5);
   --c-ink: #fff;
   --c-line: rgba(255, 255, 255, 0.16);
+}
+/* the chapter number holds just below the header's glass band (the band is 210/127 of the bar + gap,
+   its blur fading to nothing at the foot), and stays beneath the header in the stacking order */
+@media (min-width: 1024px) {
+  .case-num {
+    position: sticky;
+    top: calc((var(--header-h) + var(--header-gap)) * 210 / 127 + 8px);
+    align-self: start;
+  }
 }
 .case-glow {
   background: radial-gradient(70% 85% at 50% 115%, color-mix(in srgb, var(--c-accent) 30%, transparent), transparent 72%);

@@ -881,9 +881,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           return (
             <section key={ch.id} id={ch.id} aria-labelledby={`${ch.id}-title`} className="container-page mt-[clamp(72px,8vw,160px)]">
               <div className={`grid gap-[clamp(20px,3vw,64px)] border-t ${LINE} pt-[clamp(24px,2.6vw,48px)] lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)]`}>
-                {/* chapter number: holds beside the chapter while it scrolls — above the header's glass
-                    band (z-40 > the header's z-30), so its progressive blur never softens it */}
-                <p aria-hidden="true" className={`font-mono text-sm ${BODY} lg:sticky lg:top-[calc(var(--header-h)+24px)] lg:z-40 lg:self-start`}>
+                {/* chapter number: holds beside the chapter while it scrolls, just under the header's glass
+                    band (globals.css .case-num) — clear of its blur, and still behind the bar when its
+                    chapter runs out and it scrolls away under the logo */}
+                <p aria-hidden="true" className={`case-num font-mono text-sm ${BODY}`}>
                   <span className={INK}>{pad(n)}</span>
                   <span className="mx-2 opacity-40">/</span>
                   {pad(numbered)}

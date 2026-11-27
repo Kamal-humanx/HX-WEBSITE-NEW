@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 /**
- * Case study pages: as the footer comes within reach (its top inside one and a half screens), the
+ * Case study pages: as the footer's content comes into view (its top edge inside the screen), the
  * page takes the footer's own night and its text turns white — the theme variables the page paints
  * from are swapped on `main` (globals.css `.case-page[data-foot] > main`) and ease over, so the
  * footer stops reading as a separate dark block. Scrolling back up restores the case's colours.
@@ -21,8 +21,9 @@ export function FootTone() {
       raf = 0;
       const V = window.innerHeight;
       const top = footer.getBoundingClientRect().top;
-      /* a little hysteresis, so a scroll that rests near the line never flickers */
-      const next = on ? top < V * 1.7 : top < V * 1.5;
+      /* on once the footer's top edge is inside the screen; a little hysteresis on the way back, so a
+         scroll that rests near the line never flickers */
+      const next = on ? top < V * 1.12 : top < V * 0.96;
       if (next === on) return;
       on = next;
       if (on) page.dataset.foot = "on";
