@@ -649,12 +649,35 @@
   .about-caps-wrap { position: relative; pointer-events: none; }
   /* the capabilities stay through the principles' hold (64svh) and a reading hold after it (36svh) */
   .about-caps-wrap::after { content: ""; display: block; height: 100svh; }
-  /* held just below the header's glass band (its blur reaches 210/127 of the bar + gap; see .case-num),
-     so the title is never read through it: the band's foot + 8px, less the section's own top padding */
+  /* held exactly as the homepage holds them (.swap-stick, below): at the top of the screen, the
+     section's spacing tightened to fit one screen, the title under the header */
   .about-caps-stick {
     position: sticky;
-    top: calc((var(--header-h) + var(--header-gap)) * 210 / 127 + 8px - clamp(56px, 5.5vw, 104px));
-    opacity: 0;
+    top: 0;
+    min-height: 100svh;
+    opacity: 0; /* until AboutHandover paints it in, element by element, as ToneShift does */
+  }
+  /* the scroll-in reveal (data-rv, for phones) stays out of it here: the hand-over fades every piece
+     in itself, so the blocks must sit exactly where the homepage holds them */
+  .about-caps-stick [data-rv] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .about-caps-stick .container-page {
+    padding-top: calc(var(--header-h) + clamp(20px, 4.5vh, 48px)) !important;
+    padding-bottom: clamp(12px, 2.5vh, 40px) !important;
+  }
+  .about-caps-stick .container-page > div:nth-child(2) {
+    margin-top: min(5.4vw, 5vh) !important;
+  }
+  .about-caps-stick .group {
+    padding-top: min(23px, 1.8vh) !important;
+    padding-bottom: min(23px, 1.8vh) !important;
+  }
+  .about-caps-stick .group li {
+    padding-top: min(9.7px, 0.55vh) !important;
+    padding-bottom: min(9.7px, 0.55vh) !important;
   }
 }
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
