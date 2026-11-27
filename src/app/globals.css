@@ -912,6 +912,73 @@
 .pr.pr-armed .pr-i {
   will-change: transform, filter;
 }
+/* The icons' own loops (PhilosophyIcons.tsx): one brief move on Material's emphasized curve, then a
+   long rest, each on a period and phase of its own so no two ever play together; only transform
+   and a line draw, so nothing re-lays out. They wait while the reveal plays, and never run for
+   reduced motion. */
+.pr-i .lp {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: var(--lp) var(--dur) cubic-bezier(0.2, 0, 0, 1) var(--d0) infinite both;
+}
+.pr-i[data-kind="build"] { --dur: 6.4s; --d0: 0.8s; }
+.pr-i[data-kind="cross"] { --dur: 7.3s; --d0: 2.6s; }
+.pr-i[data-kind="co"] { --dur: 8.1s; --d0: 1.5s; }
+.pr-i[data-kind="connects"] { --dur: 7.7s; --d0: 3.9s; }
+.pr-i[data-kind="bolt"] { --dur: 8.9s; --d0: 5.2s; }
+.pr.pr-armed .pr-i .lp { animation-play-state: paused; }
+/* build: the solid cube slides exactly onto the wireframe one, rests there, and returns */
+.lp-cube { --lp: pr-build; }
+@keyframes pr-build {
+  0%, 6% { transform: none; }
+  18%, 44% { transform: translateX(-39.33px); }
+  56%, 100% { transform: none; }
+}
+/* cross: a quarter turn; four-fold symmetric, so the end is the start */
+.lp-x { --lp: pr-cross; }
+@keyframes pr-cross {
+  0%, 72% { transform: rotate(0deg); }
+  86%, 100% { transform: rotate(90deg); }
+}
+/* co-conspirator: the circles trade places (the solid one in front) and trade back */
+.lp-co-a { --lp: pr-co-a; }
+.lp-co-b { --lp: pr-co-b; }
+@keyframes pr-co-a {
+  0%, 8% { transform: none; }
+  22%, 54% { transform: translateX(26.72px); }
+  68%, 100% { transform: none; }
+}
+@keyframes pr-co-b {
+  0%, 8% { transform: none; }
+  22%, 54% { transform: translateX(-26.72px); }
+  68%, 100% { transform: none; }
+}
+/* connects: the line rests drawn; now and then it runs off the far end and redraws itself from the
+   first dot to the last (the two hidden states meet at 68%, so the jump between them never shows) */
+.lp-line { --lp: pr-line; stroke-dasharray: 82; animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
+@keyframes pr-line {
+  0%, 58% { stroke-dashoffset: 0; }
+  67.99% { stroke-dashoffset: -82; }
+  68% { stroke-dashoffset: 82; }
+  84%, 100% { stroke-dashoffset: 0; }
+}
+/* each dot gives a nod as the redrawn line reaches it (--k: its moment along the loop) */
+.lp-dot { --lp: pr-dot; animation-delay: calc(var(--d0) + (0.68 + var(--k, 0)) * var(--dur)); }
+@keyframes pr-dot {
+  0%, 100% { transform: scale(1); }
+  2.5% { transform: scale(1.22); }
+  6% { transform: scale(1); }
+}
+/* bolt: one quick strike upward, then settled */
+.lp-bolt { --lp: pr-bolt; }
+@keyframes pr-bolt {
+  0%, 100% { transform: none; }
+  5% { transform: translateY(-7%) scale(1.08); }
+  14% { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-i .lp { animation: none; }
+}
 /* Testimonials — Logo Tab 4905:154 Default → Active, and the quote that follows it. */
 .logo-tab {
   background-color: transparent;

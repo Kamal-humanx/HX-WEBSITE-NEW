@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { PhilosophyIcon } from "./PhilosophyIcons";
 
 /**
  * Homepage philosophy statement (Figma 5376:1804 "Philosophy — inline icons") with an "ink front"
@@ -9,6 +10,8 @@ import { useLayoutEffect, useRef, type ReactNode } from "react";
  * the keywords), each word rises a touch and sharpens out of a blur as the front passes, and each icon
  * fades in with a small, quiet settle when its keyword completes. Same family as the Careers reveals
  * (soft-edged front). Reduced motion (or no script) = the static text.
+ * The icons are inline SVG (PhilosophyIcons.tsx): once the reveal is done each keeps a slow loop of
+ * its own on its inner parts — the root is this reveal's to move.
  */
 
 type Kind = "build" | "cross" | "co" | "connects" | "bolt";
@@ -192,21 +195,13 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
     if ("br" in s) out.push(<br key={k++} className="hidden md:block" />);
     else if ("t" in s) out.push(<Words key={k++} text={s.t} />);
     else {
-      const { kind, src, w, h, className: ic = "" } = s.icon;
+      const { kind, w, h, className: ic = "" } = s.icon;
       out.push(
         <span key={k++} className="pr-g" data-kind={kind}>
           <span className="text-accent-2">
             <Words text={s.o} accent />
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt=""
-            width={w}
-            height={h}
-            data-kind={kind}
-            className={`pr-i mx-[0.12em] inline-block h-[0.72em] w-auto align-[-0.08em] ${ic}`}
-          />
+          <PhilosophyIcon kind={kind} w={w} h={h} className={ic} />
         </span>,
       );
     }
