@@ -3,7 +3,7 @@
 export const WORKS = {
   title: "Work That Starts With People",
   intro:
-    "We don’t just deliver projects, we build with people. Here’s what we’ve made together, and the teams who trusted us to make it.",
+    "Every project is a partnership. Here’s what we built together, and the teams who trusted us with it.",
   /** Filter pills: All, then the project categories (client list, revised Nov 2026), in that list's order.
    *  Each project's `cats` says where it appears. */
   filters: ["All", "Health", "Consumer", "Finance", "B2B", "AI", "Impact"],
