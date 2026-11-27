@@ -87,46 +87,15 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
   "juice-ai": {
     "bg": null,
     "overlay": null,
+    /* thumbnail from Figma 6041:90253 (Nov 2026): the 914 × 638 frame as one image, filling the card */
     "layers": [
       {
-        "src": "/images/work/layers/juice-ai/99547.webp",
+        "src": "/images/work/juice-ai-2026.webp",
         "x": 0,
         "y": 0,
-        "w": 100,
+        "w": 100.219,
         "h": 100,
         "d": 0
-      },
-      {
-        "src": "/images/work/layers/juice-ai/99548.webp",
-        "x": 30.875,
-        "y": 10.219,
-        "w": 40.974,
-        "h": 15.125,
-        "d": 0.6
-      },
-      {
-        "src": "/images/work/layers/juice-ai/99549.webp",
-        "x": 0,
-        "y": 28.213,
-        "w": 100,
-        "h": 71.787,
-        "d": 0.3
-      },
-      {
-        "src": "/images/work/layers/juice-ai/99550.webp",
-        "x": 0,
-        "y": 47.414,
-        "w": 100,
-        "h": 52.586,
-        "d": 1.2
-      },
-      {
-        "src": "/images/work/layers/juice-ai/99728.webp",
-        "x": 29.88,
-        "y": 31.191,
-        "w": 40.481,
-        "h": 45.376,
-        "d": 2.4
       }
     ]
   },

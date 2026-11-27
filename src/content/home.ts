@@ -65,12 +65,12 @@ export const HOME = {
         label: "Creative Intelligence",
         title: "Juice AI",
         description: "Bringing brand strategy and creative production together through an AI-powered platform.",
-        image: "/images/work/juice-ai-thumb-2026.webp",
+        image: "/images/work/juice-ai-2026.webp",
         soon: true,
-        /* 2026 thumbnail (Figma 5740:99544), composed for this card from the Work page's layers */
+        /* thumbnail from Figma 6041:90253 (Nov 2026), as drawn */
         alt: "Juice AI: “Rethinking Creative Production”, a “Glass lips beat matte” insight card over the app, on a yellow background",
-        w: 998,
-        h: 604,
+        w: 1568,
+        h: 1095,
       },
       {
         label: "GovTech",

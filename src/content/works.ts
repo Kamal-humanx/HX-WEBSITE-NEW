@@ -40,7 +40,7 @@ export const WORKS = {
       description: "A personalised parenting companion with trusted advice for every stage." },
     { name: "Amazon Now", meta: "AI · Consumer  ·  2025", cats: ["Consumer", "Impact"], key: "amazon-now", image: "/images/work/w-amazon-now.webp", alt: "Amazon Now quick-commerce app on a phone among groceries, with an “Arriving in 10 mins” card",
       description: "Making quick commerce simpler with effortless discovery and shopping journeys." },
-    { name: "Juice AI", meta: "Consumer · Brand  ·  2025", cats: ["AI"], key: "juice-ai", image: "/images/work/w-juice-ai.webp", alt: "Juice AI insights screen generating a “Glass lips beat matte” ad insight on a yellow background",
+    { name: "Juice AI", meta: "Consumer · Brand  ·  2025", cats: ["AI"], key: "juice-ai", image: "/images/work/juice-ai-2026.webp", alt: "Juice AI insights screen generating a “Glass lips beat matte” ad insight on a yellow background",
       description: "Bringing brand strategy and creative production together on one AI platform." },
     { name: "Quickplay", meta: "Enterprise · Mobile  ·  2024", cats: ["Consumer"], soon: false, key: "quickplay", href: "/works/quickplay", image: "/images/work/w-quickplay.webp", alt: "Quickplay screens: a live basketball stream on a phone and the widget builder on a tablet",
       description: "Industry-first generative AI concepts for streaming, unveiled at IBC 2023 in Amsterdam." },
