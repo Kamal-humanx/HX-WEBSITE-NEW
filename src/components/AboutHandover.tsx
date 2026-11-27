@@ -9,7 +9,7 @@ import { useEffect } from "react";
  *    for a scroll or so (24svh), then over the next 40svh (globals.css .about-hold) its content dips
  *    out, the screen itself darkens white → night, and the
  *    capabilities — pulled up onto that same screen (.about-dark, see-through top; .about-caps-stick
- *    held there) — fade in where they stand, and stay held for a further 60svh to be read. Then the
+ *    held there) — fade in where they stand, and stay held for a further 36svh to be read. Then the
  *    page scrolls on.
  * Phones and tablets keep the plain cut; reduced motion too (the CSS gate leaves everything shown).
  */

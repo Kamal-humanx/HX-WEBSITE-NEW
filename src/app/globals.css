@@ -647,9 +647,15 @@
   .about-dark > * { pointer-events: auto; }
   .about-dark .caps-list { background: transparent; }
   .about-caps-wrap { position: relative; pointer-events: none; }
-  /* the capabilities stay through the principles' hold (64svh) and a reading hold after it (60svh) */
-  .about-caps-wrap::after { content: ""; display: block; height: 124svh; }
-  .about-caps-stick { position: sticky; top: 0; opacity: 0; }
+  /* the capabilities stay through the principles' hold (64svh) and a reading hold after it (36svh) */
+  .about-caps-wrap::after { content: ""; display: block; height: 100svh; }
+  /* held just below the header's glass band (its blur reaches 210/127 of the bar + gap; see .case-num),
+     so the title is never read through it: the band's foot + 8px, less the section's own top padding */
+  .about-caps-stick {
+    position: sticky;
+    top: calc((var(--header-h) + var(--header-gap)) * 210 / 127 + 8px - clamp(56px, 5.5vw, 104px));
+    opacity: 0;
+  }
 }
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
 .map-wave {
