@@ -20,8 +20,8 @@ Studio: ${ADDRESS.full}. ${ADDRESS.hours}. Contact: ${SITE_URL}/contact.
 
 ## Pages
 
-- [Home](${u("/")}): ${HOME.hero.heading.line1}${HOME.hero.heading.line2}. Selected work: ${HOME.work.cases.map((c) => `${c.title} — ${c.description}`).join(" ")}
-- [About](${u("/about")}): ${ABOUT.heading}. ${ABOUT.intro} Principles: ${ABOUT.principles.items.map((p) => `${p.title} — ${p.caption}`).join(" ")}
+- [Home](${u("/")}): ${HOME.hero.heading.line1}${HOME.hero.heading.line2}. Selected work: ${HOME.work.cases.map((c) => `${c.title}: ${c.description}`).join(" ")}
+- [About](${u("/about")}): ${ABOUT.heading}. ${ABOUT.intro} Principles: ${ABOUT.principles.items.map((p) => `${p.title}: ${p.caption}`).join(" ")}
 - [Work](${u("/works")}): ${WORKS.title}. ${WORKS.intro} Featured: ${WORKS.featured.title}. Projects: ${unique.join("; ")}.
 - [Careers](${u("/careers")}): ${CAREERS.hero.brief} Open roles: ${CAREERS.openings.roles.map((r) => `${r.role} (${r.level}, ${r.location})`).join("; ")}.
 - [Contact](${u("/contact")}): ${CONTACT.heading}. ${CONTACT.where.intro}

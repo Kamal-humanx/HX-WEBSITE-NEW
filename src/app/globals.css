@@ -920,6 +920,8 @@
    (PhilosophyReveal adds .pr-live), then keeps one quiet event per cycle on Material's emphasized
    curves and a long rest — periods of 6–9s on different phases, so no two play together. Real
    movement and line draws (no opacity tricks); off for reduced motion. */
+/* the boxes let their contents draw past their edges, so nothing is cropped mid-move */
+.pr-i { overflow: visible; }
 .pr-i .lp {
   transform-box: fill-box;
   transform-origin: center;
@@ -932,15 +934,15 @@
 .pr-i[data-kind="co"] { --dur: 8.2s; --d0: 0.6s; }
 .pr-i[data-kind="connects"] { --dur: 7.9s; --d0: 0.8s; }
 .pr-i[data-kind="bolt"] { --dur: 9.1s; --d0: 1.9s; }
-/* build: the solid cube drifts over to interlock with the frame (half over it), lifting a touch on
-   the way, rests there, and drifts back */
+/* build: the solid cube slides over onto the frame (a hair past, then settles exactly on it), rests
+   there, and slides back */
 .lp-cube { --lp: pr-build; }
 @keyframes pr-build {
   0%, 6% { transform: none; }
-  13% { transform: translate(-10px, -3px); }
-  21%, 48% { transform: translate(-20px, 0); }
-  55% { transform: translate(-10px, -3px); }
-  63%, 100% { transform: none; }
+  17% { transform: translateX(-41.5px); }
+  22%, 50% { transform: translateX(-39.33px); }
+  61% { transform: translateX(2px); }
+  66%, 100% { transform: none; }
 }
 /* cross: re-marked by hand — the first stroke draws, then the second; later they wipe out the way
    they came and are drawn again (each stroke is 66.5 long) */
@@ -975,33 +977,34 @@
   63% { transform: translate(-13.36px, -10px); }
   72%, 100% { transform: translate(0, 0); }
 }
-/* connects: the line runs off the far end and redraws from the first dot to the last, each dot
-   popping as it's reached (the two hidden line states meet at 66%, so the jump never shows) */
+/* connects: the dots shrink away one after another as the line runs off; then the first pops back
+   in, the line draws from it to where the second pops in, and on to the third (the two hidden line
+   states meet at 56%, so the jump never shows) */
 .pr-i .lp-line { --lp: pr-line; stroke-dasharray: 82; animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
 @keyframes pr-line {
-  0%, 56% { stroke-dashoffset: 0; }
-  65.99% { stroke-dashoffset: -82; }
-  66% { stroke-dashoffset: 82; }
-  84%, 100% { stroke-dashoffset: 0; }
+  0%, 48% { stroke-dashoffset: 0; }
+  55.99% { stroke-dashoffset: -82; }
+  56%, 61% { stroke-dashoffset: 82; }
+  78%, 100% { stroke-dashoffset: 0; }
 }
 .lp-dot-0 { --lp: pr-dot-0; }
 .lp-dot-1 { --lp: pr-dot-1; }
 .lp-dot-2 { --lp: pr-dot-2; }
-@keyframes pr-dot-0 { 0%, 66% { transform: scale(1); } 69.5% { transform: scale(1.22); } 75%, 100% { transform: scale(1); } }
-@keyframes pr-dot-1 { 0%, 75% { transform: scale(1); } 78.5% { transform: scale(1.22); } 84%, 100% { transform: scale(1); } }
-@keyframes pr-dot-2 { 0%, 82% { transform: scale(1); } 85.5% { transform: scale(1.22); } 91%, 100% { transform: scale(1); } }
-/* bolt: a flick — it swings left, snaps back right with a little overshoot, and settles; two ghosts
-   run the same path a beat behind it, fading, as its trail */
+@keyframes pr-dot-0 { 0%, 48% { transform: scale(1); } 52%, 58% { transform: scale(0); } 61.5% { transform: scale(1.2); } 65%, 100% { transform: scale(1); } }
+@keyframes pr-dot-1 { 0%, 50% { transform: scale(1); } 54%, 69% { transform: scale(0); } 72.5% { transform: scale(1.2); } 76%, 100% { transform: scale(1); } }
+@keyframes pr-dot-2 { 0%, 52% { transform: scale(1); } 56%, 77% { transform: scale(0); } 80.5% { transform: scale(1.2); } 84%, 100% { transform: scale(1); } }
+/* bolt: it darts left, then right, in the gap between its words, and settles; two ghosts run the
+   same path a beat behind it, fading, as its trail */
 .lp-zap { --lp: pr-zap; }
 /* (the ghosts' lag needs the same weight as the shared animation rule above, which sets the delay) */
 .pr-i .lp-zap-1 { animation-delay: calc(var(--d0) + 0.08s); opacity: 0.38; }
 .pr-i .lp-zap-2 { animation-delay: calc(var(--d0) + 0.16s); opacity: 0.16; }
 @keyframes pr-zap {
-  0%, 58% { transform: none; }
-  64% { transform: translateX(-16%) rotate(-12deg); }
-  71% { transform: translateX(11%) rotate(8deg); }
-  77% { transform: translateX(-4%) rotate(-3deg); }
-  82%, 100% { transform: none; }
+  0%, 56% { transform: none; }
+  63% { transform: translateX(-26%); }
+  72% { transform: translateX(22%); }
+  79% { transform: translateX(-7%); }
+  85%, 100% { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .pr-i .lp { animation: none; }

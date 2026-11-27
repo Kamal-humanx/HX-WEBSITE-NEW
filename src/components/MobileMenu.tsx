@@ -99,7 +99,7 @@ export function MobileMenu({ current }: { current: string }) {
           >
             {/* the header's own row (same box and padding as Header.tsx), so logo and button stay put */}
             <div className="flex h-[var(--header-h)] w-full shrink-0 items-center justify-between pl-[max(clamp(16px,1.615vw,31px),env(safe-area-inset-left))] pr-[max(clamp(16px,1.771vw,34px),env(safe-area-inset-right))]">
-              <Link href="/" onClick={() => setOpen(false)} className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX — home">
+              <Link href="/" onClick={() => setOpen(false)} className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX, home">
                 <Logo className="h-auto w-[118.5px]" />
               </Link>
               <button type="button" onClick={close} className="tap inline-flex items-center justify-center rounded-full">

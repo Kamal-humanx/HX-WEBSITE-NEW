@@ -26,7 +26,7 @@ export default function CareersPage() {
     "@type": "JobPosting",
     title: r.role,
     // Only design-provided facts. datePosted/description/employmentType are not supplied (see REPORT.md).
-    description: `<p>${r.role} — ${r.level} — ${r.location}</p>`,
+    description: `<p>${r.role}, ${r.level}, ${r.location}</p>`,
     hiringOrganization: { "@id": ORG_ID, "@type": "Organization", name: "HumanX" },
     jobLocation: {
       "@type": "Place",

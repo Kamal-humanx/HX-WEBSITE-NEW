@@ -138,7 +138,7 @@ export function StudioCarousel({ slides }: { slides: Slide[] }) {
         ref={scrollerRef}
         tabIndex={0}
         role="group"
-        aria-label="Life at the HumanX studio — scroll horizontally"
+        aria-label="Life at the HumanX studio, scroll horizontally"
         className="no-scrollbar overflow-x-auto overscroll-x-contain focus-visible:outline-offset-[-4px]"
       >
         <ul

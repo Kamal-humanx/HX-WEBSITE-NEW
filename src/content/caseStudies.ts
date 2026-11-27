@@ -540,7 +540,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     slug: "apollo-momverse",
     client: "Apollo Momverse",
     title: "Companion for all things parenting",
-    logo: { img: m("apollo-momverse/wordmark.svg", "Apollo Momverse"), h: 52 },
+    logo: { img: m("apollo-momverse/wordmark-2.svg", "Apollo Momverse"), h: 52 },
     intro: [
       "Anxiety is common across the motherhood journey - driven by content overload, isolation, and uncertainty. **Apollo Momverse is built to ease** that. Designed as a **content-first platform**, Momverse offers the **benefits of the Apollo ecosystem**, which gives you access to Apollo doctors, expert reviewed articles and purchase of essential products. Momverse also fosters a **vibrant community of mothers** in different stages of their journey ensuring support every step of the way.",
     ],
@@ -1034,7 +1034,7 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             type: "text",
             body: [
-              "The process began with identifying attributes that best describe the brand—words that encapsulate its essence and form the cornerstone of the brand visual language. This guided the creation of the right narrative and the design of icons and images that align seamlessly with the brand's identity.",
+              "The process began with identifying attributes that best describe the brand: words that encapsulate its essence and form the cornerstone of the brand visual language. This guided the creation of the right narrative and the design of icons and images that align seamlessly with the brand's identity.",
             ],
           },
           {

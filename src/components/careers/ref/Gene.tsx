@@ -20,9 +20,9 @@ const GROUPS = [
 const STEPS = ['Human Edge', 'X Strand', 'Years Shipping'] as const
 /* one quiet line under each step's title: what the step is asking, and how to answer it */
 const HINTS = [
-  'What you bring that no tool can — pick one or more.',
-  'The craft you’ve added to it — pick one or more.',
-  'How long you’ve been shipping — pick one.',
+  'What you bring that no tool can. Pick one or more.',
+  'The craft you’ve added to it. Pick one or more.',
+  'How long you’ve been shipping. Pick one.',
 ] as const
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -392,8 +392,8 @@ export default function Gene() {
               </ol>
               <div className="gn-ask" key={step} role="group" aria-labelledby="gn-ask-t">
                 <div className="gn-head-row">
+                  {/* no step number here: the steps above already carry it (feedback) */}
                   <h3 className="gn-gt" id="gn-ask-t">
-                    <span className="gn-num mono">{'0' + (step + 1)}</span>
                     {STEPS[step]}
                   </h3>
                   {goNext(' gn-go-top')}

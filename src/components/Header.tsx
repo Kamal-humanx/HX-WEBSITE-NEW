@@ -39,7 +39,7 @@ export function Header({ current, theme = "light" }: { current: string; theme?: 
       {/* Homepage 4887:4330: inner bar 1855 wide at x=31 → 31px left / 34px right margin on the 1920 frame. */}
       <div className="relative mx-auto flex h-[var(--header-h)] w-full max-w-[var(--page-max)] items-center justify-between gap-6 pl-[max(clamp(16px,1.615vw,31px),env(safe-area-inset-left))] pr-[max(clamp(16px,1.771vw,34px),env(safe-area-inset-right))]">
         {/* Logo 4887:4331: 115.64×29.5 at x=31, y=37.21 (centre 51.96 → +1.08px from the bar centre). */}
-        <Link href="/" className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX — home">
+        <Link href="/" className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX, home">
           {/* phones/tablets: 118.5px, as in the Figma mobile frames (5654:13717, 5837:23352) */}
           <Logo className="h-auto w-[clamp(94px,6.023vw,115.64px)] max-lg:w-[118.5px]" />
         </Link>

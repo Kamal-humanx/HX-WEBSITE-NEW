@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { AboutReveal } from "@/components/AboutReveal";
 import { CaseReveal } from "@/components/CaseReveal";
+import { GroundTone } from "@/components/GroundTone";
 import { Showreel } from "@/components/Showreel";
 import { StudioCarousel } from "@/components/StudioCarousel";
 import { TeamSection } from "@/components/TeamSection";
@@ -93,7 +94,9 @@ export default function AboutPage() {
         </section>
 
         {/* ---------- Principles staircase (5376:13259) ---------- */}
-        <section aria-labelledby="principles-title" className="container-page pb-[clamp(72px,7vw,140px)]">
+        {/* desktop: a held stretch under the staircase, over which the ground darkens into the
+            capabilities (GroundTone) once the staircase has left the screen */}
+        <section aria-labelledby="principles-title" className="container-page pb-[clamp(72px,7vw,140px)] lg:pb-[50svh]">
           <div data-rv>
             <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
               {principles.title}
@@ -138,7 +141,7 @@ export default function AboutPage() {
           </Reveal>
         </section>
 
-        <div className="bg-night">
+        <div className="about-dark bg-night">
           <CapabilitiesSection reveal />
 
           <TeamSection />
@@ -148,6 +151,8 @@ export default function AboutPage() {
       </main>
       {/* line 0.82: pieces start a little higher up the screen than on the case pages */}
       <CaseReveal line={0.82} />
+      {/* the ground darkens white → night with the scroll as the dark block comes up, as on the homepage */}
+      <GroundTone block=".about-dark" />
       <Footer />
       <JsonLd data={[webPageSchema("about", "AboutPage"), breadcrumbSchema("about", "About")]} />
     </>

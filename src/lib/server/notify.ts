@@ -100,7 +100,7 @@ export async function notifyFounders(inquiry: Inquiry): Promise<NotifyResult> {
   const via = smtp ? "smtp" : "brevo";
 
   if (process.env.EMAIL_DRY_RUN === "1") {
-    console.info(`[notify] dry run — would email ${recipients.length} recipient(s) via ${via} for inquiry ${inquiry.id}`);
+    console.info(`[notify] dry run, would email ${recipients.length} recipient(s) via ${via} for inquiry ${inquiry.id}`);
     return { sent: false, detail: "dry run" };
   }
 

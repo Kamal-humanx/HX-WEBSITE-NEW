@@ -127,7 +127,7 @@ function InquiryCard({ inquiry }: { inquiry: Inquiry }) {
           <form action={inquiry.status === "new" ? markSpam : markNotSpam}>
             <input type="hidden" name="id" value={inquiry.id} />
             <button type="submit" className="min-h-11 rounded-full border border-[#d4d4d4] px-4 font-mono text-xs text-ink-form transition-colors hover:border-ink">
-              {inquiry.status === "new" ? "Mark as spam" : inquiry.notified ? "Not spam" : "Not spam — notify founders"}
+              {inquiry.status === "new" ? "Mark as spam" : inquiry.notified ? "Not spam" : "Not spam, notify founders"}
             </button>
           </form>
         </div>

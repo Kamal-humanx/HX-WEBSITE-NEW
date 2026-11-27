@@ -54,7 +54,7 @@ export const LEARNING = {
       image: "/images/learning/shreya-gulati.webp",
       width: 1157,
       height: 657,
-      alt: "“Where Design Drives Thoughtful, Intuitive Products” — HumanX welcomes Shreya Gulati",
+      alt: "“Where Design Drives Thoughtful, Intuitive Products”: HumanX welcomes Shreya Gulati",
       date: "05 Sept 2025",
       dateTime: "2025-09-05",
       type: "Perspective",

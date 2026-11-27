@@ -89,7 +89,7 @@ export function renderInquiryEmail(
 
     <tr><td class="hx-pad" style="background:#ffffff;border-radius:16px 16px 0 0;border-bottom:1px solid #ececec;padding:22px 36px 20px">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td valign="middle"><img src="${esc(logoSrc)}" width="${EMAIL_LOGO_WIDTH}" height="${EMAIL_LOGO_HEIGHT}" alt="HumanX — elevate the experience" style="display:block;border:0;outline:none;width:${EMAIL_LOGO_WIDTH}px;height:${EMAIL_LOGO_HEIGHT}px;font-family:${SANS};font-size:20px;font-weight:600;color:#171717"></td>
+        <td valign="middle"><img src="${esc(logoSrc)}" width="${EMAIL_LOGO_WIDTH}" height="${EMAIL_LOGO_HEIGHT}" alt="HumanX, elevate the experience" style="display:block;border:0;outline:none;width:${EMAIL_LOGO_WIDTH}px;height:${EMAIL_LOGO_HEIGHT}px;font-family:${SANS};font-size:20px;font-weight:600;color:#171717"></td>
         <td align="right" valign="middle" style="font-family:${MONO};font-size:11px;line-height:16px;letter-spacing:1.2px;text-transform:uppercase;color:#b84a08">New project enquiry</td>
       </tr></table>
     </td></tr>

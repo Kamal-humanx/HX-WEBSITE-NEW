@@ -9,7 +9,7 @@ export const CAREERS = {
       "New tools, shifting roles, the same way of thinking. Shape the question, put it in people’s hands, see what it changes. Design here was never confined to a screen.",
     primaryCta: "See Open Roles",
     secondaryCta: "Find Your X",
-    location: "HumanX — Mumbai",
+    location: "HumanX, Mumbai",
   },
   manifesto: {
     line1: "Design Isn’t About The Tools.",
