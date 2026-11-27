@@ -443,14 +443,18 @@ function BlockView({ b }: { b: Block }) {
                   </ul>
                 )}
               </div>
+              {/* each piece shares the row by its aspect ratio (--r) and is at most its Figma width (dw on
+                  the 1920 frame) as a share of the screen; on phones that share is 2.6× and the ratios
+                  are scaled past 1 so a lone screen fills to it (a single phone screen ≈ 63vw, a wide
+                  image the full width, three screens still one row) — globals.css .case-rowmedia */}
               <div className="flex items-start justify-center gap-[clamp(10px,1.2vw,20px)]">
                 {it.media.map((md, i) => (
                   <MediaFig
                     key={i}
                     m={md}
-                    sizes={`(min-width: 768px) ${Math.round(((it.dw / 15.12) * 100) / 100)}vw, ${Math.round(88 / it.media.length)}vw`}
-                    className="min-w-0"
-                    style={{ flex: `${md.w / md.h} 1 0`, maxWidth: `${(it.dw / 15.12).toFixed(2)}vw` }}
+                    sizes={`(min-width: 768px) ${Math.round(((it.dw / 15.12) * 100) / 100)}vw, ${Math.min(Math.round(88 / it.media.length), Math.round((it.dw / 15.12) * 2.6))}vw`}
+                    className="case-rowmedia min-w-0"
+                    style={{ ["--r" as string]: (md.w / md.h).toFixed(4), ["--dw" as string]: `${(it.dw / 15.12).toFixed(2)}vw` }}
                   />
                 ))}
               </div>

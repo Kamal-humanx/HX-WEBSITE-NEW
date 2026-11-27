@@ -568,6 +568,19 @@
   --c-ink: #fff;
   --c-line: rgba(255, 255, 255, 0.16);
 }
+/* case "rows" media: its Figma width as a share of the screen; 2.6× that on phones, where the 1920
+   share left a single phone screen under 100px wide */
+.case-rowmedia {
+  /* grow factors under 1 only take that fraction of the row: ×10 keeps the shares, fills the row */
+  flex: calc(var(--r, 1) * 10) 1 0;
+  max-width: min(100%, calc(var(--dw) * 2.6));
+}
+@media (min-width: 768px) {
+  .case-rowmedia {
+    flex: var(--r, 1) 1 0;
+    max-width: var(--dw);
+  }
+}
 /* the chapter number holds just below the header's glass band (the band is 210/127 of the bar + gap,
    its blur fading to nothing at the foot), and stays beneath the header in the stacking order */
 @media (min-width: 1024px) {
