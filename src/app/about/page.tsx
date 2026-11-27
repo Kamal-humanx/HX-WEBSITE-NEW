@@ -99,7 +99,7 @@ export default function AboutPage() {
             the homepage's work → capabilities hand-over) */}
         <div className="about-pin relative">
         <div className="about-stage">
-        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(72px,7vw,140px)]">
+        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(54px,5.25vw,105px)]">
           <div data-rv>
             <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
               {principles.title}

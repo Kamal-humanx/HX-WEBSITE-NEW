@@ -680,6 +680,24 @@
     padding-bottom: min(9.7px, 0.55vh) !important;
   }
 }
+/* Phones: the homepage's phone hand-over (.tone-on-phone) — the principles hold 70svh, and the dark
+   block is pulled up by one screen only: it starts 70% down the held screen and rises into place
+   over the hold while the capabilities fade in with the darkening. Same see-through overlap. */
+@media (max-width: 767px) and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .about-hold { height: 70svh; }
+  .about-stage { position: sticky; }
+  .about-dark {
+    position: relative;
+    z-index: 10;
+    margin-top: calc(-100svh - 1px);
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent 0, transparent calc(100svh - 6px), var(--color-night) calc(100svh - 6px));
+  }
+  .about-dark > * { pointer-events: auto; }
+  .about-dark .caps-list { background: transparent; }
+  .about-caps-wrap { pointer-events: none; }
+  .about-caps-stick { opacity: 0; } /* until AboutHandover paints it in, piece by piece */
+}
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
 .map-wave {
   opacity: 0;
@@ -948,6 +966,15 @@
 }
 .tone-dark .swap-a > section {
   background: transparent;
+}
+
+/* A touched capability row (CapsTouch.tsx sets data-touch) lights as a hovered one: title to orange,
+   items to plain white. Touch screens never see `group-hover`. */
+.caps-list .group[data-touch] h3 {
+  color: var(--color-accent);
+}
+.caps-list .group[data-touch] .cap-item {
+  color: #fff;
 }
 
 /* Capability item divider (was border-b white/5) as its own line, so it can draw in right → left

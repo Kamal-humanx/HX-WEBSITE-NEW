@@ -4,16 +4,22 @@ import { useEffect } from "react";
 
 /**
  * About: principles → capabilities, the homepage's work → capabilities hand-over (PinCover +
- * ToneShift), on desktop:
+ * ToneShift), with the same values.
+ * Desktop (≥ 1024):
  *  - the principles stage (.about-stage) sticks once its foot meets the screen's foot (a touch
- *    higher, LIFT) and sits still
- *    for a scroll or so (24svh), then over the next 40svh (globals.css .about-hold) its content dips
- *    out, the screen itself darkens white → night, and the
+ *    higher, LIFT) and sits still for a scroll or so (24svh), then over the next 40svh (globals.css
+ *    .about-hold) its content dips out, the screen itself darkens white → night, and the
  *    capabilities — pulled up onto that same screen (.about-dark, see-through top; .about-caps-stick
  *    held there, laid out exactly as the homepage's held capabilities) — fade in where they stand
  *    piece by piece as ToneShift fades them in on the homepage, and stay held for a further 36svh to
  *    be read. Then the page scrolls on.
- * Phones and tablets keep the plain cut; reduced motion too (the CSS gate leaves everything shown).
+ * Phones (< 768), as the homepage's phone hand-over:
+ *  - the stage sticks with its foot at the screen's foot and holds for 70svh; the principles on
+ *    screen fold away one after another, top first (each rising ~10% of the screen and shrinking a
+ *    little from its top edge); the ground darkens over the middle of the hold; and the capabilities,
+ *    pulled up by one screen only (they start 70% down the held screen), rise into place with the
+ *    scroll while they fade in piece by piece with the darkening.
+ * Tablets keep the plain cut; reduced motion and no script too (the CSS gates leave everything shown).
  */
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const ramp = (v: number, a: number, b: number) => clamp((v - a) / (b - a));
@@ -29,9 +35,10 @@ const set = (el: HTMLElement | null, t: number) => {
   el.style.filter = `blur(${(6 * (1 - t)).toFixed(2)}px)`;
   el.style.transform = `scale(${(0.985 + 0.015 * t).toFixed(4)})`;
 };
-const LIFT = 20; // px: the held principles sit this much higher than their foot-at-the-foot place
-const REST = 24; // svh: the principles sit still first
-const HAND = 40; // svh: then the hand-over (together, .about-hold's 64svh)
+const LIFT = 20; // px: the held principles sit this much higher than their foot-at-the-foot place (desktop)
+const REST = 24; // svh: the principles sit still first (desktop)
+const HAND = 40; // svh: then the hand-over (together, .about-hold's 64svh on desktop)
+const PHONE_HOLD = 70; // svh: the phone hold, as the homepage's work section (.about-hold on phones)
 
 export function AboutHandover() {
   useEffect(() => {
@@ -42,6 +49,11 @@ export function AboutHandover() {
     const caps = document.querySelector<HTMLElement>(".about-caps-stick");
     if (!main || !pin || !stage || !content || !caps || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const wide = matchMedia("(min-width: 1024px)");
+    const phone = matchMedia("(max-width: 767px)");
+    const mode = () => (wide.matches ? "wide" : phone.matches ? "phone" : null);
+    /* phones: the principles leave one by one, as the homepage's work cards — the title block and
+       each step of the list */
+    const cards = Array.from(content.querySelectorAll<HTMLElement>(":scope > [data-rv], :scope > ol > li:not([aria-hidden])"));
     /* the capabilities' pieces, as ToneShift fades them in on the homepage */
     const title = caps.querySelector<HTMLElement>("h2");
     const rows = Array.from(caps.querySelectorAll<HTMLElement>(".group")).map((row) => ({
@@ -65,6 +77,9 @@ export function AboutHandover() {
     const clear = () => {
       stage.style.top = "";
       content.style.opacity = content.style.transform = "";
+      cards.forEach((li) => {
+        li.style.transformOrigin = li.style.transform = li.style.opacity = "";
+      });
       caps.style.opacity = caps.style.pointerEvents = "";
       pieces().forEach((el) => {
         if (!el) return;
@@ -76,13 +91,15 @@ export function AboutHandover() {
       last = -1;
     };
     const measure = () => {
-      if (!wide.matches) return clear();
+      const m = mode();
+      if (!m) return clear();
       V = window.innerHeight;
       const h = stage.offsetHeight;
-      /* its foot at the screen's foot, and the whole of it a touch higher (LIFT) */
-      top = Math.min(0, V - h) - LIFT;
+      /* its foot at the screen's foot (or its top at the top, if it fits); on desktop the whole of it
+         a touch higher (LIFT) */
+      top = Math.min(0, V - h) - (m === "wide" ? LIFT : 0);
       stage.style.top = `${top}px`;
-      /* the hold begins when the stage sticks: its foot at the screen's foot */
+      /* the hold begins when the stage sticks */
       start = pin.getBoundingClientRect().top + window.scrollY - top;
       caps.style.opacity = "1"; // the pieces carry their own, from here on
       sortItems();
@@ -91,24 +108,46 @@ export function AboutHandover() {
     };
     const paint = () => {
       raf = 0;
-      if (!wide.matches) return;
-      const e = ramp(window.scrollY - start - (REST / 100) * V, 0, (HAND / 100) * V);
+      const m = mode();
+      if (!m) return;
+      const rest = m === "wide" ? REST : 0, hand = m === "wide" ? HAND : PHONE_HOLD;
+      const e = ramp(window.scrollY - start - (rest / 100) * V, 0, (hand / 100) * V);
       if (Math.abs(e - last) < 0.0015) return;
       last = e;
-      /* out: the principles sink a little as they fade */
-      const o = smooth(ramp(e, 0, 0.45));
-      content.style.opacity = o > 0 ? (1 - o).toFixed(3) : "";
-      content.style.transform = o > 0 ? `translateY(${(o * o * 48).toFixed(1)}px)` : "";
+      if (m === "wide") {
+        /* out: the principles sink a little as they fade */
+        const o = smooth(ramp(e, 0, 0.45));
+        content.style.opacity = o > 0 ? (1 - o).toFixed(3) : "";
+        content.style.transform = o > 0 ? `translateY(${(o * o * 48).toFixed(1)}px)` : "";
+      } else {
+        /* out: the principles on screen leave one after another, top first, each rising and
+           shrinking a little from its top edge so it tucks in under the one above — the homepage's
+           stack folding away. Card j over [0.07j, 0.32 + 0.07j] of the hold. */
+        let j = 0;
+        const rise = Math.round(Math.min(120, Math.max(72, V * 0.105)));
+        cards.forEach((li) => {
+          const r = li.getBoundingClientRect();
+          const onScreen = r.bottom > 0 && r.top < V;
+          const p = smooth(ramp(e, (onScreen ? j : 0) * 0.07, 0.32 + (onScreen ? j : 0) * 0.07));
+          if (onScreen) j++;
+          li.style.transformOrigin = p ? "50% 0" : "";
+          li.style.transform = p ? `translateY(${(-rise * p).toFixed(1)}px) scale(${(1 - 0.08 * p).toFixed(4)})` : "";
+          li.style.opacity = p ? (1 - p).toFixed(3) : "";
+        });
+      }
+      /* phones: the dark and the capabilities start a beat earlier, right as the last principle
+         goes, so there's no blank white moment between them (the homepage's offset) */
+      const o = m === "phone" ? 0.15 : 0;
       /* ground: the held screen darkens white → night (as the homepage's, over the second half) */
-      const g = smooth(ramp(e, 0.5, 0.95));
+      const g = smooth(ramp(e, 0.5 - o, 0.95 - o));
       const c = Math.round(255 + (14 - 255) * g);
       main.style.backgroundColor = g > 0 ? `rgb(${c},${c},${c})` : ""; // HeaderTheme reads this for the header's ink
-      /* in: the capabilities, already in place on that screen, fade in there with the darkening,
-         exactly as on the homepage: title first, then each row, its items a beat apart, each item's
-         divider drawing in right → left before its text */
-      set(title, smooth(ramp(e, 0.45, 0.8)));
+      /* in: the capabilities, already in place on that screen (desktop) or rising into it (phones),
+         fade in there with the darkening, exactly as on the homepage: title first, then each row,
+         its items a beat apart, each item's divider drawing in right → left before its text */
+      set(title, smooth(ramp(e, 0.45 - o, 0.8 - o)));
       rows.forEach((r, i) => {
-        const base = 0.5 + i * 0.08;
+        const base = 0.5 - o + i * 0.08;
         set(r.h, smooth(ramp(e, base, base + 0.3)));
         set(r.rule, smooth(ramp(e, base + 0.03, base + 0.33)));
         set(r.label, smooth(ramp(e, base + 0.04, base + 0.32)));
@@ -131,12 +170,14 @@ export function AboutHandover() {
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", onScroll, { passive: true });
     wide.addEventListener("change", measure);
+    phone.addEventListener("change", measure);
     measure();
     return () => {
       ro.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("scroll", onScroll);
       wide.removeEventListener("change", measure);
+      phone.removeEventListener("change", measure);
       cancelAnimationFrame(raf);
       clear();
     };

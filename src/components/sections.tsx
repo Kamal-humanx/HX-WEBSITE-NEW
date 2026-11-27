@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { CAPABILITIES, LEARNING } from "@/content/shared";
 import { DisplayHeading } from "./ui";
+import { CapsTouch } from "./CapsTouch";
 
 /**
  * "What We Bring To The Table" — Figma 5376:2788 (Home), 5376:10179 (About), 5376:4919 (Contact).
@@ -56,6 +57,7 @@ export function CapabilitiesSection({ id = "capabilities", reveal = false }: { i
           ))}
         </div>
       </div>
+      <CapsTouch />
     </section>
   );
 }
