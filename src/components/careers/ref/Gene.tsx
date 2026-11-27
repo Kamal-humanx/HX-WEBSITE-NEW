@@ -20,9 +20,9 @@ const GROUPS = [
 const STEPS = ['Human Edge', 'X Strand', 'Years Shipping'] as const
 /* one quiet line under each step's title: what the step is asking, and how to answer it */
 const HINTS = [
-  'What you bring that no tool can. Pick one or more.',
-  'The craft you’ve added to it. Pick one or more.',
-  'How long you’ve been shipping. Pick one.',
+  'The strengths that were yours before any tool. Choose as many as ring true.',
+  'The craft you’ve layered on: code, motion, data, agents. Add every one you work in.',
+  'How long you’ve been putting real work into the world. One band.',
 ] as const
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
