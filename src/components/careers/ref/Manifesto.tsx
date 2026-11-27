@@ -245,9 +245,10 @@ export default function Manifesto() {
     const exitLen = () => (narrow.matches ? 1 : 1.1)
     const side = stage.querySelector<HTMLElement>('.mf-side')!, draw = stage.querySelector<HTMLElement>('.mf-draw')!
     const rail = stage.querySelector<HTMLElement>('.mf-rail')!
-    /* phones: the gene rises over this stage's last screen see-through (careers-ref.css), its chamber
-       and content fading in with the darkening (--gn-in), as the homepage's capabilities arrive on a
-       phone: no hard-edged dark sheet sliding up the white stage */
+    /* phones: the gene is already in place over this stage's last screen, see-through and held there
+       (careers-ref.css); once the copy has left and the stage has darkened to black, its chamber and
+       content fade in where they stand (--gn-in). Nothing slides up from below. Until it shows it
+       takes no touch, so the drawing beneath still answers the finger. */
     const gene = sec.nextElementSibling as HTMLElement | null
     let exitWas = -1
     function exitOut(e: number) {
@@ -266,7 +267,9 @@ export default function Manifesto() {
       draw.style.transform = d && move ? `scale(${(1 - 0.16 * d).toFixed(4)})` : ''
       rail.style.opacity = d ? String(1 - d) : ''
       side.style.pointerEvents = e > 0.3 ? 'none' : ''
-      const k = smooth(ramp(e, 0.5, 0.95))
+      /* phones: the ground goes to black sooner, right after the copy has left, so the gene can
+         follow it in before the hand-off's screen is spent */
+      const k = narrow.matches ? smooth(ramp(e, 0.45, 0.78)) : smooth(ramp(e, 0.5, 0.95))
       stage.dataset.exit = e > 0 ? '1' : ''
       if (k <= 0 && pinned) stage.style.background = '#fff'
       /* the dark it hands over: the gene's own ground where the two meet edge to edge (phones and
@@ -274,8 +277,13 @@ export default function Manifesto() {
       const end = +getComputedStyle(sec).getPropertyValue('--mf-exit') || 18
       if (k > 0) stage.style.background = `rgb(${[0, 1, 2].map(() => Math.round(255 + (end - 255) * k)).join(',')})`
       if (gene) {
-        if (narrow.matches) gene.style.setProperty('--gn-in', smooth(ramp(e, 0.45, 0.9)).toFixed(3))
-        else gene.style.removeProperty('--gn-in')
+        if (narrow.matches) {
+          gene.style.setProperty('--gn-in', smooth(ramp(e, 0.72, 1)).toFixed(3))
+          gene.style.pointerEvents = e >= 0.72 ? '' : 'none'
+        } else {
+          gene.style.removeProperty('--gn-in')
+          gene.style.pointerEvents = ''
+        }
       }
     }
 
@@ -400,6 +408,7 @@ export default function Manifesto() {
       live.destroy()
       held.forEach((f) => f.destroy())
       gene?.style.removeProperty('--gn-in')
+      if (gene) gene.style.pointerEvents = ''
     }
   }, [])
 

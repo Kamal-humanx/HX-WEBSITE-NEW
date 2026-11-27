@@ -1263,21 +1263,20 @@
    narrower desktops let the line wrap on its own rather than spill past its column */
 @media (min-width:1101px) and (max-width:1399px){.hxc .lede .ln{display:inline;white-space:normal}}
 
-/* phones: the gene rises over the principles' last screen instead of following an emptied, darkened
-   one (that left a whole blank dark screen to scroll through). The track is lengthened by the
-   overlap, so each principle keeps its share of the scroll */
+/* phones: the gene is already in place on the principles' last screen when the hand-off begins, and
+   stays put through it: it is laid over the stage's last two screens (pulled up 200svh), see-through
+   and unseen (and taking no touch) while principle 03 still plays beneath, then its first screen
+   sticks at the top for the hand-off's one screen (the spacer after the track gives it that room, so
+   the page is no longer than before). On that held screen the principles' copy leaves, the stage
+   darkens to black beneath, and only then the gene's chamber and content fade in where they stand
+   (Manifesto.tsx exitOut sets --gn-in). Nothing slides up from below. The principles' track keeps the
+   overlap's length, so each principle keeps its share of the scroll */
 @media (max-width:760px){
   .hxc[data-motion] .mf.mf-pinned .mf-principles{height:400svh}
-  .hxc[data-motion] .mf.mf-pinned + .gn{margin-top:-100svh}
-}
-/* phones: the screen the gene rises over is see-through, so the principles' own darkening shows through
-   it (no hard-edged dark sheet sliding up a white stage), and the gene's chamber and content fade in
-   with that darkening (Manifesto.tsx exitOut sets --gn-in) — as the homepage's capabilities arrive on
-   phones, rising into place while they fade in with the ground */
-@media (max-width:760px){
-  .hxc[data-motion] .mf.mf-pinned + .gn{background:linear-gradient(to bottom,transparent 0,transparent calc(100svh - 6px),#121212 calc(100svh - 6px))}
-  .hxc[data-motion] .mf.mf-pinned + .gn .gn-stage{background:rgb(14 14 14 / var(--gn-in,1))}
+  .hxc[data-motion] .mf.mf-pinned + .gn{margin-top:-200svh;background:linear-gradient(to bottom,transparent 0,transparent calc(200svh - 6px),#121212 calc(200svh - 6px))}
+  .hxc[data-motion] .mf.mf-pinned + .gn .gn-stage{position:sticky;top:0;background:rgb(14 14 14 / var(--gn-in,1))}
   .hxc[data-motion] .mf.mf-pinned + .gn .gn-stage > *{opacity:var(--gn-in,1)}
+  .hxc[data-motion] .mf.mf-pinned + .gn .gn-track::after{content:"";display:block;height:100svh}
 }
 
 /* phones: the next chevron moves up beside the step's title — at the right edge, level with it — so
