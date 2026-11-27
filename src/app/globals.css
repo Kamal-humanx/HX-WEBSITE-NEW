@@ -634,21 +634,21 @@
    wait unseen until the hand-over brings them in. Desktop, with script, no reduced motion; otherwise
    the sections simply follow one another. */
 @media (min-width: 1024px) and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  /* the principles stay still for 40svh, then hand over across the next 40svh */
-  .about-hold { height: 80svh; }
+  /* the principles stay still for 24svh, then hand over across the next 40svh */
+  .about-hold { height: 64svh; }
   .about-stage { position: sticky; }
   .about-dark {
     position: relative;
     z-index: 10;
-    margin-top: calc(-180svh - 1px);
+    margin-top: calc(-164svh - 1px);
     pointer-events: none;
-    background: linear-gradient(to bottom, transparent 0, transparent calc(180svh - 6px), var(--color-night) calc(180svh - 6px));
+    background: linear-gradient(to bottom, transparent 0, transparent calc(164svh - 6px), var(--color-night) calc(164svh - 6px));
   }
   .about-dark > * { pointer-events: auto; }
   .about-dark .caps-list { background: transparent; }
   .about-caps-wrap { position: relative; pointer-events: none; }
-  /* the capabilities stay through the principles' hold (80svh) and a reading hold after it (60svh) */
-  .about-caps-wrap::after { content: ""; display: block; height: 140svh; }
+  /* the capabilities stay through the principles' hold (64svh) and a reading hold after it (60svh) */
+  .about-caps-wrap::after { content: ""; display: block; height: 124svh; }
   .about-caps-stick { position: sticky; top: 0; opacity: 0; }
 }
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */

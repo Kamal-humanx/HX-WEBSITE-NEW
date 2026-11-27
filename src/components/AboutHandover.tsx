@@ -6,7 +6,7 @@ import { useEffect } from "react";
  * About: principles → capabilities, the homepage's work → capabilities hand-over (PinCover +
  * ToneShift), on desktop:
  *  - the principles stage (.about-stage) sticks once its foot meets the screen's foot and sits still
- *    for a scroll or two (40svh), then over the next 40svh (globals.css .about-hold) its content dips
+ *    for a scroll or so (24svh), then over the next 40svh (globals.css .about-hold) its content dips
  *    out, the screen itself darkens white → night, and the
  *    capabilities — pulled up onto that same screen (.about-dark, see-through top; .about-caps-stick
  *    held there) — fade in where they stand, and stay held for a further 60svh to be read. Then the
@@ -16,8 +16,8 @@ import { useEffect } from "react";
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const ramp = (v: number, a: number, b: number) => clamp((v - a) / (b - a));
 const smooth = (t: number) => ((t = clamp(t)), t * t * (3 - 2 * t));
-const REST = 40; // svh: the principles sit still first
-const HAND = 40; // svh: then the hand-over (together, .about-hold's 80svh)
+const REST = 24; // svh: the principles sit still first
+const HAND = 40; // svh: then the hand-over (together, .about-hold's 64svh)
 
 export function AboutHandover() {
   useEffect(() => {
