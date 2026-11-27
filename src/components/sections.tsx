@@ -77,7 +77,8 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
             {LEARNING.title}
           </DisplayHeading>
         </div>
-        <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
+        {/* Figma 6023:12047: four cards of 434 across the 1848 frame, 36 apart */}
+        <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(20px,1.875vw,36px)] gap-y-14 md:grid-cols-2 xl:grid-cols-4">
           {LEARNING.posts.map((post) => (
             <li key={post.cta} {...rv}>
               <article className="post-card group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
@@ -88,7 +89,7 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
                   alt={post.alt}
                   width={post.width}
                   height={post.height}
-                  sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 92vw"
+                  sizes="(min-width: 1280px) 23vw, (min-width: 768px) 46vw, 92vw"
                   className="aspect-[565/330] w-full object-cover"
                 />
                 </div>

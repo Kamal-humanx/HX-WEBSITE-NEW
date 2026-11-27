@@ -3,14 +3,15 @@
  * inline so their parts can move. Each keeps a slow, quiet loop of its own (globals.css, .pr-i .lp),
  * begun the moment its keyword has inked in: one event per cycle, then a long rest — on a period
  * and phase of its own, so they never play together.
- *  - build: the solid cube slides over onto the wireframe one, rests there, and slides back
+ *  - build: the solid cube is placed onto the wireframe one like a block (a dip, an arc, a landing
+ *    squash), rests there, and is lifted back the same way
  *  - cross: re-marked by hand — one stroke draws, then the other; later they wipe and redraw
  *  - co-conspirator: the two circle each other — the outline over the top, the solid underneath —
  *    so they trade sides, and orbit back
- *  - connects: the dots go and come back one by one — the first pops in, the line draws from it to
- *    where the second pops in, and on to the third
- *  - bolt: it darts left, then right, in the gap between its words, and settles — two fading
- *    ghosts trailing it
+ *  - connects: the dots go and spring back one by one — the first pops in, the line draws from it
+ *    to where the second pops in, and on to the third
+ *  - bolt: it gathers itself and darts right, back left and settles in the gap between its words,
+ *    squashing and stretching as it goes — two fading ghosts trailing it
  * The boxes let their contents draw past their edges (nothing is cropped mid-move); the X keeps its
  * flat edges with a clip of its own.
  * The loops run on inner parts; the root (.pr-i) belongs to the reveal in PhilosophyReveal.tsx.
@@ -36,7 +37,7 @@ export function PhilosophyIcon({ kind, w, h, className = "" }: { kind: IconKind;
             <path d="M0.41 12.21 L20.42 0 L40.08 12.21 V35.6 L20.42 47.47 V24.07 L0.41 12.21 M20.42 24.07 L40.08 12.21" />
             <path d="M0.75 12.21 V34.92 L20.42 46.79" strokeDasharray="1.42 2.84" />
           </g>
-          {/* the solid cube, which slides over onto the frame */}
+          {/* the solid cube, which is placed onto the frame */}
           <path className="lp lp-cube" d="M39.74 12.21 L59.75 0 L79.41 12.21 V35.6 L59.75 47.47 L39.74 35.6 Z" fill={O} />
         </svg>
       );

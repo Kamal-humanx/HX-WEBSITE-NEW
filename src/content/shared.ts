@@ -24,6 +24,20 @@ export const CAPABILITIES = {
 export const LEARNING = {
   title: "We're constantly learning",
   posts: [
+    /* Figma "Latest 25/6" 6023:12047 (Nov 2026): the Builders' Table leads the row */
+    {
+      image: "/images/learning/the-builders-table.webp",
+      width: 1306,
+      height: 768,
+      alt: "“The Builders’ Table”: the name on a yellow tag beside the HumanX X mark",
+      date: "21st Nov 2026",
+      dateTime: "2026-11-21",
+      type: "Community",
+      excerpt:
+        "A community initiative by HumanX that brings together designers, builders and tinkerers to showcase what they’re creating, exchange ideas and learn from one another.",
+      cta: "Know more",
+      href: "https://www.instagram.com/reel/Df14VARTQZR/?dmpr=MzV4bWo2M2dhcWJ1",
+    },
     {
       image: "/images/learning/join-the-conversation.webp",
       width: 1131,
