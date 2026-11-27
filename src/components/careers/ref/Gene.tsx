@@ -18,6 +18,12 @@ const GROUPS = [
   { key: 'x', num: '02', title: 'X Strand', traits: XS, n: 'X' },
 ] as const
 const STEPS = ['Human Edge', 'X Strand', 'Years Shipping'] as const
+/* one quiet line under each step's title: what the step is asking, and how to answer it */
+const HINTS = [
+  'What you bring that no tool can — pick one or more.',
+  'The craft you’ve added to it — pick one or more.',
+  'How long you’ve been shipping — pick one.',
+] as const
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /* a value that resolves out of noise when it changes, as the careers site's labels do */
@@ -356,9 +362,10 @@ export default function Gene() {
               <h2 className="gn-title" id="gn-title">
                 Every builder here carries a mutation.
               </h2>
+              {/* reads as an instruction (feedback: what to do here was lost in the invitation) */}
               <p className="gn-invite">
-                <span className="ln">Your human edge, your X strand, your years shipping.</span>
-                <span className="ln">Splice in what’s true and we’ll sequence the mutant you are.</span>
+                <span className="ln">Pick your human edge, your X strand, your years shipping.</span>
+                <span className="ln">We’ll sequence the mutant you are and match you to a role.</span>
               </p>
             </div>
 
@@ -391,6 +398,7 @@ export default function Gene() {
                   </h3>
                   {goNext(' gn-go-top')}
                 </div>
+                <p className="gn-hint mono">{HINTS[step]}</p>
                 <div className={'gn-cloud gn-cloud-' + step}>
                   {step < 2
                     ? [

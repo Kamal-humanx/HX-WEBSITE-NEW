@@ -1284,3 +1284,7 @@
 /* the record's call to action reads as disabled until the record is complete (it did nothing when
    tapped, but looked like any other pill) */
 .hxc .gn-cta[aria-disabled="true"]{opacity:.4;cursor:not-allowed}
+
+/* the step's hint: one quiet mono line under its title saying what it asks and how to answer */
+.hxc .gn-hint{margin:10px 0 0;font:400 12px/1.5 var(--mono);letter-spacing:.01em;color:rgba(255,255,255,.5);animation:hxc-gn-pop .6s var(--out) .08s both}
+@media (prefers-reduced-motion:reduce){.hxc .gn-hint{animation:none}}
