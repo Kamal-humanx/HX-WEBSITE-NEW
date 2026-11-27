@@ -15,7 +15,7 @@ export const TEAM = {
     { name: "Shreya Gulati", role: "Design Director", image: "/images/team/shreya-2026.webp", w: 720, h: 826, size: "lg", x: 1271, y: 0, cw: 351, photo: [325, 372] },
     { name: "Jay Khut", role: "Sr. Project Manager", image: "/images/team/jay-2026.webp", w: 612, h: 564, size: "sm", x: 388, y: 0, cw: 222, photo: [204, 188] },
     { name: "Abhishek", role: "Project Manager", image: "/images/team/abhishek-2026.webp", w: 537, h: 566, size: "sm", x: 647, y: 229, cw: 199, photo: [179, 189] },
-    { name: "Sakshi", role: "Project Manager", image: "/images/team/sakshi-2026.webp", w: 537, h: 566, size: "sm", x: 1659, y: 0, cw: 199, photo: [179, 189] },
+    { name: "Sakshi", role: "Social Media Manager", image: "/images/team/sakshi-2026.webp", w: 537, h: 566, size: "sm", x: 1659, y: 0, cw: 199, photo: [179, 189] },
   ],
 } as const;
 

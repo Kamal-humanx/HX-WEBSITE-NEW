@@ -44,7 +44,7 @@ export const WORKS = {
       description: "Bringing brand strategy and creative production together on one AI platform." },
     { name: "Quickplay", meta: "Enterprise · Mobile  ·  2024", cats: ["Consumer"], soon: false, key: "quickplay", href: "/works/quickplay", image: "/images/work/w-quickplay.webp", alt: "Quickplay screens: a live basketball stream on a phone and the widget builder on a tablet",
       description: "Industry-first generative AI concepts for streaming, unveiled at IBC 2023 in Amsterdam." },
-    { name: "SBI Life", meta: "Consumer · Mobile  ·  2024", cats: ["Consumer", "Impact"], key: "sbi-life", image: "/images/work/w-sbi-life.webp", alt: "SBI Life eShield Next protection-plan screens on three phones" },
+    { name: "SBI Life", meta: "Consumer · Mobile  ·  2024", cats: ["Finance", "Impact"], key: "sbi-life", image: "/images/work/w-sbi-life.webp", alt: "SBI Life eShield Next protection-plan screens on three phones" },
     /* (Godrej Wealth and Aokah swapped places on feedback) */
     { name: "Godrej Wealth", meta: "Consumer · Mobile  ·  2024", cats: ["Finance", "AI"], key: "godrej", image: "/images/work/w-godrej.webp", alt: "Godrej wealth app portfolio screens and insight cards: “Opportunities that reflect your behaviour”" },
     { name: "Hurun India", meta: "AI · Enterprise  ·  2025", cats: ["B2B"], soon: false, key: "hurun", href: "/works/hurun", image: "/images/work/w-hurun.webp", alt: "Hurun India website on a phone over gold line illustrations: “Promoting Indian Entrepreneurship”",

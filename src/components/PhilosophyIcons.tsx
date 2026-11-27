@@ -26,7 +26,7 @@ export function PhilosophyIcon({ kind, w, h, className = "" }: { kind: IconKind;
     "data-kind": kind,
     "aria-hidden": true as const,
     focusable: "false" as const,
-    className: `pr-i mx-[0.12em] inline-block h-[0.72em] w-auto align-[-0.08em] ${className}`,
+    className: `pr-i inline-block h-[0.72em] w-auto align-[-0.08em] ${className}`,
   };
   switch (kind) {
     case "build":

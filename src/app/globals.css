@@ -585,6 +585,21 @@
     max-width: var(--dw);
   }
 }
+/* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
+.map-wave {
+  opacity: 0;
+  transform: scale(0.18);
+  animation: map-wave 3.3s cubic-bezier(0.2, 0, 0.3, 1) infinite;
+}
+@keyframes map-wave {
+  0% { transform: scale(0.18); opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-wave { animation: none; opacity: 0.5; transform: scale(0.5); }
+  .map-wave:not(:first-child) { display: none; }
+}
 /* the chapter number holds just below the header's glass band (the band is 210/127 of the bar + gap,
    its blur fading to nothing at the foot), and stays beneath the header in the stacking order */
 @media (min-width: 1024px) {
@@ -922,6 +937,14 @@
    movement and line draws (no opacity tricks); off for reduced motion. */
 /* the boxes let their contents draw past their edges, so nothing is cropped mid-move */
 .pr-i { overflow: visible; }
+/* each icon's gap to the words either side, as drawn in Figma 5376:1804 (measured from the frame
+   at 70px and taken as a share of the font size); the circles and bolt boxes carry blank margins of
+   their own (10% and 17% of their width), subtracted here */
+.pr-i[data-kind="build"] { margin: 0 0.11em 0 0.07em; }
+.pr-i[data-kind="cross"] { margin: 0 0.3em 0 0.33em; }
+.pr-i[data-kind="co"] { margin: 0 0.05em 0 0.05em; }
+.pr-i[data-kind="connects"] { margin: 0 0.25em 0 0.23em; }
+.pr-i[data-kind="bolt"] { margin: 0 -0.02em 0 -0.04em; }
 /* the taller boxes (circles, bolt) sit so their artwork's centre lands where the others' does,
    0.37em above the baseline, level with the keyword's capitals (measured; the utility classes on
    these two were losing to the shared ones) */

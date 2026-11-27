@@ -77,8 +77,8 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
             {LEARNING.title}
           </DisplayHeading>
         </div>
-        {/* Figma 6023:12047: four cards of 434 across the 1848 frame, 36 apart */}
-        <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(20px,1.875vw,36px)] gap-y-14 md:grid-cols-2 xl:grid-cols-4">
+        {/* three cards (Nov 2026: back from four to three; Figma 5376:2864's row) */}
+        <ul className="mt-[clamp(32px,2.4vw,46px)] grid gap-x-[clamp(24px,3.2vw,62px)] gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {LEARNING.posts.map((post) => (
             <li key={post.cta} {...rv}>
               <article className="post-card group/post relative flex h-full flex-col gap-[15px] border-b border-white/20 pb-[clamp(24px,2vw,40px)]">
@@ -89,10 +89,11 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
                   alt={post.alt}
                   width={post.width}
                   height={post.height}
-                  sizes="(min-width: 1280px) 23vw, (min-width: 768px) 46vw, 92vw"
+                  sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 92vw"
                   className="aspect-[565/330] w-full object-cover"
                 />
                 </div>
+                {/* the kind of piece, where the date stood (the date was dropped, Nov 2026) */}
                 <p className="mt-[6px] font-mono text-[17px] tracking-[-0.016em] text-white/60">{post.type}</p>
                 <p className="text-base leading-[1.4] text-white/80">{post.excerpt}</p>
                 {/* opens the post in a new tab (the card's hover lights it: globals.css .post-card) */}

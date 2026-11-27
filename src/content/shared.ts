@@ -30,8 +30,6 @@ export const LEARNING = {
       width: 1306,
       height: 768,
       alt: "“The Builders’ Table”: the name on a yellow tag beside the HumanX X mark",
-      date: "21st Nov 2026",
-      dateTime: "2026-11-21",
       type: "Community",
       excerpt:
         "A community initiative by HumanX that brings together designers, builders and tinkerers to showcase what they’re creating, exchange ideas and learn from one another.",
@@ -48,17 +46,6 @@ export const LEARNING = {
         "In a world that's obsessed with shiny new objects in tech, we want to focus on what makes it really work, on insights that are unmistakably human...",
       cta: "Join the conversation",
       href: "https://www.youtube.com/@humanx11",
-    },
-    {
-      image: "/images/learning/crafting-the-one-thing.webp",
-      width: 1159,
-      height: 659,
-      alt: "“Crafting the One Thing” workshop poster for Product Tank by Devang Raiyani",
-      type: "Workshop",
-      excerpt:
-        "We had a motley crew of PMs, engineers, enterpreneurs & product designers from R listed companies to young startups participating in this session...",
-      cta: "See the thinking",
-      href: "https://www.instagram.com/p/C3IZFJpIMnT/",
     },
     {
       image: "/images/learning/shreya-gulati.webp",
