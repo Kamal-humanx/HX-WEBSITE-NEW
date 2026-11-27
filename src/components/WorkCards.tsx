@@ -171,7 +171,8 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
         {/* z-[1] keeps the thumbnail above the card's full-card link */}
         {/* (the cursor ripple on the thumbnails was removed on feedback; the card's own hover stays) */}
         <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className={`object-cover ${c.soon ? "" : "case-img"}`} />
-        {/* the Work page's pill (.wk-badge), sized by this thumbnail's width, in the top-right corner */}
+        {/* the Work page's pill (.wk-badge), sized by this thumbnail's width, in the top-left corner (as
+            on the Work page; it sat top-right here until feedback, Nov 2026) */}
         {c.soon && (
           <span aria-hidden="true" className="wk-badge pointer-events-none z-[2]">
             Coming Soon
