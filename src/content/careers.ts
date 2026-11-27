@@ -15,7 +15,7 @@ export const CAREERS = {
     line1: "In A World Shaped By AI,",
     line2: "Human Is The Advantage.",
     step: { current: "02", total: " / 03" },
-    title: ["Move The Needle.", "Not Just The Pixels."],
+    title: ["Move Outcomes,", "Not Just Pixels."],
     body: "We’re measured by the problems we solve and the behaviour we change. Tools are how we get there, never the point.",
     diagramAlt:
       "Diagram: lines from FIGMA, CODE, AI, RESEARCH, PROTOTYPES and WORKSHOPS converge through a field of points into a single orange point labelled “BEHAVIOUR, CHANGED”",

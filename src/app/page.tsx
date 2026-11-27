@@ -148,7 +148,7 @@ export default function HomePage() {
             }
           />
 
-          {/* Human Cognition × System Intelligence (Figma 5692:13015, 1855 wide on the 1920 frame).
+          {/* Clarity × Craft × Systems, formerly Human Cognition × System Intelligence (Figma 5692:13015, 1855 wide on the 1920 frame).
               Two columns with no gutter: the title takes 914, the copy starts at 914 and runs 941
               to the right edge — so the body sets in three lines and the quote in three, as drawn.
               Body → quote is a tight 19 px; quote → link is 41 px. */}

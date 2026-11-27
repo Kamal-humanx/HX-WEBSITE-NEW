@@ -148,7 +148,7 @@ export const HOME = {
     ],
   },
   manifesto: {
-    title: "Human Cognition × System Intelligence",
+    title: "Clarity × Craft × Systems",
     body: "AI gives us speed and scale. It does not give us direction. Knowing what to ask, and what to build takes empathy. Nothing replaces watching real behaviour, listening to real conversations, and getting real feedback. ",
     quote: "In our world, the tools will keep changing. Our craft stays unmistakably human.",
     cta: "Get In Touch",

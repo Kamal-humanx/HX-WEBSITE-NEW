@@ -14,7 +14,7 @@ const PRINCIPLES = [
   },
   {
     kicker: 'Outcomes over tools',
-    head: ['Move the needle.', 'Not just the pixels.'],
+    head: ['Move outcomes,', 'not just pixels.'],
     copy: 'We’re measured by the problems we solve and the behaviour we change. Tools are how we get there, never the point.',
   },
   {
