@@ -76,7 +76,9 @@ export default function ContactPage() {
             <div data-rv="media" className="relative mt-[clamp(24px,1.5vw,30px)] overflow-hidden lg:h-[max(812px,calc((min(100vw,1920px)-2*var(--gutter))*0.456911))]" style={{ ["--rv-r" as string]: "0px" }}>
               <div className="relative aspect-[1845/843] overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto lg:[container-type:size]">
                 <div className="absolute inset-0 lg:inset-auto lg:left-1/2 lg:top-1/2 lg:aspect-[1845/843] lg:w-[max(100cqw,calc(100cqh*1845/843))] lg:-translate-x-1/2 lg:-translate-y-1/2">
-                  <Image src="/images/contact/map-2.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio off the Western Express Highway, opposite Oberoi Commerz and Morgan Stanley, near Aarey Metro" fill sizes="(min-width: 1024px) 140vw, 96vw" className="object-cover" />
+                  {/* unoptimized: served as the 5400px file it is — the optimizer's largest size (3840) was being
+                      stretched across ~4200 device pixels on a 2x Mac, which read as soft */}
+                  <Image src="/images/contact/map-2.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio off the Western Express Highway, opposite Oberoi Commerz and Morgan Stanley, near Aarey Metro" fill unoptimized className="object-cover" />
                   <div aria-hidden="true" className="absolute inset-0 bg-black/20" />
                   {/* three waves pulse out from the studio's spot and fade, one after another (globals.css
                       .map-wave); reduced motion: one still ring */}
