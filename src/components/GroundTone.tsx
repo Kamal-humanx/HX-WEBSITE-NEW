@@ -9,7 +9,8 @@ import { useEffect } from "react";
  * the block's own content come in. Desktop only (phones keep the plain cut); none for reduced motion.
  *  - `block`: the dark block's selector; `fade`: the light content that leaves (a selector)
  *  - progress p runs from the block's top at 100% of the screen height to 42%:
- *    content out over p 0 → 0.55, ground over 0.2 → 0.85, the block's content in over 0.82 → 1
+ *    content out over p 0 → 0.5, ground over 0.15 → 0.72, the block's content in over 0.55 → 0.85
+ *    (so it is already there as the ground settles, not a screen later)
  */
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const ramp = (v: number, a: number, b: number) => clamp((v - a) / (b - a));
@@ -30,16 +31,16 @@ export function GroundTone({ block, fade }: { block: string; fade?: string }) {
       const p = wide.matches ? ramp(V - dark.getBoundingClientRect().top, 0, V * 0.58) : 0;
       if (Math.abs(p - last) < 0.002) return;
       last = p;
-      const g = smooth(ramp(p, 0.2, 0.85));
+      const g = smooth(ramp(p, 0.15, 0.72));
       const c = Math.round(255 + (14 - 255) * g);
       main.style.backgroundColor = g > 0 ? `rgb(${c},${c},${c})` : "";
       if (out) {
-        const o = smooth(ramp(p, 0, 0.55));
+        const o = smooth(ramp(p, 0, 0.5));
         out.style.opacity = o > 0 ? (1 - o).toFixed(3) : "";
         out.style.transform = o > 0 ? `translateY(${(o * o * 48).toFixed(1)}px)` : "";
       }
       if (inner) {
-        const i = smooth(ramp(p, 0.82, 1));
+        const i = smooth(ramp(p, 0.55, 0.85));
         inner.style.opacity = p > 0 && i < 1 ? i.toFixed(3) : "";
       }
     };

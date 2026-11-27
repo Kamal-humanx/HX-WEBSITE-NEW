@@ -96,7 +96,7 @@ export default function AboutPage() {
         {/* ---------- Principles staircase (5376:13259) ---------- */}
         {/* desktop: as the dark block comes up, this section dips out, the ground darkens, and the
             capabilities come in (GroundTone, as the homepage's work → capabilities) */}
-        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(72px,7vw,140px)]">
+        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(72px,7vw,140px)] lg:pb-[clamp(40px,3.5vw,64px)]">
           <div data-rv>
             <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
               {principles.title}
