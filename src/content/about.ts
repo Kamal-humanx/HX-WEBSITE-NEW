@@ -33,7 +33,7 @@ export const ABOUT = {
   ],
   process: "Our journey and impact",
   stats: [
-    { value: "12+ Years", caption: "What began as a brother sister duo has grown into a team working across sectors and across continents" },
+    { value: "12+ Years", caption: "What started as a love for the craft has grown into a practice trusted by global brands, startups and governments." },
     { value: "1Billion+", caption: "People who interact with the systems we’ve helped build" },
     { value: "50+", caption: "Strategists, designers, and operations managers bringing their unique perspectives" },
   ],
