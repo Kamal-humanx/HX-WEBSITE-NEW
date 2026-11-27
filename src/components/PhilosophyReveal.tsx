@@ -24,18 +24,18 @@ type Seg =
    word is the icon's own margin (globals.css, per icon, measured from the frame), since a space on
    top of it set the words too far apart. */
 const SEGS: Seg[] = [
-  { t: "It's a great time to " },
+  { t: "It’s a great time to " },
   { o: "build", icon: { kind: "build", src: "/images/icons/build.svg", w: 80, h: 48 } },
   { t: "new ideas," },
   { br: true },
-  { t: " To shape " },
+  { t: " to shape " },
   { o: "new behaviours", icon: { kind: "cross", src: "/images/icons/cross.svg", w: 47, h: 47, className: "h-[0.6em]" } },
-  { t: ", To tell a new story" },
+  { t: ". To tell a new story," },
   { br: true },
-  { t: " You need a new kind of partner, a " },
+  { t: " you need a new kind of partner, a " },
   { o: "co-conspirator", icon: { kind: "co", src: "/images/icons/co-conspirator.svg", w: 92, h: 92, className: "h-[1em] align-[-0.2em]" } },
   { br: true },
-  { t: " Who " },
+  { t: " who " },
   { o: "connects", icon: { kind: "connects", src: "/images/icons/connects.svg", w: 69, h: 56 } },
   { t: "the dots and " },
   { o: "makes it", icon: { kind: "bolt", src: "/images/icons/bolt.svg", w: 82, h: 82, className: "h-[1em] align-[-0.18em]" } },
@@ -43,7 +43,7 @@ const SEGS: Seg[] = [
 ];
 
 /* the statement as plain text (screen readers): a space between segments, none before a comma */
-const PLAIN = SEGS.map((s) => ("t" in s ? s.t : "o" in s ? s.o : " ")).join(" ").replace(/\s+/g, " ").replace(/ ,/g, ",").trim();
+const PLAIN = SEGS.map((s) => ("t" in s ? s.t : "o" in s ? s.o : " ")).join(" ").replace(/\s+/g, " ").replace(/ ([,.])/g, "$1").trim();
 
 /* text → words (inline-block, so they can rise and sharpen) → letters (each inks on its own) */
 function Words({ text, accent }: { text: string; accent?: boolean }) {

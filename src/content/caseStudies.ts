@@ -1,5 +1,5 @@
 /**
- * Project detail pages (/works/[slug]). Every word on these pages is taken verbatim from the
+ * Project detail pages (/work/[slug]). Every word on these pages is taken verbatim from the
  * existing humanx.io case studies (typos included, so nothing is reworded); the pages themselves are
  * built in the new site's language (header, footer, Uncut Sans + Chivo Mono).
  *

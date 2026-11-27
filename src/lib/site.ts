@@ -37,7 +37,7 @@ export const SOCIAL: { label: string; href?: string }[] = [
 export const NAV = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/works", label: "Work" },
+  { href: "/work", label: "Work" },
   { href: "/careers", label: "Careers" },
   /* Contact is reached by the header's "Get in Touch" pill (it led to the same form) */
 ] as const;

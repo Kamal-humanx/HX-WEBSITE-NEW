@@ -54,7 +54,7 @@ export function Analytics() {
       const a = (e.target as Element | null)?.closest?.("a[href]");
       if (!a) return;
       const href = a.getAttribute("href") ?? "";
-      if (href.startsWith("/works/")) track("select_content", { content_type: "case_study", content_id: href.slice(7) });
+      if (href.startsWith("/work/")) track("select_content", { content_type: "case_study", content_id: href.slice(6) });
       else if (href.startsWith("mailto:")) track("email_click");
     };
     const onApply = (e: Event) => track("apply_click", { role: String((e as CustomEvent<{ role?: string }>).detail?.role ?? "") });

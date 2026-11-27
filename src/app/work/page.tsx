@@ -274,7 +274,7 @@ export default function WorksPage() {
 
   return (
     <div className="bg-night text-white">
-      <Header current="/works" theme="dark" />
+      <Header current="/work" theme="dark" />
       <main id="main">
         {/* ---------- Intro (5740:94338): title 70/115% −2%, intro 18/26 right-aligned ----------
             phones: the title at 38px, the size the Home and About titles take there (text-h1's floor),

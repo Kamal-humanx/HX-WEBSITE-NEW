@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   // Optimised images are content-addressed by URL + width, so they can be cached for a long time.
   images: { formats: ["image/avif", "image/webp"], minimumCacheTTL: 31536000 },
   poweredByHeader: false,
+  // The Work section moved from /works to /work; old links and search results keep working.
+  async redirects() {
+    return [
+      { source: "/works", destination: "/work", permanent: true },
+      { source: "/works/:slug*", destination: "/work/:slug*", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

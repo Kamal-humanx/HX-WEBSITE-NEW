@@ -100,7 +100,7 @@ export default function HomePage() {
               {work.title}
             </DisplayHeading>
             <Link
-              href="/works"
+              href="/work"
               className="link-arrow text-base capitalize leading-[1.5] text-[#181818] sm:mb-1"
             >
               <span className="la">{work.seeAll}</span>

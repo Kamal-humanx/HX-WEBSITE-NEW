@@ -158,7 +158,7 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
             Coming Soon
           </p>
         ) : (
-          <ArrowLink href={c.href ?? "/works"} srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
+          <ArrowLink href={c.href ?? "/work"} srSuffix={`: ${c.title}`} className="after:absolute after:inset-0 after:content-['']">
             {readMore}
           </ArrowLink>
         )}

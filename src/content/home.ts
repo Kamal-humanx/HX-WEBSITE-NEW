@@ -48,7 +48,7 @@ export const HOME = {
         w: 1006,
         h: 610,
         /* its project page; the other cards go to the Work page until theirs are built */
-        href: "/works/bengaluru-international-airport",
+        href: "/work/bengaluru-international-airport",
       },
       {
         /* replaced Amazon Now (no case study yet) — Figma 5253:31411, without its Coming Soon pill */
@@ -59,7 +59,7 @@ export const HOME = {
         alt: "Amazon miniTV app: the Your Honor home screen, a zodiac show finder, Mini Laughs memes and a show notification",
         w: 998,
         h: 604,
-        href: "/works/minitv",
+        href: "/work/minitv",
       },
       {
         label: "Creative Intelligence",
@@ -94,7 +94,7 @@ export const HOME = {
         alt: "Apollo Momverse brand artwork: “Empowering your journey” beside a woman drinking from a glass",
         w: 998,
         h: 604,
-        href: "/works/apollo-momverse",
+        href: "/work/apollo-momverse",
       },
     ],
     readMore: "Read More",

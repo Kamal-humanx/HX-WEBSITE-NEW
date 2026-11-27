@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const c = caseStudy((await params).slug);
   if (!c) return {};
   const title = `${c.client} - ${c.title.replace(/\n/g, " ")} | HumanX`;
-  const path = `/works/${c.slug}`;
+  const path = `/work/${c.slug}`;
   return {
     title: { absolute: title },
     description: c.metaDescription,
@@ -763,7 +763,7 @@ function TestimonialPanel({ t }: { t: Testimonial }) {
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const c = caseStudy((await params).slug);
   if (!c) notFound();
-  const path = `/works/${c.slug}`;
+  const path = `/work/${c.slug}`;
   const t = c.theme;
   const dark = t.mode === "dark";
   const themeVars = {
@@ -787,7 +787,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <div className={`case-page bg-[var(--c-bg)] ${FG}`} style={themeVars} data-mode={t.mode}>
-      <Header current="/works" theme={dark ? "dark" : "light"} />
+      <Header current="/work" theme={dark ? "dark" : "light"} />
       {/* main paints the case's colours itself: as the footer nears, FootTone swaps its theme variables
           for the footer's night and white (globals.css), and the whole page eases over with it */}
       <main id="main" className={`bg-[var(--c-bg)] ${FG}`}>
@@ -804,7 +804,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               </li>
               <li aria-hidden="true">/</li>
               <li>
-                <Link href="/works" className="inline-flex min-h-11 items-center transition-opacity hover:opacity-70">
+                <Link href="/work" className="inline-flex min-h-11 items-center transition-opacity hover:opacity-70">
                   Work
                 </Link>
               </li>
@@ -919,10 +919,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               {/* Onward links: the next case study (they form a loop, so no page is a dead end) and
                   the way back to the full list. */}
               <div data-rv className="flex flex-wrap items-center gap-x-[clamp(24px,3vw,56px)] gap-y-3">
-                <ArrowLink href={`/works/${next.slug}`} tone="orange" onDark={dark} className="text-lg">
+                <ArrowLink href={`/work/${next.slug}`} tone="orange" onDark={dark} className="text-lg">
                   Next project: {next.client}
                 </ArrowLink>
-                <ArrowLink href="/works" tone="orange" onDark={dark} className="text-lg">
+                <ArrowLink href="/work" tone="orange" onDark={dark} className="text-lg">
                   Explore more work
                 </ArrowLink>
               </div>
@@ -954,7 +954,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-              { "@type": "ListItem", position: 2, name: "Work", item: absoluteUrl("/works") },
+              { "@type": "ListItem", position: 2, name: "Work", item: absoluteUrl("/work") },
               { "@type": "ListItem", position: 3, name: c.client, item: absoluteUrl(path) },
             ],
           },

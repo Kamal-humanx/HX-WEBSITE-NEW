@@ -20,7 +20,7 @@ export const PAGE_META = {
       "We partner with ambitious brands and challenge convention. Meet the HumanX team, the principles behind every decision we make, and what we bring to the table.",
   },
   works: {
-    path: "/works",
+    path: "/work",
     title: "Work - HumanX Projects and Case Studies",
     description:
       "Work that starts with people: Bengaluru International Airport, Apollo Momverse, Juice AI, MyAdhaar, Quickplay, Stream Discovery and more from the HumanX studio.",
