@@ -36,7 +36,7 @@ const set = (el: HTMLElement | null, t: number) => {
   el.style.transform = `scale(${(0.985 + 0.015 * t).toFixed(4)})`;
 };
 const LIFT = 20; // px: the held principles sit this much higher than their foot-at-the-foot place (desktop)
-const TRIM = 0.25; // the white under the held staircase's bars, trimmed by this share (desktop)
+const TRIM = 0.1; // the white under the held staircase's bars, trimmed by this share (desktop)
 const REST = 24; // svh: the principles sit still first (desktop)
 const HAND = 40; // svh: then the hand-over (together, .about-hold's 64svh on desktop)
 const PHONE_HOLD = 70; // svh: the phone hold, as the homepage's work section (.about-hold on phones)
@@ -98,7 +98,7 @@ export function AboutHandover() {
       const h = stage.offsetHeight;
       /* its foot at the screen's foot (or its top at the top, if it fits); on desktop the whole of it
          a touch higher (LIFT), then down again by a share (TRIM) of the white that would be left under
-         the staircase's bars, so that white is a quarter less */
+         the staircase's bars, so that white is a tenth less */
       top = Math.min(0, V - h);
       if (m === "wide") {
         top -= LIFT;
