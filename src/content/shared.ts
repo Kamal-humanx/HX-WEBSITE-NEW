@@ -43,8 +43,6 @@ export const LEARNING = {
       width: 1131,
       height: 665,
       alt: "“Join the Conversation” podcast artwork: an illustrated conversation between two people on an orange sofa",
-      date: "05 Sept 2025",
-      dateTime: "2025-09-05",
       type: "Podcast",
       excerpt:
         "In a world that's obsessed with shiny new objects in tech, we want to focus on what makes it really work, on insights that are unmistakably human...",
@@ -56,8 +54,6 @@ export const LEARNING = {
       width: 1159,
       height: 659,
       alt: "“Crafting the One Thing” workshop poster for Product Tank by Devang Raiyani",
-      date: "05 Sept 2025",
-      dateTime: "2025-09-05",
       type: "Workshop",
       excerpt:
         "We had a motley crew of PMs, engineers, enterpreneurs & product designers from R listed companies to young startups participating in this session...",
@@ -69,8 +65,6 @@ export const LEARNING = {
       width: 1157,
       height: 657,
       alt: "“Where Design Drives Thoughtful, Intuitive Products”: HumanX welcomes Shreya Gulati",
-      date: "05 Sept 2025",
-      dateTime: "2025-09-05",
       type: "Perspective",
       excerpt:
         "Design isn't decoration. It's how products communicate intent, reduce friction, and create trust. That's why we're excited to welcome Shreya as our new Design Director...",

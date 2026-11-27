@@ -93,10 +93,7 @@ export function LearningSection({ id = "learning", reveal = false }: { id?: stri
                   className="aspect-[565/330] w-full object-cover"
                 />
                 </div>
-                <p className="mt-[6px] flex items-center justify-between font-mono text-[17px] tracking-[-0.016em] text-white/60">
-                  <time dateTime={post.dateTime}>{post.date}</time>
-                  <span>{post.type}</span>
-                </p>
+                <p className="mt-[6px] font-mono text-[17px] tracking-[-0.016em] text-white/60">{post.type}</p>
                 <p className="text-base leading-[1.4] text-white/80">{post.excerpt}</p>
                 {/* opens the post in a new tab (the card's hover lights it: globals.css .post-card) */}
                 <a
