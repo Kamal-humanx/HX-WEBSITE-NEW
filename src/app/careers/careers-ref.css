@@ -1296,3 +1296,19 @@
 /* the step's hint: one quiet mono line under its title saying what it asks and how to answer */
 .hxc .gn-hint{margin:10px 0 0;font:400 12px/1.5 var(--mono);letter-spacing:.01em;color:rgba(255,255,255,.5);animation:hxc-gn-pop .6s var(--out) .08s both}
 @media (prefers-reduced-motion:reduce){.hxc .gn-hint{animation:none}}
+
+/* phones, after Figma 6100:19055 (layout only; the type stays as set above): the count sits under the
+   title at the left, 40px below it; the list runs 4px past the text column on each side under a
+   #dadada hairline; each role is its name, then one line with level · location at the left and Apply
+   at the right, 20px above and below, 18px between; no row number */
+@media (max-width:760px){
+  .hxc .or-bar{justify-content:flex-start;margin-top:40px}
+  .hxc .or-list{margin:26px -4px 0;border-top:1px solid var(--orule)}
+  .hxc .or-in{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"name name name" "lv lc ap";column-gap:0;row-gap:18px;padding:20px 0}
+  .hxc .or-n{display:none}
+  .hxc .or-name{grid-area:name}
+  .hxc .or-lv{grid-area:lv}
+  .hxc .or-lc{grid-area:lc;justify-self:start}
+  .hxc .or-lc::before{content:"·";margin:0 8px}
+  .hxc .or-ap{grid-area:ap;justify-self:end}
+}
