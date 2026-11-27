@@ -320,6 +320,23 @@ export default function Gene() {
       )
   }
 
+  /* on to the next strand: tangerine once there's a pick. Drawn in the grid's spare eighth cell on
+     desktop and tablets; on phones (one column) it sits beside the step's title instead, so the same
+     button is rendered in both places and careers-ref.css shows one or the other */
+  const goNext = (place = '') =>
+    step < 2 ? (
+      <button
+        type="button"
+        className={'gn-go' + place}
+        key="go"
+        disabled={!done[step]}
+        aria-label={`Next: ${STEPS[step + 1]}`}
+        title={`Next: ${STEPS[step + 1]}`}
+        onClick={() => setStep(step + 1)}
+      >
+        <Arrow />
+      </button>
+    ) : null
   const blank = <span className="gn-blank" role="img" aria-label="not yet spliced" />
   return (
     <section id="gene" className="gn" ref={secRef} aria-labelledby="gn-title" data-complete={complete || undefined}>
@@ -367,26 +384,18 @@ export default function Gene() {
                 ))}
               </ol>
               <div className="gn-ask" key={step} role="group" aria-labelledby="gn-ask-t">
-                <h3 className="gn-gt" id="gn-ask-t">
-                  <span className="gn-num mono">{'0' + (step + 1)}</span>
-                  {STEPS[step]}
-                </h3>
+                <div className="gn-head-row">
+                  <h3 className="gn-gt" id="gn-ask-t">
+                    <span className="gn-num mono">{'0' + (step + 1)}</span>
+                    {STEPS[step]}
+                  </h3>
+                  {goNext(' gn-go-top')}
+                </div>
                 <div className={'gn-cloud gn-cloud-' + step}>
                   {step < 2
                     ? [
                         ...TRAITS[step].map(([label], i) => renderTrait(step as 0 | 1, i, label)),
-                        /* on to the next strand: the eighth cell of the grid, tangerine once there's a pick */
-                        <button
-                          type="button"
-                          className="gn-go"
-                          key="go"
-                          disabled={!done[step]}
-                          aria-label={`Next: ${STEPS[step + 1]}`}
-                          title={`Next: ${STEPS[step + 1]}`}
-                          onClick={() => setStep(step + 1)}
-                        >
-                          <Arrow />
-                        </button>,
+                        goNext(),
                       ]
                     : YEARS.map((y, i) => (
                         <button

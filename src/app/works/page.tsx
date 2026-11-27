@@ -275,10 +275,12 @@ export default function WorksPage() {
     <div className="bg-night text-white">
       <Header current="/works" theme="dark" />
       <main id="main">
-        {/* ---------- Intro (5740:94338): title 70/115% −2%, intro 18/26 right-aligned ---------- */}
+        {/* ---------- Intro (5740:94338): title 70/115% −2%, intro 18/26 right-aligned ----------
+            phones: the title at 38px, the size the Home and About titles take there (text-h1's floor),
+            so it leads the intro and the filter pills instead of competing with them */}
         <section aria-labelledby="works-title" className="container-page pt-[clamp(24px,2.7vw,52px)]">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <h1 id="works-title" data-seq="wk-title" className="max-w-[7.7em] text-h2 font-normal capitalize leading-[1.15] tracking-[-0.02em]">
+            <h1 id="works-title" data-seq="wk-title" className="max-w-[7.7em] text-h2 font-normal capitalize leading-[1.15] tracking-[-0.02em] max-md:text-[2.375rem] max-md:tracking-[-0.04em]">
               {WORKS.title}
             </h1>
             <p data-seq="wk-intro" className="max-w-[616px] text-base leading-[1.4444] text-white lg:text-right">

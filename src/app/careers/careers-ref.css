@@ -419,7 +419,7 @@
 .hxc .gn-act{margin-top:auto;padding-top:28px}
 .hxc .gn-cta{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;width:100%;padding:16.8px 24.8px;border:1px solid var(--g3);
   text-decoration:none;outline:none;font:500 16px/19.5px var(--sans);letter-spacing:-.01em;color:var(--g2);
-  cursor:default;transition:background-color .6s var(--out),color .6s var(--out),border-color .6s var(--out)}
+  cursor:default;transition:background-color .6s var(--out),color .6s var(--out),border-color .6s var(--out),opacity .6s var(--out)}
 .hxc .gn-cta .arr{display:inline-block;transition:transform .5s var(--out)}
 .hxc [data-complete] .gn-cta{border-color:var(--cot);background:var(--cot);color:#141414;cursor:pointer;transition-delay:1.5s}
 .hxc [data-complete] .gn-cta:hover{background:transparent;color:var(--cot);transition-delay:0s}
@@ -1091,14 +1091,14 @@
 /* ---- round 8 ---------------------------------------------------------------------------------- */
 /* on to the next strand: a round chevron in the grid's spare eighth cell; faint until there's a pick,
    then tangerine with a slow pulse so it asks to be pressed */
-.hxc .gn-cloud .gn-go{justify-self:start;align-self:center;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;
+.hxc .gn-go{justify-self:start;align-self:center;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;
   border:1px solid rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.3);cursor:default;
   transition:background-color .35s var(--io),border-color .35s var(--io),color .35s var(--io);animation:hxc-gn-pop .5s var(--out) .3s both}
-.hxc .gn-cloud .gn-go svg{width:18px;height:18px;transition:transform .35s var(--out)}
-.hxc .gn-cloud .gn-go:not(:disabled){background:var(--x);border-color:var(--x);color:#fff;cursor:pointer;
+.hxc .gn-go svg{width:18px;height:18px;transition:transform .35s var(--out)}
+.hxc .gn-go:not(:disabled){background:var(--x);border-color:var(--x);color:#fff;cursor:pointer;
   animation:hxc-gn-pop .5s var(--out) both,hxc-gn-pulse 1.8s ease-out .5s infinite}
-.hxc .gn-cloud .gn-go:not(:disabled):hover svg{transform:translateX(3px)}
-.hxc .gn-cloud .gn-go:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.hxc .gn-go:not(:disabled):hover svg{transform:translateX(3px)}
+.hxc .gn-go:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @keyframes hxc-gn-pulse{0%{box-shadow:0 0 0 0 rgba(243,103,18,.45)}100%{box-shadow:0 0 0 14px rgba(243,103,18,0)}}
 
 /* the specimen in its own faint container; the drawing is seen only inside it, fading out at the top
@@ -1117,11 +1117,11 @@
   .hxc .gn-intro{grid-template-columns:minmax(0,1fr) auto}
   .hxc .gn-intro .gn-invite .ln{white-space:nowrap}
 }
-@media (prefers-reduced-motion:reduce){.hxc .gn-cloud .gn-go{animation:none !important}}
+@media (prefers-reduced-motion:reduce){.hxc .gn-go{animation:none !important}}
 /* the rotate hint sits just below the specimen's container, not inside it */
 .hxc .gn-drag{top:100%;bottom:auto;margin-top:12px}
 /* the next chevron sits at the right edge of the options grid, under the second column's pills */
-.hxc .gn-cloud .gn-go{justify-self:end}
+.hxc .gn-go{justify-self:end}
 /* the specimen and the record take a little more of a wide screen, grown by the same amount, with the
    question column giving way and the gaps a touch tighter */
 @media (min-width:1181px){
@@ -1270,3 +1270,17 @@
   .hxc[data-motion] .mf.mf-pinned .mf-principles{height:400svh}
   .hxc[data-motion] .mf.mf-pinned + .gn{margin-top:-100svh}
 }
+
+/* phones: the next chevron moves up beside the step's title — at the right edge, level with it — so
+   the options end on their last pill and the record follows a little closer (the same button is
+   rendered in both places, Gene.tsx goNext; one shows at a time) */
+.hxc .gn-head-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.hxc .gn-go-top{display:none}
+@media (max-width:760px){
+  .hxc .gn-go-top{display:grid;flex:none}
+  .hxc .gn-cloud .gn-go{display:none}
+  .hxc .gn-panel{margin-top:36px}
+}
+/* the record's call to action reads as disabled until the record is complete (it did nothing when
+   tapped, but looked like any other pill) */
+.hxc .gn-cta[aria-disabled="true"]{opacity:.4;cursor:not-allowed}

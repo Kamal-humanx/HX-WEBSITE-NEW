@@ -91,10 +91,11 @@ export function FilterChips({
     };
   }, [active, filters, targetId]);
 
+  /* dark (Work page) pills are a touch smaller on phones (13px, 38px tall), so the page title leads */
   const base =
     variant === "dark"
-      ? "px-5 py-[11px] text-sm leading-[19px]" /* Figma pill: 1 + 11 + 19 + 11 + 1 = 43 */
-      : "px-4 py-[9px] text-xs leading-[1.35]";
+      ? "min-h-[43px] px-5 py-[11px] text-sm leading-[19px] max-md:min-h-[38px] max-md:px-4 max-md:py-[9px] max-md:text-[13px] max-md:leading-[17px]" /* Figma pill: 1 + 11 + 19 + 11 + 1 = 43 */
+      : "min-h-[36px] px-4 py-[9px] text-xs leading-[1.35]";
 
   return (
     <div role="group" aria-label={label} className="no-scrollbar flex min-w-0 gap-x-3 overflow-x-auto py-1 max-sm:-mx-[var(--gutter)] max-sm:px-[var(--gutter)] lg:flex-wrap lg:gap-y-2 lg:overflow-visible">
@@ -117,8 +118,7 @@ export function FilterChips({
             aria-pressed={isActive}
             disabled={!enabled}
             onClick={() => setActive(f)}
-            className={`relative inline-flex min-h-11 shrink-0 items-center rounded-full border font-mono transition-colors before:absolute before:-inset-y-1 before:inset-x-0 disabled:cursor-not-allowed disabled:opacity-40 ${base} ${tone}`}
-            style={{ minHeight: variant === "light" ? 36 : 43 }}
+            className={`relative inline-flex shrink-0 items-center rounded-full border font-mono transition-colors before:absolute before:-inset-y-1 before:inset-x-0 disabled:cursor-not-allowed disabled:opacity-40 ${base} ${tone}`}
           >
             {f}
           </button>
