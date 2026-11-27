@@ -1,6 +1,6 @@
 /*
  * Careers page only — overrides on top of careers-ref.css (the scoped interactions reference).
- * Every selector is scoped to `.hxc` / `.hxc-footer`, classes that exist only on /careers, so
+ * Every selector is scoped to `.hxc`, a class that exists only on /careers, so
  * nothing leaks into other pages even after a client-side navigation keeps this stylesheet loaded.
  */
 
@@ -10,16 +10,9 @@
   overflow-x: clip;
 }
 
-/* Footer (shared component, Careers option): fills the screen so the Openings wash lands on it
-   cleanly (handoff §4.6). */
-.hxc-footer {
-  min-height: max(100svh, 620px);
-  display: flex;
-  flex-direction: column;
-}
-.hxc-footer > div {
-  flex: 1;
-}
+/* Footer: the shared component at its usual size (it used to fill the screen here so the Openings
+   wash would land on it; the wash — OpenRoles.tsx — darkens the ground as the footer approaches,
+   which is enough on its own, Nov 2026). */
 
 /* Contrast: the reference's #8b8b8b is 3.4:1 on white; #6b6b6b is 5.3:1 (WCAG AA). */
 .hxc .or-count {

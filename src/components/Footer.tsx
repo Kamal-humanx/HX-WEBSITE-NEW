@@ -15,12 +15,14 @@ import { EMAIL_DOMAIN, EMAIL_USER, FOOTER_COPY, SOCIAL } from "@/lib/site";
  * no dots) → 16 → hairline (white 30%) → 16 → copyright (Chivo Mono 12 / 139% / -1%, two lines).
  * Desktop is unchanged.
  */
-/** variant "careers": Careers page only — fills the screen so the Openings wash lands on it (handoff §4.6). */
+/** variant "careers": Careers page only — marks the footer (data-hxc-footer) so the Openings section can
+ *  wash down to its dark as it approaches; the footer itself is the same size as everywhere else (it
+ *  used to fill the screen, Nov 2026). */
 export function Footer({ variant }: { variant?: "careers" } = {}) {
   const [legal, rights] = FOOTER_COPY.copyright.split(" All Rights Reserved");
   return (
     <footer
-      className={`relative isolate overflow-hidden bg-night text-white${variant === "careers" ? " hxc-footer" : ""}`}
+      className="relative isolate overflow-hidden bg-night text-white"
       data-hxc-footer={variant === "careers" ? "" : undefined}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
