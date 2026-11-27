@@ -6,14 +6,14 @@ export const CAREERS = {
     line2: "Has No",
     line3: "Edges",
     brief:
-      "New tools, shifting roles, the same way of thinking. Shape the question, put it in people’s hands, see what it changes. Design here was never confined to a screen.",
+      "Tools and roles evolve. Our foundations don’t. We shape the question, put it in people’s hands and see what it changes. Our design goes beyond the screen.",
     primaryCta: "See Open Roles",
     secondaryCta: "Find Your X",
     location: "HumanX, Mumbai",
   },
   manifesto: {
-    line1: "Design Isn’t About The Tools.",
-    line2: "It’s About The Experiences We Shape",
+    line1: "In A World Shaped By AI,",
+    line2: "Human Is The Advantage.",
     step: { current: "02", total: " / 03" },
     title: ["Move The Needle.", "Not Just The Pixels."],
     body: "We’re measured by the problems we solve and the behaviour we change. Tools are how we get there, never the point.",

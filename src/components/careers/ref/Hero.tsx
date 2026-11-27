@@ -340,10 +340,10 @@ export default function Hero() {
         <div className="brief">
           <p className="lede ink">
             {/* set on four lines on wide screens; it wraps freely below */}
-            <span className="ln">New tools, shifting roles, the same way of </span>
-            <span className="ln">thinking. Shape the question, put it in people’s </span>
-            <span className="ln">hands, see what it changes. Design here was </span>
-            <span className="ln">never confined to a screen.</span>
+            <span className="ln">Tools and roles evolve. Our foundations don’t. </span>
+            <span className="ln">We shape the question, put it in people’s </span>
+            <span className="ln">hands and see what it changes. Our design </span>
+            <span className="ln">goes beyond the screen.</span>
           </p>
           <div className="ctas">
             <a className="btn" id="cta" href="#roles" onClick={toRoles}>

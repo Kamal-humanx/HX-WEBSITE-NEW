@@ -399,23 +399,19 @@ export default function Manifesto() {
       <div className="mf-open">
         {/* each word is its own piece so it can sharpen out of a blur as it arrives (the homepage
             philosophy reveal); each carries its slice of the heading's gradient (set in measure) */}
-        <h2 className="mf-statement" id="mf-title" aria-label="Design isn’t about the tools. It’s about the experiences we shape.">
-          {'Design isn’t about the tools.'.split(' ').map((w, i) => (
+        <h2 className="mf-statement" id="mf-title" aria-label="In a world shaped by AI, human is the advantage.">
+          {'In a world shaped by AI,'.split(' ').map((w, i) => (
             <Fragment key={'a' + i}>
               <span className="mfw" aria-hidden="true">{w}</span>{' '}
             </Fragment>
           ))}
-          <i className="hx-glyph hx-xs mfw-i" aria-hidden="true" />
           <br />
-          {'It’s about the experiences we shape'.split(' ').map((w, i, all) => (
+          {'human is the advantage.'.split(' ').map((w, i) => (
             <Fragment key={'b' + i}>
-              <span className="mfw" aria-hidden="true">
-                {w}
-                {i === all.length - 1 && <span className="mf-dot">.</span>}
-              </span>
-              {i < all.length - 1 ? ' ' : null}
+              <span className="mfw" aria-hidden="true">{w}</span>{' '}
             </Fragment>
           ))}
+          <i className="hx-glyph hx-xs mfw-i" aria-hidden="true" />
         </h2>
       </div>
 
