@@ -628,18 +628,28 @@
   background: linear-gradient(to bottom, #4e4b4b 0%, #151515 23%);
   box-shadow: 0 4px 15.3px 4px rgba(0, 0, 0, 0.25);
 }
-/* About (GroundTone): the dark block is pulled up over the staircase's last stretch, its top see-through,
-   so the capabilities stand where the staircase was and fade in there once it has gone — not a
-   screen further down. The solid part feathers in below the overlap. */
-@media (min-width: 1024px) {
-  .about-dark {
-    margin-top: -22svh;
-    background: linear-gradient(to bottom, transparent 22svh, var(--color-night) calc(22svh + 160px));
-  }
-}
-/* its capabilities wait unseen over the staircase until GroundTone brings them in (script only) */
+/* About (AboutHandover.tsx): the principles hold for a short scroll once they are all on screen, and
+   the capabilities are pulled up onto that same held screen — the dark block rises by one screen plus
+   the hold, see-through over it, solid from its foot (the ground is already night by then) — where they
+   wait unseen until the hand-over brings them in. Desktop, with script, no reduced motion; otherwise
+   the sections simply follow one another. */
 @media (min-width: 1024px) and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  .about-dark > :first-child { opacity: 0; }
+  /* the principles stay still for 40svh, then hand over across the next 40svh */
+  .about-hold { height: 80svh; }
+  .about-stage { position: sticky; }
+  .about-dark {
+    position: relative;
+    z-index: 10;
+    margin-top: calc(-180svh - 1px);
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent 0, transparent calc(180svh - 6px), var(--color-night) calc(180svh - 6px));
+  }
+  .about-dark > * { pointer-events: auto; }
+  .about-dark .caps-list { background: transparent; }
+  .about-caps-wrap { position: relative; pointer-events: none; }
+  /* the capabilities stay through the principles' hold (80svh) and a reading hold after it (60svh) */
+  .about-caps-wrap::after { content: ""; display: block; height: 140svh; }
+  .about-caps-stick { position: sticky; top: 0; opacity: 0; }
 }
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
 .map-wave {

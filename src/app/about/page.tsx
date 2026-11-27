@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { AboutReveal } from "@/components/AboutReveal";
 import { CaseReveal } from "@/components/CaseReveal";
-import { GroundTone } from "@/components/GroundTone";
+import { AboutHandover } from "@/components/AboutHandover";
 import { Showreel } from "@/components/Showreel";
 import { StudioCarousel } from "@/components/StudioCarousel";
 import { TeamSection } from "@/components/TeamSection";
@@ -94,9 +94,12 @@ export default function AboutPage() {
         </section>
 
         {/* ---------- Principles staircase (5376:13259) ---------- */}
-        {/* desktop: as the dark block comes up, this section dips out, the ground darkens, and the
-            capabilities come in (GroundTone, as the homepage's work → capabilities) */}
-        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(72px,7vw,140px)] lg:pb-[clamp(40px,3.5vw,64px)]">
+        {/* desktop: the principles hold for a scroll or two once they are all on screen; over that hold
+            they dip out, the screen darkens, and the capabilities — already on it — fade in (AboutHandover,
+            the homepage's work → capabilities hand-over) */}
+        <div className="about-pin relative">
+        <div className="about-stage">
+        <section aria-labelledby="principles-title" className="about-principles container-page pb-[clamp(72px,7vw,140px)]">
           <div data-rv>
             <DisplayHeading as="h2" id="principles-title" className="max-w-[815px] !text-h1-sm !leading-[1.25] text-ink lg:h-[5.05vw] lg:max-w-[42vw] 3xl:max-w-[815px]">
               {principles.title}
@@ -140,9 +143,18 @@ export default function AboutPage() {
             ))}
           </Reveal>
         </section>
+        </div>
+        {/* the hold: a spacer the stuck stage rides over (padding would not count for sticky) */}
+        <div aria-hidden="true" className="about-hold" />
+        </div>
 
         <div className="about-dark bg-night">
-          <CapabilitiesSection reveal />
+          {/* held on the principles' screen while they hand over (desktop); then the page scrolls on */}
+          <div className="about-caps-wrap">
+            <div className="about-caps-stick">
+              <CapabilitiesSection reveal />
+            </div>
+          </div>
 
           <TeamSection />
 
@@ -151,8 +163,7 @@ export default function AboutPage() {
       </main>
       {/* line 0.82: pieces start a little higher up the screen than on the case pages */}
       <CaseReveal line={0.82} />
-      {/* the ground darkens white → night with the scroll as the dark block comes up, as on the homepage */}
-      <GroundTone block=".about-dark" fade=".about-principles" />
+      <AboutHandover />
       <Footer />
       <JsonLd data={[webPageSchema("about", "AboutPage"), breadcrumbSchema("about", "About")]} />
     </>
