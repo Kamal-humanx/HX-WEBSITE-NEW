@@ -77,6 +77,10 @@ export const CASE_MEDIA: Record<string, { w: number; h: number }> = {
     "w": 116,
     "h": 56
   },
+  "apollo-momverse/wordmark.svg": {
+    "w": 107,
+    "h": 56
+  },
   "apollo-momverse/group-1707480934.webp": {
     "w": 3088,
     "h": 2833
