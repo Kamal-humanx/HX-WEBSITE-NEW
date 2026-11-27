@@ -520,6 +520,23 @@
     transform: none;
     filter: none;
   }
+  /* About (.rv-slow): about a third longer and on a gentler curve (the sharp ease-out finished most
+     of the move in its first moments, so pieces seemed to be there already) */
+  .rv-slow [data-rv] {
+    transition:
+      opacity 1.2s cubic-bezier(0.25, 0.7, 0.3, 1),
+      transform 1.45s cubic-bezier(0.25, 0.7, 0.3, 1),
+      filter 1.2s cubic-bezier(0.25, 0.7, 0.3, 1);
+    transition-delay: calc(var(--rv-i, 0) * 120ms);
+  }
+  .rv-slow [data-rv="media"] {
+    transition: clip-path 1.7s cubic-bezier(0.25, 0.7, 0.3, 1);
+    transition-delay: calc(var(--rv-i, 0) * 140ms);
+  }
+  .rv-slow [data-rv="media"] > * {
+    transition: transform 2s cubic-bezier(0.25, 0.7, 0.3, 1);
+    transition-delay: inherit;
+  }
 }
 
 /* Project pages: a soft glow of the case's brand colour (hero panel, testimonial) */

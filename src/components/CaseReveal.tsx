@@ -10,8 +10,12 @@ import { useEffect } from "react";
  * A piece reveals once its top is 90% of the way down the screen; pieces that arrive together are
  * staggered (--rv-i) in reading order. Positions are read from layout boxes, which the media's
  * starting clip doesn't affect. Hidden start states are CSS-only (scripting on + no reduced motion).
+ * A piece holding pictures that haven't loaded yet (a first visit) waits for them, up to a second,
+ * so the reveal plays on the picture instead of on an empty box that then pops in finished.
+ * `line`: how far down the screen a piece's top must come before it reveals (About: a little higher,
+ * so it plays where the eye is).
  */
-export function CaseReveal() {
+export function CaseReveal({ line: at = 0.9 }: { line?: number } = {}) {
   useEffect(() => {
     let pending = Array.from(document.querySelectorAll<HTMLElement>("[data-rv]"));
     const videos = Array.from(document.querySelectorAll<HTMLVideoElement>("video[data-autoplay]"));
@@ -38,7 +42,7 @@ export function CaseReveal() {
     const check = () => {
       raf = 0;
       playVideos();
-      const line = window.innerHeight * 0.9;
+      const line = window.innerHeight * at;
       const now: { el: HTMLElement; top: number; left: number }[] = [];
       pending = pending.filter((el) => {
         const r = el.getBoundingClientRect();
@@ -57,7 +61,13 @@ export function CaseReveal() {
         .sort((a, b) => a.top - b.top || a.left - b.left)
         .forEach(({ el }, i) => {
           el.style.setProperty("--rv-i", String(Math.min(i, 8)));
-          el.classList.add("rv-in");
+          const imgs = Array.from(el.querySelectorAll("img")).filter((im) => !im.complete);
+          if (!imgs.length) return el.classList.add("rv-in");
+          imgs.forEach((im) => (im.loading = "eager"));
+          Promise.race([
+            Promise.all(imgs.map((im) => im.decode().catch(() => {}))),
+            new Promise((res) => setTimeout(res, 1000)),
+          ]).then(() => el.classList.add("rv-in"));
         });
       if (!pending.length && !videos.length) window.removeEventListener("scroll", onScroll);
     };
@@ -72,6 +82,6 @@ export function CaseReveal() {
       window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [at]);
   return null;
 }

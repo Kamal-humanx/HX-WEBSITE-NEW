@@ -45,8 +45,9 @@ export default function AboutPage() {
     <>
       <Header current="/about" theme="light" />
       {/* rv-soft: the sections below the photos rise in gently as they're scrolled to (CaseReveal, softer
-          than the case pages); the intro, photos and staircase keep their own animations */}
-      <main id="main" className="rv-soft">
+          than the case pages); rv-slow: a touch slower, so a first-time visitor sees them come in;
+          the intro, photos and staircase keep their own animations */}
+      <main id="main" className="rv-soft rv-slow">
         {/* ---------- Intro (5376:13451 + 5376:10176) ---------- */}
         <section aria-labelledby="about-title" className="container-page grid gap-6 pb-[clamp(32px,2.9vw,56px)] pt-[clamp(24px,3.8vw,73px)] lg:grid-cols-[minmax(0,1292px)_minmax(0,472px)] lg:justify-between">
           {/* on load (AboutReveal): the words rise in one by one, then the intro's, then the photos */}
@@ -145,7 +146,8 @@ export default function AboutPage() {
           <LearningSection id="about-learning" reveal />
         </div>
       </main>
-      <CaseReveal />
+      {/* line 0.82: pieces start a little higher up the screen than on the case pages */}
+      <CaseReveal line={0.82} />
       <Footer />
       <JsonLd data={[webPageSchema("about", "AboutPage"), breadcrumbSchema("about", "About")]} />
     </>
