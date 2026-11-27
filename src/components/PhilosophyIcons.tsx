@@ -1,16 +1,15 @@
-import type { CSSProperties } from "react";
-
 /**
  * The philosophy statement's inline icons (Figma 5376:1804 "Philosophy — inline icons"), drawn
- * inline so their parts can move. Each keeps a slow, quiet loop of its own (globals.css, .pr-i .lp):
- * one brief move, then a long rest — on a period and phase of its own, so they never play together.
- *  - build: the solid cube slides over the wireframe one (the frame, built) and back
- *  - cross: a quarter turn — the X is four-fold symmetric, so the loop closes on itself
- *  - co-conspirator: the two circles trade places, the solid one passing in front, and trade back
- *  - connects: the line draws from the first dot to the last, each dot giving a nod as it's reached,
- *    then leaves the way it came
- *  - bolt: one quick strike upward, settled
- * The loops run on inner groups; the root (.pr-i) belongs to the reveal in PhilosophyReveal.tsx.
+ * inline so their parts can move. Each keeps a slow, quiet loop of its own (globals.css, .pr-i .lp),
+ * begun the moment its keyword has inked in: one event per cycle, then a long rest — on a period
+ * and phase of its own, so they never play together.
+ *  - build: the wireframe cube fills with colour from the ground up (built), holds, and lets go
+ *  - cross: X → + → X, two quarter-turn halves with a hold between (four-fold symmetric, so it closes)
+ *  - co-conspirator: the fill passes from one circle to the other and back — a handover
+ *  - connects: the line runs off and the dots dim; it redraws from the first dot to the last and
+ *    each dot lights up as it's reached
+ *  - bolt: it dims, charges back up from the ground, and strikes
+ * The loops run on inner parts; the root (.pr-i) belongs to the reveal in PhilosophyReveal.tsx.
  */
 export type IconKind = "build" | "cross" | "co" | "connects" | "bolt";
 const O = "#F07412";
@@ -28,13 +27,15 @@ export function PhilosophyIcon({ kind, w, h, className = "" }: { kind: IconKind;
     case "build":
       return (
         <svg viewBox="0 0 80 48" fill="none" {...common}>
+          {/* the fill that rises inside the wireframe (clipped away at rest) */}
+          <path className="lp lp-fill" d="M0.41 12.21 L20.42 0 L40.08 12.21 V35.6 L20.42 47.47 L0.41 35.6 Z" fill={O} />
           {/* the wireframe cube: visible edges solid, the two hidden edges dashed */}
           <g stroke={O} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round">
             <path d="M0.41 12.21 L20.42 0 L40.08 12.21 V35.6 L20.42 47.47 V24.07 L0.41 12.21 M20.42 24.07 L40.08 12.21" />
             <path d="M0.75 12.21 V34.92 L20.42 46.79" strokeDasharray="1.42 2.84" />
           </g>
-          {/* the solid cube, which slides over the frame */}
-          <path className="lp lp-cube" d="M39.74 12.21 L59.75 0 L79.41 12.21 V35.6 L59.75 47.47 L39.74 35.6 Z" fill={O} />
+          {/* the solid cube */}
+          <path d="M39.74 12.21 L59.75 0 L79.41 12.21 V35.6 L59.75 47.47 L39.74 35.6 Z" fill={O} />
         </svg>
       );
     case "cross":
@@ -54,15 +55,20 @@ export function PhilosophyIcon({ kind, w, h, className = "" }: { kind: IconKind;
       return (
         <svg viewBox="0 0 69 56" fill="none" {...common}>
           <path className="lp lp-line" d="M54 43.5L10.4825 20.0675C9.71939 19.6566 9.80475 18.5356 10.6213 18.245L38 8.5" stroke={O} strokeWidth="3" strokeLinecap="round" />
-          <circle className="lp lp-dot" style={{ "--k": 0 } as CSSProperties} cx="54.5" cy="41.5" r="14.5" fill={O} />
-          <circle className="lp lp-dot" style={{ "--k": 0.15 } as CSSProperties} cx="42" cy="6" r="6" fill={O} />
-          <circle className="lp lp-dot" style={{ "--k": 0.09 } as CSSProperties} cx="9.5" cy="18.5" r="9.5" fill={O} />
+          {/* in the order the line reaches them: the big dot, the left one, the small one */}
+          <circle className="lp lp-dot-0" cx="54.5" cy="41.5" r="14.5" fill={O} />
+          <circle className="lp lp-dot-2" cx="42" cy="6" r="6" fill={O} />
+          <circle className="lp lp-dot-1" cx="9.5" cy="18.5" r="9.5" fill={O} />
         </svg>
       );
     case "bolt":
       return (
         <svg viewBox="0 0 82 82" fill="none" {...common}>
-          <path className="lp lp-bolt" d="M46.125 6.83333L13.6667 46.125H37.5833L32.4583 75.1667L68.3333 35.875H44.4167L46.125 6.83333Z" fill={O} />
+          <g className="lp lp-strike">
+            <path className="lp lp-bolt" d="M46.125 6.83333L13.6667 46.125H37.5833L32.4583 75.1667L68.3333 35.875H44.4167L46.125 6.83333Z" fill={O} />
+            {/* the charge that rises over the dimmed bolt (clipped away at rest) */}
+            <path className="lp lp-charge" d="M46.125 6.83333L13.6667 46.125H37.5833L32.4583 75.1667L68.3333 35.875H44.4167L46.125 6.83333Z" fill={O} />
+          </g>
         </svg>
       );
   }

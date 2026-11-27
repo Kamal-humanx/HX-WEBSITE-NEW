@@ -912,72 +912,91 @@
 .pr.pr-armed .pr-i {
   will-change: transform, filter;
 }
-/* The icons' own loops (PhilosophyIcons.tsx): one brief move on Material's emphasized curve, then a
-   long rest, each on a period and phase of its own so no two ever play together; only transform
-   and a line draw, so nothing re-lays out. They wait while the reveal plays, and never run for
-   reduced motion. */
+/* The icons' own loops (PhilosophyIcons.tsx): each begins the moment its keyword has inked in
+   (PhilosophyReveal adds .pr-live), then keeps one quiet event per cycle on Material's emphasized
+   curves and a long rest — periods of 6–9s on different phases, so no two play together. Fills,
+   handovers and line draws rather than slides; off for reduced motion. */
 .pr-i .lp {
   transform-box: fill-box;
   transform-origin: center;
   animation: var(--lp) var(--dur) cubic-bezier(0.2, 0, 0, 1) var(--d0) infinite both;
+  animation-play-state: paused;
 }
-.pr-i[data-kind="build"] { --dur: 6.4s; --d0: 0.8s; }
-.pr-i[data-kind="cross"] { --dur: 7.3s; --d0: 2.6s; }
-.pr-i[data-kind="co"] { --dur: 8.1s; --d0: 1.5s; }
-.pr-i[data-kind="connects"] { --dur: 7.7s; --d0: 3.9s; }
-.pr-i[data-kind="bolt"] { --dur: 8.9s; --d0: 5.2s; }
-.pr.pr-armed .pr-i .lp { animation-play-state: paused; }
-/* build: the solid cube slides exactly onto the wireframe one, rests there, and returns */
-.lp-cube { --lp: pr-build; }
+.pr-i.pr-live .lp { animation-play-state: running; }
+.pr-i[data-kind="build"] { --dur: 6.6s; --d0: 0.5s; }
+.pr-i[data-kind="cross"] { --dur: 7.4s; --d0: 0.7s; }
+.pr-i[data-kind="co"] { --dur: 8.2s; --d0: 0.6s; }
+.pr-i[data-kind="connects"] { --dur: 7.9s; --d0: 0.8s; }
+.pr-i[data-kind="bolt"] { --dur: 9.1s; --d0: 1.9s; }
+/* build: the wireframe cube fills with colour from the ground up — built — holds, and lets go */
+.pr-i .lp-fill { --lp: pr-build; clip-path: inset(100% 0 0 0); animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
 @keyframes pr-build {
-  0%, 6% { transform: none; }
-  18%, 44% { transform: translateX(-39.33px); }
-  56%, 100% { transform: none; }
+  0%, 4% { clip-path: inset(100% 0 0 0); opacity: 1; }
+  22%, 50% { clip-path: inset(0 0 0 0); opacity: 1; }
+  60% { clip-path: inset(0 0 0 0); opacity: 0; }
+  60.01%, 100% { clip-path: inset(100% 0 0 0); opacity: 0; }
 }
-/* cross: a quarter turn; four-fold symmetric, so the end is the start */
+/* cross: X → + → X, two quarter-turn halves with a hold between; four-fold symmetric, so it closes */
 .lp-x { --lp: pr-cross; }
 @keyframes pr-cross {
-  0%, 72% { transform: rotate(0deg); }
-  86%, 100% { transform: rotate(90deg); }
+  0%, 26% { transform: rotate(0deg); }
+  38%, 62% { transform: rotate(45deg); }
+  74%, 100% { transform: rotate(90deg); }
 }
-/* co-conspirator: the circles trade places (the solid one in front) and trade back */
-.lp-co-a { --lp: pr-co-a; }
+/* co-conspirator: the fill passes from one circle to the other and back — a handover */
+.lp-co-a { --lp: pr-co-a; fill: #f07412; fill-opacity: 0; }
 .lp-co-b { --lp: pr-co-b; }
-@keyframes pr-co-a {
-  0%, 8% { transform: none; }
-  22%, 54% { transform: translateX(26.72px); }
-  68%, 100% { transform: none; }
-}
-@keyframes pr-co-b {
-  0%, 8% { transform: none; }
-  22%, 54% { transform: translateX(-26.72px); }
-  68%, 100% { transform: none; }
-}
-/* connects: the line rests drawn; now and then it runs off the far end and redraws itself from the
-   first dot to the last (the two hidden states meet at 68%, so the jump between them never shows) */
-.lp-line { --lp: pr-line; stroke-dasharray: 82; animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
+@keyframes pr-co-a { 0%, 10% { fill-opacity: 0; } 22%, 54% { fill-opacity: 1; } 66%, 100% { fill-opacity: 0; } }
+@keyframes pr-co-b { 0%, 10% { fill-opacity: 1; } 22%, 54% { fill-opacity: 0; } 66%, 100% { fill-opacity: 1; } }
+/* connects: the line runs off and the dots dim; it redraws from the first dot to the last, and each
+   dot lights up as it's reached (the two hidden line states meet at 66%, so the jump never shows) */
+.pr-i .lp-line { --lp: pr-line; stroke-dasharray: 82; animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
 @keyframes pr-line {
-  0%, 58% { stroke-dashoffset: 0; }
-  67.99% { stroke-dashoffset: -82; }
-  68% { stroke-dashoffset: 82; }
+  0%, 56% { stroke-dashoffset: 0; }
+  65.99% { stroke-dashoffset: -82; }
+  66% { stroke-dashoffset: 82; }
   84%, 100% { stroke-dashoffset: 0; }
 }
-/* each dot gives a nod as the redrawn line reaches it (--k: its moment along the loop) */
-.lp-dot { --lp: pr-dot; animation-delay: calc(var(--d0) + (0.68 + var(--k, 0)) * var(--dur)); }
-@keyframes pr-dot {
-  0%, 100% { transform: scale(1); }
-  2.5% { transform: scale(1.22); }
-  6% { transform: scale(1); }
+.lp-dot-0 { --lp: pr-dot-0; }
+.lp-dot-1 { --lp: pr-dot-1; }
+.lp-dot-2 { --lp: pr-dot-2; }
+@keyframes pr-dot-0 {
+  0%, 56% { fill-opacity: 1; transform: scale(1); }
+  62%, 66% { fill-opacity: 0.3; transform: scale(1); }
+  69% { fill-opacity: 1; transform: scale(1.16); }
+  74%, 100% { fill-opacity: 1; transform: scale(1); }
 }
-/* bolt: one quick strike upward, then settled */
+@keyframes pr-dot-1 {
+  0%, 56% { fill-opacity: 1; transform: scale(1); }
+  62%, 75% { fill-opacity: 0.3; transform: scale(1); }
+  78% { fill-opacity: 1; transform: scale(1.16); }
+  83%, 100% { fill-opacity: 1; transform: scale(1); }
+}
+@keyframes pr-dot-2 {
+  0%, 56% { fill-opacity: 1; transform: scale(1); }
+  62%, 82% { fill-opacity: 0.3; transform: scale(1); }
+  85% { fill-opacity: 1; transform: scale(1.16); }
+  90%, 100% { fill-opacity: 1; transform: scale(1); }
+}
+/* bolt: it dims, charges back up from the ground, and strikes */
+.lp-strike { --lp: pr-strike; }
 .lp-bolt { --lp: pr-bolt; }
-@keyframes pr-bolt {
-  0%, 100% { transform: none; }
-  5% { transform: translateY(-7%) scale(1.08); }
-  14% { transform: none; }
+.pr-i .lp-charge { --lp: pr-charge; clip-path: inset(100% 0 0 0); animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1); }
+@keyframes pr-bolt { 0%, 40% { fill-opacity: 1; } 47%, 80% { fill-opacity: 0.28; } 86%, 100% { fill-opacity: 1; } }
+@keyframes pr-charge {
+  0%, 52% { clip-path: inset(100% 0 0 0); opacity: 1; }
+  76%, 86% { clip-path: inset(0 0 0 0); opacity: 1; }
+  90% { clip-path: inset(0 0 0 0); opacity: 0; }
+  90.01%, 100% { clip-path: inset(100% 0 0 0); opacity: 0; }
+}
+@keyframes pr-strike {
+  0%, 76% { transform: none; }
+  79% { transform: translateY(-7%) scale(1.08); }
+  86%, 100% { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .pr-i .lp { animation: none; }
+  .lp-fill, .lp-charge { display: none; }
 }
 /* Testimonials — Logo Tab 4905:154 Default → Active, and the quote that follows it. */
 .logo-tab {

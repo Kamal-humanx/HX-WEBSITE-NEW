@@ -10,8 +10,8 @@ import { PhilosophyIcon } from "./PhilosophyIcons";
  * the keywords), each word rises a touch and sharpens out of a blur as the front passes, and each icon
  * fades in with a small, quiet settle when its keyword completes. Same family as the Careers reveals
  * (soft-edged front). Reduced motion (or no script) = the static text.
- * The icons are inline SVG (PhilosophyIcons.tsx): once the reveal is done each keeps a slow loop of
- * its own on its inner parts — the root is this reveal's to move.
+ * The icons are inline SVG (PhilosophyIcons.tsx): the moment each has inked in (.pr-live) it begins
+ * a slow loop of its own on its inner parts — the root is this reveal's to move.
  */
 
 type Kind = "build" | "cross" | "co" | "connects" | "bolt";
@@ -143,6 +143,7 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
         if (v >= 1) {
           ic.el.style.transform = "";
           ic.el.style.opacity = "";
+          ic.el.classList.add("pr-live");
         } else {
           const e = easeOut(v);
           ic.el.style.transform = iconMove(e);
@@ -186,6 +187,7 @@ export function PhilosophyReveal({ className = "" }: { className?: string }) {
       io.disconnect();
       cancelAnimationFrame(raf);
       root.classList.remove("pr-armed");
+      icons.forEach((ic) => ic.el.classList.remove("pr-live"));
     };
   }, []);
 
