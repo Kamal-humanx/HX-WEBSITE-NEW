@@ -5,7 +5,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLink } from "@/components/ui";
 
 /** soon: the project page isn't out yet — the Work page's glass "Coming Soon" pill on the thumbnail */
-type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string; soon?: boolean };
+/** `position` is the picture's focal point (CSS object-position) when the card crops it. */
+type Case = { label: string; title: string; description: string; image: string; alt: string; href?: string; soon?: boolean; position?: string };
 
 /*
  * Work cards â€” "thumbnail explo" (5253:31321 active, 5253:31411 rest).
@@ -170,7 +171,7 @@ function Card({ c, active, readMore, onEnter }: { c: Case; active: boolean; read
       <div className="case-thumb relative z-[1] m-[4px] aspect-[502/302] max-md:order-first overflow-hidden rounded-card border-[3px] [container-type:inline-size] md:m-0 md:mb-[1.36px] md:mr-px md:mt-[1.64px] md:aspect-auto md:w-[calc(100%-1px)] md:self-stretch">
         {/* z-[1] keeps the thumbnail above the card's full-card link */}
         {/* (the cursor ripple on the thumbnails was removed on feedback; the card's own hover stays) */}
-        <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className={`object-cover ${c.soon ? "" : "case-img"}`} />
+        <Image src={c.image} alt={c.alt} fill sizes="(min-width: 768px) 27vw, 100vw" className={`object-cover ${c.soon ? "" : "case-img"}`} style={c.position ? { objectPosition: c.position } : undefined} />
         {/* the Work page's pill (.wk-badge), sized by this thumbnail's width, in the top-left corner (as
             on the Work page; it sat top-right here until feedback, Nov 2026) */}
         {c.soon && (

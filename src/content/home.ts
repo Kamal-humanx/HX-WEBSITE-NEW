@@ -65,10 +65,13 @@ export const HOME = {
         label: "Creative Intelligence",
         title: "Juice AI",
         description: "Bringing brand strategy and creative production together through an AI-powered platform.",
-        image: "/images/work/juice-ai-2026.webp",
+        image: "/images/work/juice-ai-editor.webp",
         soon: true,
-        /* thumbnail from Figma 6041:90253 (Nov 2026), as drawn */
-        alt: "Juice AI: “Rethinking Creative Production”, a “Glass lips beat matte” insight card over the app, on a yellow background",
+        /* the Work page's thumbnail (supplied Nov 2026; Figma "Juice_1"). Anchored top-right, so
+           whichever way the card crops it (the bottom on wide screens, the left on narrower ones)
+           the juice ai logo in the top-right corner stays whole. */
+        position: "100% 0%",
+        alt: "Juice AI video editor: a clip on the canvas above a timeline with Cutter, Layers, Captions and Sound tools, on a yellow ground",
         w: 1568,
         h: 1095,
       },
