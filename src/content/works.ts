@@ -40,7 +40,7 @@ export const WORKS = {
       description: "A personalised parenting companion with trusted advice for every stage." },
     { name: "Amazon Now", meta: "AI · Consumer  ·  2025", cats: ["Consumer", "Impact"], key: "amazon-now", image: "/images/work/w-amazon-now.webp", alt: "Amazon Now quick-commerce app on a phone among groceries, with an “Arriving in 10 mins” card",
       description: "Making quick commerce simpler with effortless discovery and shopping journeys." },
-    { name: "Juice AI", meta: "Consumer · Brand  ·  2025", cats: ["AI"], key: "juice-ai", image: "/images/work/juice-ai-2026.webp", alt: "Juice AI insights screen generating a “Glass lips beat matte” ad insight on a yellow background",
+    { name: "Juice AI", meta: "Consumer · Brand  ·  2025", cats: ["AI"], key: "juice-ai", image: "/images/work/juice-ai-editor.webp", alt: "Juice AI video editor: a clip on the canvas above a timeline with Cutter, Layers, Captions and Sound tools, on a yellow ground",
       description: "Bringing brand strategy and creative production together on one AI platform." },
     { name: "Quickplay", meta: "Enterprise · Mobile  ·  2024", cats: ["Consumer"], soon: false, key: "quickplay", href: "/works/quickplay", image: "/images/work/w-quickplay.webp", alt: "Quickplay screens: a live basketball stream on a phone and the widget builder on a tablet",
       description: "Industry-first generative AI concepts for streaming, unveiled at IBC 2023 in Amsterdam." },
@@ -58,6 +58,12 @@ export const WORKS = {
     /* no case study yet: description written from the project's screens (city explorer, scores, advisors) */
     { name: "Aokah", meta: "Consumer · Brand  ·  2025", cats: ["B2B", "AI"], key: "aokah", image: "/images/work/w-aokah.webp", alt: "Aokah location explorer dashboard with city recommendations and a “Need expert guidance?” card",
       description: "Helping companies choose where to build their next team, city by city." },
+    /* Coming Soon projects added Nov 2026 (thumbnails: Figma 6046:98719 and its neighbours) */
+    { name: "Fabelle", meta: "Consumer · Brand  ·  2025", cats: ["Consumer"], key: "fabelle", image: "/images/work/w-fabelle-2026.webp", alt: "Fabelle chocolate website on a laptop with product cards, on a brown ground with gold line-art mountains" },
+    { name: "Sho-Up", meta: "Consumer · Mobile  ·  2025", cats: ["Consumer", "Health"], key: "sho-up", image: "/images/work/w-sho-up-2026.webp", alt: "Sho-Up fitness app on a phone: “Explore, move, and make every day count!”, beside a silhouette stretching" },
+    { name: "Amazon Fresh", meta: "Consumer · Mobile  ·  2025", cats: ["Consumer", "Impact"], key: "amazon-fresh", image: "/images/work/w-amazon-fresh-2026.webp", alt: "Amazon Fresh grocery order screen on a phone, in a green crate among fruit and vegetables" },
+    { name: "Hamleys", meta: "Consumer · Brand  ·  2025", cats: ["Consumer"], key: "hamleys", image: "/images/work/w-hamleys-2026.webp", alt: "Hamleys logo on red beside a smiling child against a blue sky" },
+    { name: "Seclore", meta: "Enterprise · AI  ·  2025", cats: ["B2B", "AI"], key: "seclore", image: "/images/work/w-seclore-2026.webp", alt: "Seclore data catalog dashboard with file-scanning statistics, on a purple ground" },
   ] as { name: string; meta: string; cats: string[]; key: string; image: string; alt: string; soon?: boolean; href?: string; description?: string; allHidden?: boolean }[],
 };
 

@@ -87,10 +87,10 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
   "juice-ai": {
     "bg": null,
     "overlay": null,
-    /* thumbnail from Figma 6041:90253 (Nov 2026): the 914 × 638 frame as one image, filling the card */
+    /* thumbnail supplied Nov 2026 (Figma "Juice_1", 914 × 638: the video editor), one image filling the card */
     "layers": [
       {
-        "src": "/images/work/juice-ai-2026.webp",
+        "src": "/images/work/juice-ai-editor.webp",
         "x": 0,
         "y": 0,
         "w": 100.219,
@@ -402,5 +402,35 @@ export const WORK_LAYERS: Record<string, WorkCardLayers> = {
         "d": 1
       }
     ]
+  },
+  /* Coming Soon thumbnail (supplied Nov 2026; Figma Project Listing page, 912 × 640) as one image filling the card */
+  "fabelle": {
+    "bg": null,
+    "overlay": null,
+    "layers": [{ "src": "/images/work/w-fabelle-2026.webp", "x": 0, "y": 0, "w": 100, "h": 100, "d": 0 }]
+  },
+  /* Coming Soon thumbnail (supplied Nov 2026; Figma Project Listing page, 912 × 640) as one image filling the card */
+  "sho-up": {
+    "bg": null,
+    "overlay": null,
+    "layers": [{ "src": "/images/work/w-sho-up-2026.webp", "x": 0, "y": 0, "w": 100, "h": 100, "d": 0 }]
+  },
+  /* Coming Soon thumbnail (supplied Nov 2026; Figma Project Listing page, 912 × 640) as one image filling the card */
+  "amazon-fresh": {
+    "bg": null,
+    "overlay": null,
+    "layers": [{ "src": "/images/work/w-amazon-fresh-2026.webp", "x": 0, "y": 0, "w": 100, "h": 100, "d": 0 }]
+  },
+  /* Coming Soon thumbnail (supplied Nov 2026; Figma Project Listing page, 912 × 640) as one image filling the card */
+  "hamleys": {
+    "bg": null,
+    "overlay": null,
+    "layers": [{ "src": "/images/work/w-hamleys-2026.webp", "x": 0, "y": 0, "w": 100, "h": 100, "d": 0 }]
+  },
+  /* Coming Soon thumbnail (supplied Nov 2026; Figma Project Listing page, 912 × 640) as one image filling the card */
+  "seclore": {
+    "bg": null,
+    "overlay": null,
+    "layers": [{ "src": "/images/work/w-seclore-2026.webp", "x": 0, "y": 0, "w": 100, "h": 100, "d": 0 }]
   }
 };

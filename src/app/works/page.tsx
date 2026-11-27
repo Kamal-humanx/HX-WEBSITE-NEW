@@ -31,6 +31,7 @@ const GLOW: Record<string, string> = {
   bial: "176, 140, 255", aadhaar: "255, 186, 140", momverse: "240, 214, 190", "amazon-now": "120, 225, 255", "juice-ai": "255, 226, 110",
   quickplay: "255, 140, 80", "sbi-life": "196, 166, 255", aokah: "120, 196, 255", hurun: "226, 178, 98",
   ask: "222, 176, 90", minitv: "255, 96, 186", setu: "250, 182, 150", godrej: "245, 170, 80",
+  fabelle: "214, 170, 110", "sho-up": "236, 190, 120", "amazon-fresh": "140, 220, 90", hamleys: "255, 110, 120", seclore: "190, 140, 255",
 };
 
 /* a thumbnail's layers, placed in % of its 912×640 box; `sizes` scales with the box's share of the screen */
