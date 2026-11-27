@@ -118,7 +118,7 @@ export default function HomePage() {
           <SwapStage
             hold={90}
             lead={70}
-            first={<CapabilitiesSection phoneList />}
+            first={<CapabilitiesSection />}
             second={
               /* Testimonial (5376:2844 / Testimonials 4899:1434) */
               /* testimonials-phone: Figma "testimonials-1" 5969:10826 on phones (globals.css) */

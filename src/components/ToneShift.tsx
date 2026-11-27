@@ -6,15 +6,14 @@ import { useEffect } from "react";
  * Work → dark hand-over, scrubbed by the scroll (both ways) — the Careers manifesto → gene hand-off
  * (Manifesto.tsx exitOut), with the same values:
  *  - The work section holds (PinCover data-pin="work", 70svh).
- *  - Its cards dip out one after another, top first: each fades while sinking p²·72px, card j over
- *    [0.07j, 0.32 + 0.07j] of the hold.
+ *  - Its cards leave one after another, top first: each fades while rising ~10% of the screen and
+ *    shrinking 8% from its top edge (a stack folding away), card j over [0.07j, 0.32 + 0.07j].
  *  - Over [0.5, 0.95] of the hold the stage darkens white → night (`--tone`).
  *  - The capabilities are already in their final place on that same screen (the dark block is
  *    pulled up over the hold, `.tone-dark.tone-on`) and fade in there with the darkening — clearing
  *    from a soft blur and settling from a hair smaller, title first, then each row and its items.
  *    Nothing scrolls in. Then the page carries straight on into the capabilities → testimonials swap.
- * Phones: the cards leave upwards (rising and shrinking from their top edge, a stack folding
- *    away), and the services list, pulled up one screen only, rises into place while it fades in.
+ * Phones: the services list, pulled up one screen only, rises into place while it fades in.
  * Reduced motion: none of this; the sections simply follow one another.
  */
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -59,7 +58,7 @@ export function ToneShift() {
     const stage = document.querySelector<HTMLElement>(".tone-dark .swap-stage");
     /* phones (< 768): the Figma phone list is taller than a screen, so the dark block is pulled up
        by one screen only (.tone-on-phone): the list rises in from below over the hold while it fades
-       in with the darkening; the work cards leave upwards instead of dipping */
+       in with the darkening */
     const phoneMq = matchMedia("(max-width: 767px)");
     const applyMode = () => {
       /* phones get a shorter pull-up (globals.css .tone-on-phone): the services list rises in from
@@ -90,19 +89,19 @@ export function ToneShift() {
       const h = stick.offsetHeight;
       const e = ramp(-pin.getBoundingClientRect().top - Math.max(0, h - V), 0, V * 0.7);
 
-      /* — out: the cards on screen dip out one after another, top first (Careers' values) — */
+      /* — out: the cards on screen leave one after another, top first, each rising and shrinking a
+             little from its top edge so it tucks in under the one above — a stack folding away
+             upwards. Card j over [0.07j, 0.32 + 0.07j] of the hold; the rise is a share of the
+             screen height so it reads the same on a phone, a 13-inch MacBook and a 27-inch monitor. — */
       let j = 0;
+      const rise = Math.round(Math.min(120, Math.max(72, V * 0.105)));
       cards.forEach((li) => {
         const r = li.getBoundingClientRect();
         const onScreen = r.bottom > 0 && r.top < V;
         const p = smooth(ramp(e, (onScreen ? j : 0) * 0.07, 0.32 + (onScreen ? j : 0) * 0.07));
         if (onScreen) j++;
-        /* phones: they leave upwards instead, each rising and shrinking a little from its top
-           edge so it tucks in under the one above, like a stack folding away */
-        if (phoneMq.matches) {
-          li.style.transformOrigin = p ? "50% 0" : "";
-          set(li, p ? `translateY(${(-90 * p).toFixed(1)}px) scale(${(1 - 0.08 * p).toFixed(4)})` : "", 1 - p);
-        } else set(li, p ? `translateY(${(p * p * 72).toFixed(1)}px)` : "", 1 - p);
+        li.style.transformOrigin = p ? "50% 0" : "";
+        set(li, p ? `translateY(${(-rise * p).toFixed(1)}px) scale(${(1 - 0.08 * p).toFixed(4)})` : "", 1 - p);
       });
 
       /* phones: the dark and the services start a beat earlier, right as the last card goes, so

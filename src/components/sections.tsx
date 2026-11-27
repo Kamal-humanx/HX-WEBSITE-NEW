@@ -7,18 +7,14 @@ import { DisplayHeading } from "./ui";
  * Rows: 42px title (first row orange), 1px rgba(255,255,255,.1) separators, a vertical rule,
  * "Our Capabilities" (Chivo Mono 16px, +1.94px, #8b8b8b) and two 24px/40px columns.
  *
- * Phones (< 768px, no Figma frame): the same content in a compact form — each group keeps its two
- * columns side by side at 14px instead of stacking into one long list. On the homepage this block
- * is held in place for a screen while the testimonials take over, so it has to fit one phone
- * screen; as a single column it was ~1.5 screens tall and most of it was never on screen at once.
+ * Phones (< 768px): Figma "Services — Mobile" 5969:6729 on every page (Home, About, Contact) — one
+ * full-length list per group with dividers (globals.css .caps-list).
  */
-export function CapabilitiesSection({ id = "capabilities", reveal = false, phoneList = false }: { id?: string; reveal?: boolean; phoneList?: boolean }) {
+export function CapabilitiesSection({ id = "capabilities", reveal = false }: { id?: string; reveal?: boolean }) {
   /* `reveal`: soft scroll-in reveal (needs <CaseReveal /> on the page) — About, where nothing else animates it */
   const rv = reveal ? { "data-rv": "" } : {};
-  /* `phoneList` (homepage): on phones, Figma "Services — Mobile" 5969:6729 — one full-length list per
-     group with dividers (globals.css .caps-list); otherwise the compact two-column phone form */
   return (
-    <section aria-labelledby={`${id}-title`} className={`bg-night text-white ${phoneList ? "caps-list" : ""}`}>
+    <section aria-labelledby={`${id}-title`} className="caps-list bg-night text-white">
       <div className="container-page pb-[var(--section-y)] pt-[clamp(56px,5.5vw,104px)] lg:px-[clamp(36px,3.75vw,72px)]">
         <div data-swap-block="" {...rv}>
           <DisplayHeading id={`${id}-title`} className="caps-title max-w-[440px] text-white">

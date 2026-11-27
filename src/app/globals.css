@@ -1194,8 +1194,8 @@
   }
 }
 
-/* Homepage on phones — Figma "Services — Mobile" 5969:6729 (sections.tsx CapabilitiesSection phoneList):
-   title 40/44; each group: name 28/34 (the first orange), "Our Capabilities" 10/16 +1.94px #8b8b8b,
+/* Phones, every page — Figma "Services — Mobile" 5969:6729 (sections.tsx CapabilitiesSection):
+   title 40/44; each group: name 28/34 (white; orange on hover like every row — not pre-lit), "Our Capabilities" 10/16 +1.94px #8b8b8b,
    then one list (17/24 on a 45px pitch, white 22% dividers between items, none after the last),
    closed 30px below by a white 55% rule; the next group's name 33px below it. */
 @media (max-width: 767px) {
@@ -1220,9 +1220,6 @@
     font-size: 28px;
     line-height: 34px;
     letter-spacing: -0.03em;
-  }
-  .caps-list .group:first-child h3 {
-    color: var(--color-accent);
   }
   .caps-list .caps-label {
     margin-top: 20px;
