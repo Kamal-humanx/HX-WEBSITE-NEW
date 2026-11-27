@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/analytics";
 import { ThankYouDialog } from "@/components/ThankYouDialog";
 import { CONTACT } from "@/content/contact";
 import { validateContact, type ContactErrorCode, type ContactField } from "@/lib/contact-rules";
@@ -192,6 +193,7 @@ export function ContactForm() {
       });
       if (res.ok) {
         setStatus("success");
+        track("generate_lead", { form: "contact" });
         setThanks({ open: true, firstName: String(data.get("fullName") ?? "").trim().split(/\s+/)[0].slice(0, 40) });
         formRef.current?.reset();
       } else {
