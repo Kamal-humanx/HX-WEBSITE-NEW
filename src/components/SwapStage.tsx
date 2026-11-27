@@ -15,8 +15,10 @@ const ramp = (v: number, a: number, b: number) => clamp((v - a) / (b - a));
 const smooth = (t: number) => ((t = clamp(t)), t * t * (3 - 2 * t));
 
 /* `lead` (svh): an extra stretch of hold before the swap starts — used on the homepage, where this
-   stage already sits on screen during the work section's own hold (ToneShift fades it in there). */
-export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: ReactNode; second: ReactNode; hold?: number; lead?: number }) {
+   stage already sits on screen during the work section's own hold (ToneShift fades it in there),
+   plus a pause with the first section fully in, so it can be read and hovered before it leaves.
+   `tail` (svh): a pause after the second section has fully arrived, before the page scrolls on. */
+export function SwapStage({ first, second, hold = 120, lead = 0, tail = 0 }: { first: ReactNode; second: ReactNode; hold?: number; lead?: number; tail?: number }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef<HTMLDivElement>(null);
   const aRef = useRef<HTMLDivElement>(null);
@@ -104,7 +106,7 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
       B.removeAttribute("aria-hidden");
       B.inert = false;
     };
-  }, [hold, lead, phone]);
+  }, [hold, lead, tail, phone]);
 
   return (
     <div ref={wrapRef} className="swap-stage relative">
@@ -112,7 +114,8 @@ export function SwapStage({ first, second, hold = 120, lead = 0 }: { first: Reac
         <div ref={aRef} className="swap-a">{first}</div>
         <div ref={bRef} className="swap-b">{second}</div>
       </div>
-      <div aria-hidden="true" className="swap-hold" style={{ height: `${hold + lead}svh` }} />
+      {/* the swap runs over `hold`; the stage stays put for `tail` more after it */}
+      <div aria-hidden="true" className="swap-hold" style={{ height: `${hold + lead + tail}svh` }} />
     </div>
   );
 }

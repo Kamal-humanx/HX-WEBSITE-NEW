@@ -241,8 +241,11 @@ export default function WorksPage() {
     if (members[0] === "bial" || members.length % 2 === 1) spotlight[c] = members[0];
   }
   const bialTags = ["All", ...CATS.filter((c) => spotlight[c] === "bial")];
-  /* allHidden: BIAL's grid card, which only shows under its categories (All has the featured card) */
+  /* allHidden: BIAL's grid card, which only shows under its categories (All has the featured card) —
+     except on phones (data-tags-phone, FilterChips), where the grid is one column and the wide
+     featured card looked out of place: there All shows the same grid card as its categories */
   const gridTags = (p: P) => [...(p.allHidden ? [] : ["All"]), ...p.cats.filter((c) => spotlight[c] !== p.key)];
+  const phoneTags = (p: P) => (p.allHidden ? ["All", ...gridTags(p)].join("|") : undefined);
   const spots = projects.map((p) => ({ p, cats: CATS.filter((c) => spotlight[c] === p.key) })).filter((s) => s.cats.length);
   const available = CATS.filter((c) => featured.cats.includes(c) || projects.some((p) => p.cats.includes(c)));
 
@@ -295,7 +298,8 @@ export default function WorksPage() {
         {/* everything the filter shows and hides */}
         <div id="work-list">
         {/* ---------- Featured (5740:95311, 57px under the filters): built from its layers ---------- */}
-        <section aria-labelledby="featured-title" data-tags={bialTags.join("|")} className="container-page mt-[clamp(32px,2.969vw,57px)]">
+        {/* phones: not shown (max-md:hidden; data-tags-phone keeps the filter in step) — BIAL's grid card stands in */}
+        <section aria-labelledby="featured-title" data-tags={bialTags.join("|")} data-tags-phone="" className="container-page mt-[clamp(32px,2.969vw,57px)] max-md:hidden">
           <article
             data-seq="wk-feat"
             className="wk-feat relative isolate overflow-hidden rounded-feature md:aspect-[1848/780]"
@@ -366,7 +370,7 @@ export default function WorksPage() {
               );
               return (
               /* data-soon: "Coming Soon" — not clickable, so no hover (WorksMotion) */
-              <li key={`${p.name}-${i}`} data-tags={gridTags(p).join("|")} hidden={!gridTags(p).includes("All")} data-soon={soon ? "" : undefined} className="wk-item">
+              <li key={`${p.name}-${i}`} data-tags={gridTags(p).join("|")} data-tags-phone={phoneTags(p)} hidden={!gridTags(p).includes("All")} data-soon={soon ? "" : undefined} className="wk-item">
                 <article>
                   {/* thumbnail 912×640, r16 — built from its Figma layers so each can float on its own.
                       With a project page, the thumbnail and the name both open it (the name is the

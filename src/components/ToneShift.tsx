@@ -136,8 +136,10 @@ export function ToneShift() {
           if (txt) txt.style.opacity = t < 1 ? t.toFixed(3) : "";
         });
       });
-      /* the held capabilities take the pointer only once they are in */
-      if (stage) stage.style.pointerEvents = e >= 1 ? "auto" : "none";
+      /* the held capabilities take the pointer as soon as the last work card has gone (by 0.53) and
+         their title is readable — so the rows answer the hover the moment they're on screen, not
+         only once the hold has run out */
+      if (stage) stage.style.pointerEvents = e >= 0.6 ? "auto" : "none";
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);

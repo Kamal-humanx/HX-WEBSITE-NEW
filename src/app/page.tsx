@@ -117,7 +117,11 @@ export default function HomePage() {
               the same place; then the page scrolls on normally */}
           <SwapStage
             hold={90}
-            lead={70}
+            /* 70 = the work section's hold, during which this stage fades in; + 45 held with the
+               capabilities fully in (two or three scrolls) before they start to leave */
+            lead={115}
+            /* 35 held with the testimonials fully in (a scroll or so) before the page moves on */
+            tail={35}
             first={<CapabilitiesSection />}
             second={
               /* Testimonial (5376:2844 / Testimonials 4899:1434) */

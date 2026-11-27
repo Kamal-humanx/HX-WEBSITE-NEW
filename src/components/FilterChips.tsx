@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from "react";
  * `hidden` on elements inside `targetId` whose `data-tags` don't include the chosen filter. Each
  * item lists every filter it shows under, the first ("All") included — so the page decides, per
  * filter, which items show (e.g. a project highlighted on top under one filter and in the grid
- * under another).
+ * under another). An item with `data-tags-phone` uses that list instead below 768px (the Work
+ * page's featured card gives way to a grid card there).
  * Every filter stays selectable; one with no matching items yet shows the page's empty note.
  * Changing the filter is animated: the current items sink and fade, then the matching set rises back
  * in one after another (reduced motion: instant).
@@ -33,7 +34,9 @@ export function FilterChips({
     const root = document.getElementById(targetId);
     if (!root) return;
     const items = Array.from(root.querySelectorAll<HTMLElement>("[data-tags]"));
-    const show = (el: HTMLElement) => (el.dataset.tags ?? "").split("|").includes(active);
+    const phoneMq = matchMedia("(max-width: 767px)");
+    const tags = (el: HTMLElement) => (phoneMq.matches && el.dataset.tagsPhone !== undefined ? el.dataset.tagsPhone : el.dataset.tags) ?? "";
+    const show = (el: HTMLElement) => tags(el).split("|").includes(active);
     /* a filter with nothing under it yet shows the empty note (#<targetId>-empty) instead of a blank grid */
     const empty = document.getElementById(`${targetId}-empty`);
     const apply = () => {
@@ -46,11 +49,13 @@ export function FilterChips({
       if (empty) empty.hidden = items.some((el) => !el.hidden);
     };
 
+    /* crossing the phone breakpoint re-reads which list each item uses */
+    phoneMq.addEventListener("change", apply);
     const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (first.current || calm) {
       first.current = false;
       apply();
-      return;
+      return () => phoneMq.removeEventListener("change", apply);
     }
     const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
     const leaving = items.filter((el) => !el.hidden);
@@ -82,6 +87,7 @@ export function FilterChips({
     return () => {
       alive = false;
       window.clearTimeout(t);
+      phoneMq.removeEventListener("change", apply);
     };
   }, [active, filters, targetId]);
 
