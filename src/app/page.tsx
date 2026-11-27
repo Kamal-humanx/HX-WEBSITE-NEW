@@ -20,6 +20,9 @@ import { breadcrumbSchema, pageMetadata, webPageSchema } from "@/lib/seo";
 
 export const metadata = pageMetadata("home");
 
+/* client logos: a touch smaller than drawn (every mark, by the same share) */
+const LOGO_K = 0.88;
+
 export default function HomePage() {
   const { hero, work, testimonial, manifesto } = HOME;
 
@@ -60,9 +63,10 @@ export default function HomePage() {
                     height={Math.round(c.h * 2)}
                     sizes={`${Math.ceil(c.w)}px`}
                     loading="eager"
+                    /* LOGO_K: the marks sit 12% smaller than the Figma strip (feedback, Nov 2026) */
                     style={{
-                      width: `clamp(${c.w / 2}px, ${(c.w / 19.2).toFixed(4)}vw, ${c.w}px)`,
-                      height: `clamp(${c.h / 2}px, ${(c.h / 19.2).toFixed(4)}vw, ${c.h}px)`,
+                      width: `clamp(${(c.w * LOGO_K) / 2}px, ${((c.w * LOGO_K) / 19.2).toFixed(4)}vw, ${c.w * LOGO_K}px)`,
+                      height: `clamp(${(c.h * LOGO_K) / 2}px, ${((c.h * LOGO_K) / 19.2).toFixed(4)}vw, ${c.h * LOGO_K}px)`,
                     }}
                     className="max-w-none"
                   />
