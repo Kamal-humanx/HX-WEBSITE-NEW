@@ -245,6 +245,10 @@ export default function Manifesto() {
     const exitLen = () => (narrow.matches ? 1 : 1.1)
     const side = stage.querySelector<HTMLElement>('.mf-side')!, draw = stage.querySelector<HTMLElement>('.mf-draw')!
     const rail = stage.querySelector<HTMLElement>('.mf-rail')!
+    /* phones: the gene rises over this stage's last screen see-through (careers-ref.css), its chamber
+       and content fading in with the darkening (--gn-in), as the homepage's capabilities arrive on a
+       phone: no hard-edged dark sheet sliding up the white stage */
+    const gene = sec.nextElementSibling as HTMLElement | null
     let exitWas = -1
     function exitOut(e: number) {
       if (Math.abs(e - exitWas) < 0.0005) return
@@ -269,6 +273,10 @@ export default function Manifesto() {
          tablets), the graphite the pinned gene is laid over on desktop */
       const end = +getComputedStyle(sec).getPropertyValue('--mf-exit') || 18
       if (k > 0) stage.style.background = `rgb(${[0, 1, 2].map(() => Math.round(255 + (end - 255) * k)).join(',')})`
+      if (gene) {
+        if (narrow.matches) gene.style.setProperty('--gn-in', smooth(ramp(e, 0.45, 0.9)).toFixed(3))
+        else gene.style.removeProperty('--gn-in')
+      }
     }
 
     function follow(now: number) {
@@ -391,6 +399,7 @@ export default function Manifesto() {
       TOUCH.forEach((n) => liveCanvas.removeEventListener(n, onTouch))
       live.destroy()
       held.forEach((f) => f.destroy())
+      gene?.style.removeProperty('--gn-in')
     }
   }, [])
 

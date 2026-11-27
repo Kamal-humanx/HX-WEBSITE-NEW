@@ -617,8 +617,9 @@
 @media (max-width: 1023px) {
   .map-box { height: min(220vw, 920px); }
   .map-layer-phone { left: 50%; top: 0; width: max(100cqw, calc(100cqh * 720 / 1358)); aspect-ratio: 720 / 1358; transform: translateX(-50%); }
-  /* the card sits on the map at its foot, with the CTA under its right corner as in the design */
+  /* the card sits on the map at its foot, with the CTA centred under it */
   .map-card { position: absolute; left: 14px; right: 22px; bottom: 69px; }
+  .map-cta { left: 0; right: 0; width: max-content; margin-inline: auto; }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
   .map-card { left: auto; width: 420px; }

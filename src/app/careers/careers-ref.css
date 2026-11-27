@@ -1270,6 +1270,15 @@
   .hxc[data-motion] .mf.mf-pinned .mf-principles{height:400svh}
   .hxc[data-motion] .mf.mf-pinned + .gn{margin-top:-100svh}
 }
+/* phones: the screen the gene rises over is see-through, so the principles' own darkening shows through
+   it (no hard-edged dark sheet sliding up a white stage), and the gene's chamber and content fade in
+   with that darkening (Manifesto.tsx exitOut sets --gn-in) — as the homepage's capabilities arrive on
+   phones, rising into place while they fade in with the ground */
+@media (max-width:760px){
+  .hxc[data-motion] .mf.mf-pinned + .gn{background:linear-gradient(to bottom,transparent 0,transparent calc(100svh - 6px),#121212 calc(100svh - 6px))}
+  .hxc[data-motion] .mf.mf-pinned + .gn .gn-stage{background:rgb(14 14 14 / var(--gn-in,1))}
+  .hxc[data-motion] .mf.mf-pinned + .gn .gn-stage > *{opacity:var(--gn-in,1)}
+}
 
 /* phones: the next chevron moves up beside the step's title — at the right edge, level with it — so
    the options end on their last pill and the record follows a little closer (the same button is
