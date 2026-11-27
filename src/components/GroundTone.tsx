@@ -8,9 +8,12 @@ import { useEffect } from "react";
  * out (sinking a little as it fades), the page's ground darkens white → night, and only then does
  * the block's own content come in. Desktop only (phones keep the plain cut); none for reduced motion.
  *  - `block`: the dark block's selector; `fade`: the light content that leaves (a selector)
- *  - progress p runs from the block's top at 100% of the screen height to 42%:
- *    content out over p 0 → 0.5, ground over 0.15 → 0.72, the block's content in over 0.55 → 0.85
- *    (so it is already there as the ground settles, not a screen later)
+ *  - progress p runs over half a screen of scroll, starting only once the light content has been
+ *    wholly on screen for a beat (its foot 78% of the way down; the block's own top, when there is
+ *    no `fade`): content out over p 0 → 0.5,
+ *    ground over 0.15 → 0.72, the block's content in over 0.55 → 0.85. The block is pulled up over
+ *    the light content's last stretch (globals.css .about-dark), so its content stands where that was
+ *    and fades in there, hidden until then (CSS, scripting on).
  */
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const ramp = (v: number, a: number, b: number) => clamp((v - a) / (b - a));
@@ -28,7 +31,8 @@ export function GroundTone({ block, fade }: { block: string; fade?: string }) {
     const paint = () => {
       raf = 0;
       const V = window.innerHeight;
-      const p = wide.matches ? ramp(V - dark.getBoundingClientRect().top, 0, V * 0.58) : 0;
+      const foot = (out ?? dark).getBoundingClientRect().bottom;
+      const p = wide.matches ? ramp(V * 0.78 - foot, 0, V * 0.5) : 0;
       if (Math.abs(p - last) < 0.002) return;
       last = p;
       const g = smooth(ramp(p, 0.15, 0.72));
@@ -39,10 +43,7 @@ export function GroundTone({ block, fade }: { block: string; fade?: string }) {
         out.style.opacity = o > 0 ? (1 - o).toFixed(3) : "";
         out.style.transform = o > 0 ? `translateY(${(o * o * 48).toFixed(1)}px)` : "";
       }
-      if (inner) {
-        const i = smooth(ramp(p, 0.55, 0.85));
-        inner.style.opacity = p > 0 && i < 1 ? i.toFixed(3) : "";
-      }
+      if (inner) inner.style.opacity = wide.matches ? smooth(ramp(p, 0.55, 0.85)).toFixed(3) : "";
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);

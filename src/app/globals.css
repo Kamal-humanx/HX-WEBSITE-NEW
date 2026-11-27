@@ -585,6 +585,62 @@
     max-width: var(--dw);
   }
 }
+/* Phone menu (MobileMenu.tsx): on open the panel fades in over the page, blurring it as it darkens,
+   then the pages arrive one after another from the top and the pill last; on close the pages go
+   first, then the black lifts. Reduced motion: it simply appears. */
+.menu-panel {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  animation: menu-fade 0.38s cubic-bezier(0.2, 0, 0, 1) both;
+}
+.menu-panel .menu-item {
+  animation: menu-item 0.46s cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: calc(0.16s + var(--i, 0) * 0.055s);
+}
+.menu-panel.menu-closing {
+  animation: menu-fade-out 0.3s ease-in 0.14s both;
+}
+.menu-panel.menu-closing .menu-item {
+  animation: menu-item-out 0.2s ease-in both;
+  animation-delay: calc(var(--i, 0) * 0.025s);
+}
+@keyframes menu-fade { from { opacity: 0; } }
+@keyframes menu-fade-out { to { opacity: 0; } }
+@keyframes menu-item { from { opacity: 0; transform: translateY(14px); } }
+@keyframes menu-item-out { to { opacity: 0; transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel, .menu-panel .menu-item, .menu-panel.menu-closing, .menu-panel.menu-closing .menu-item { animation: none; }
+}
+/* Contact map on phones and tablets (contact/page.tsx): a tall box; the portrait crop fills its width
+   from the top (the studio a fifth of the way down); the location card sits on it at the foot, and
+   "View On Maps" moves to the top right, out from under the card. */
+@media (max-width: 1023px) {
+  .map-box { height: min(220vw, 920px); }
+  .map-layer-phone { left: 50%; top: 0; width: max(100cqw, calc(100cqh * 720 / 1358)); aspect-ratio: 720 / 1358; transform: translateX(-50%); }
+  /* the card sits on the map at its foot, with the CTA under its right corner as in the design */
+  .map-card { position: absolute; left: 14px; right: 22px; bottom: 69px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .map-card { left: auto; width: 420px; }
+}
+/* the card's own surface (Figma 5000:16099): a grey → #151515 gradient over its top 23%, a soft shadow */
+.map-card-box {
+  background: linear-gradient(to bottom, #4e4b4b 0%, #151515 23%);
+  box-shadow: 0 4px 15.3px 4px rgba(0, 0, 0, 0.25);
+}
+/* About (GroundTone): the dark block is pulled up over the staircase's last stretch, its top see-through,
+   so the capabilities stand where the staircase was and fade in there once it has gone — not a
+   screen further down. The solid part feathers in below the overlap. */
+@media (min-width: 1024px) {
+  .about-dark {
+    margin-top: -22svh;
+    background: linear-gradient(to bottom, transparent 22svh, var(--color-night) calc(22svh + 160px));
+  }
+}
+/* its capabilities wait unseen over the staircase until GroundTone brings them in (script only) */
+@media (min-width: 1024px) and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .about-dark > :first-child { opacity: 0; }
+}
 /* Contact map: a wave pulses out from the studio's spot and fades, three of them a beat apart */
 .map-wave {
   opacity: 0;

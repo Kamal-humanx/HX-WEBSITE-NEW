@@ -6,6 +6,7 @@ import { ContactBlob } from "@/components/ContactBlob";
 import { ContactForm } from "@/components/ContactForm";
 import { CapabilitiesSection } from "@/components/sections";
 import { CaseReveal } from "@/components/CaseReveal";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { DisplayHeading } from "@/components/ui";
 import { CONTACT } from "@/content/contact";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
@@ -73,9 +74,23 @@ export default function ContactPage() {
                 Map (Nov 2026): a wider view, so the studio reads against places people know (the highway,
                 Oberoi Commerz, Morgan Stanley, Aarey Metro) rather than IITC Road; the pin is a transparent
                 PNG (the old one carried a black square). */}
-            <div data-rv="media" className="relative mt-[clamp(24px,1.5vw,30px)] overflow-hidden lg:h-[max(812px,calc((min(100vw,1920px)-2*var(--gutter))*0.456911))]" style={{ ["--rv-r" as string]: "0px" }}>
-              <div className="relative aspect-[1845/843] overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto lg:[container-type:size]">
-                <div className="absolute inset-0 lg:inset-auto lg:left-1/2 lg:top-1/2 lg:aspect-[1845/843] lg:w-[max(100cqw,calc(100cqh*1845/843))] lg:-translate-x-1/2 lg:-translate-y-1/2">
+            {/* Phones and tablets (globals.css .map-box / .map-layer-phone / .map-card / .map-cta): a tall
+                portrait crop of the same map, the location card sitting on it at the foot as the desktop
+                card sits at the right, the studio's pin above the card, "View On Maps" at the top right. */}
+            <div data-rv="media" className="map-box relative mt-[clamp(24px,1.5vw,30px)] overflow-hidden lg:h-[max(812px,calc((min(100vw,1920px)-2*var(--gutter))*0.456911))]" style={{ ["--rv-r" as string]: "0px" }}>
+              <div className="absolute inset-0 overflow-hidden [container-type:size]">
+                {/* phones and tablets: the portrait crop (720 × 1358 of the capture), its top at the box's top */}
+                <div className="map-layer-phone absolute lg:hidden">
+                  <Image src="/images/contact/map-phone.webp" alt="" aria-hidden="true" fill unoptimized className="object-cover" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-black/20" />
+                  <span aria-hidden="true" className="absolute left-[34.7%] top-[20.6%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
+                    {[0, 1, 2].map((i) => (
+                      <span key={i} className="map-wave absolute inset-0 rounded-full border border-[#fdead7]/90 bg-[#f38b23]/20" style={{ animationDelay: `${i * 1.1}s` }} />
+                    ))}
+                  </span>
+                  <Image src="/images/contact/pin-2.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[34.7%] top-[20.6%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
+                </div>
+                <div className="absolute left-1/2 top-1/2 aspect-[1845/843] w-[max(100cqw,calc(100cqh*1845/843))] -translate-x-1/2 -translate-y-1/2 max-lg:hidden">
                   {/* unoptimized: served as the 5400px file it is — the optimizer's largest size (3840) was being
                       stretched across ~4200 device pixels on a 2x Mac, which read as soft */}
                   <Image src="/images/contact/map-2.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio off the Western Express Highway, opposite Oberoi Commerz and Morgan Stanley, near Aarey Metro" fill unoptimized className="object-cover" />
@@ -84,7 +99,7 @@ export default function ContactPage() {
                       .map-wave); reduced motion: one still ring */}
                   <span aria-hidden="true" className="absolute left-[26.6%] top-[44.1%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
                     {[0, 1, 2].map((i) => (
-                      <span key={i} className="map-wave absolute inset-0 rounded-full border border-accent bg-accent/15" style={{ animationDelay: `${i * 1.1}s` }} />
+                      <span key={i} className="map-wave absolute inset-0 rounded-full border border-[#fdead7]/90 bg-[#f38b23]/20" style={{ animationDelay: `${i * 1.1}s` }} />
                     ))}
                   </span>
                   <Image src="/images/contact/pin-2.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[26.6%] top-[43.9%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
@@ -93,7 +108,7 @@ export default function ContactPage() {
                   href={MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-pill absolute bottom-[clamp(12px,1.5vw,30px)] right-[clamp(12px,1.6vw,30px)] z-10 px-5 py-2.5 text-sm"
+                  className="map-cta btn-pill absolute bottom-[clamp(12px,1.5vw,30px)] right-[clamp(12px,1.6vw,30px)] z-10 min-w-[239px] justify-center gap-4 whitespace-nowrap py-3 pl-[18px] pr-4 text-sm"
                 >
                   {where.mapsCta}
                   <span className="sr-only"> (opens Google Maps in a new tab)</span>
@@ -102,20 +117,20 @@ export default function ContactPage() {
               </div>
 
               {/* Location card (5376:4988) */}
-              <address className="relative z-[1] not-italic lg:absolute lg:right-[1.2%] lg:top-[3.1%] lg:w-[513px]">
-                <div data-rv className="rounded-card bg-night-3 p-4 lg:min-h-[697px]">
+              <address className="map-card relative z-[1] not-italic lg:absolute lg:right-[1.2%] lg:top-[3.1%] lg:w-[513px]">
+                <div data-rv className="map-card-box rounded-[12px] p-[15px] pt-[15px] lg:min-h-[697px] lg:px-4">
                   <Image src="/images/contact/studio.webp" alt="The HumanX studio lounge with orange papasan chairs and pendant lights" width={960} height={720} sizes="(min-width: 1024px) 480px, 92vw" className="aspect-[480/313] w-full rounded-[11px] object-cover" />
-                  <div className="px-[15px] pb-4 pt-[clamp(20px,1.9vw,36px)]">
-                    <p className="text-lg font-medium leading-[1.25] tracking-[-0.025em] text-white">{ADDRESS.label}</p>
-                    <p className="mt-[30px] font-mono text-sm leading-[1.42] text-gray-3">{ADDRESS.full}</p>
-                    <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                  <div className="px-[15px] pb-[14px] pt-[16px] lg:pb-4 lg:pt-[23px]">
+                    <p className="text-[22px] font-medium leading-[1.25] tracking-[-0.025em] text-white lg:text-[24px] lg:leading-[30px]">{ADDRESS.label}</p>
+                    <p className="mt-[18px] font-mono text-[13px] leading-[1.5] text-[#9b9b9b] lg:mt-[36px] lg:text-[16px] lg:leading-[1.42]">{ADDRESS.full}</p>
+                    <dl className="mt-[26px] grid grid-cols-2 gap-4 border-t border-[#3a3a3a] pt-[18px] lg:mt-[46px] lg:pt-[25px]">
                       <div>
-                        <dt className="font-mono text-[12px] uppercase lg:text-[10px] leading-[1.5] tracking-[0.16em] text-gray-3">{where.hoursLabel}</dt>
-                        <dd className="mt-2 font-mono text-sm text-white">{ADDRESS.hours}</dd>
+                        <dt className="font-mono text-[10px] uppercase leading-[15px] tracking-[0.16em] text-[#9b9b9b]">{where.hoursLabel}</dt>
+                        <dd className="mt-1 font-mono text-[14px] leading-[1.22] text-white lg:text-base">{ADDRESS.hours}</dd>
                       </div>
                       <div>
-                        <dt className="font-mono text-[12px] uppercase lg:text-[10px] leading-[1.5] tracking-[0.16em] text-gray-3">{where.emailLabel}</dt>
-                        <dd className="mt-2 font-mono text-sm text-white">
+                        <dt className="font-mono text-[10px] uppercase leading-[15px] tracking-[0.16em] text-[#9b9b9b]">{where.emailLabel}</dt>
+                        <dd className="mt-1 font-mono text-[14px] leading-[1.22] text-white lg:text-base">
                           <ObfuscatedEmail user={EMAIL_USER} domain={EMAIL_DOMAIN} className="-my-3 inline-block py-3 hover:underline" />
                         </dd>
                       </div>
@@ -133,7 +148,8 @@ export default function ContactPage() {
                 {faq.title}
               </DisplayHeading>
             </div>
-            <ul className="border-t border-white/10 lg:mt-[clamp(0px,1vw,20px)]">
+            {/* FaqAccordion animates each answer's unfold and fold (the .faq-body wrapper is what grows) */}
+            <ul id="faq-list" className="border-t border-white/10 lg:mt-[clamp(0px,1vw,20px)]">
               {faq.items.map((item, i) =>
                 item.a ? (
                   <li key={item.q} data-rv className="border-b border-white/10">
@@ -142,10 +158,12 @@ export default function ContactPage() {
                         <h3 className="text-base-lg font-medium leading-[1.125]">{item.q}</h3>
                         <span aria-hidden="true" className="relative size-[18px] shrink-0">
                           <span className="absolute left-0 top-1/2 h-px w-full bg-white" />
-                          <span className="absolute left-1/2 top-0 h-full w-px bg-white transition-transform group-open:scale-y-0" />
+                          <span className="absolute left-1/2 top-0 h-full w-px bg-white transition-transform duration-300 group-open:scale-y-0" />
                         </span>
                       </summary>
-                      <p className="max-w-[824px] pb-6 font-mono text-xs leading-[1.625] text-gray-3">{item.a}</p>
+                      <div className="faq-body">
+                        <p className="max-w-[824px] pb-6 font-mono text-xs leading-[1.625] text-gray-3">{item.a}</p>
+                      </div>
                     </details>
                   </li>
                 ) : (
@@ -163,6 +181,7 @@ export default function ContactPage() {
         </div>
       </main>
       <CaseReveal />
+      <FaqAccordion root="#faq-list" />
       <Footer />
       <JsonLd
         data={[

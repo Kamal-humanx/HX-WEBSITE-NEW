@@ -15,9 +15,13 @@ import { Logo } from "./Logo";
  * bottom, inner glow) reading "Get in Touch" (the design's Contact item / "Start a Project" were
  * merged into it). A11y: aria-expanded/aria-controls on the trigger, role="dialog" + aria-modal,
  * focus trap, Esc to close, focus returns to the trigger, background scroll locked.
+ * Open / close (globals.css .menu-panel): the panel fades in over the page, blurring it as it darkens,
+ * then the pages arrive one after another; on close they go first and the black lifts — the panel
+ * stays mounted for that beat (`closing`).
  */
 export function MobileMenu({ current }: { current: string }) {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [mounted, setMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -25,9 +29,13 @@ export function MobileMenu({ current }: { current: string }) {
 
   useEffect(() => setMounted(true), []);
 
+  const CLOSE_MS = 460;
   const close = useCallback(() => {
     setOpen(false);
     triggerRef.current?.focus();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setClosing(true);
+    window.setTimeout(() => setClosing(false), CLOSE_MS);
   }, []);
 
   useEffect(() => {
@@ -83,7 +91,7 @@ export function MobileMenu({ current }: { current: string }) {
       </button>
 
       {mounted &&
-        open &&
+        (open || closing) &&
         createPortal(
           <div
             id={id}
@@ -91,7 +99,8 @@ export function MobileMenu({ current }: { current: string }) {
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="fixed inset-0 z-50 flex h-[100dvh] flex-col bg-night text-white lg:hidden"
+            className={`menu-panel fixed inset-0 z-50 flex h-[100dvh] flex-col bg-night text-white lg:hidden${closing && !open ? " menu-closing" : ""}`}
+            aria-hidden={closing && !open ? true : undefined}
             style={{
               paddingTop: "env(safe-area-inset-top)",
               paddingBottom: "env(safe-area-inset-bottom)",
@@ -99,7 +108,7 @@ export function MobileMenu({ current }: { current: string }) {
           >
             {/* the header's own row (same box and padding as Header.tsx), so logo and button stay put */}
             <div className="flex h-[var(--header-h)] w-full shrink-0 items-center justify-between pl-[max(clamp(16px,1.615vw,31px),env(safe-area-inset-left))] pr-[max(clamp(16px,1.771vw,34px),env(safe-area-inset-right))]">
-              <Link href="/" onClick={() => setOpen(false)} className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX, home">
+              <Link href="/" onClick={close} className="tap -ml-1 inline-flex translate-y-[1.08px] items-center rounded p-1" aria-label="HumanX, home">
                 <Logo className="h-auto w-[118.5px]" />
               </Link>
               <button type="button" onClick={close} className="tap inline-flex items-center justify-center rounded-full">
@@ -118,13 +127,13 @@ export function MobileMenu({ current }: { current: string }) {
             <nav aria-label="Mobile" className="flex min-h-0 flex-1 flex-col overflow-y-auto">
               {/* the pages, centred in the space between the header row and the pill */}
               <ul className="my-auto flex flex-col items-center gap-[26px] py-6">
-                {NAV.map((item) => {
+                {NAV.map((item, i) => {
                   const active = item.href === current;
                   return (
-                    <li key={item.href}>
+                    <li key={item.href} className="menu-item" style={{ ["--i" as string]: i }}>
                       <Link
                         href={item.href}
-                        onClick={() => setOpen(false)}
+                        onClick={close}
                         aria-current={active ? "page" : undefined}
                         className={`flex min-h-11 items-center font-mono text-[32px] leading-[0.91] tracking-normal transition-colors ${
                           active
@@ -138,8 +147,8 @@ export function MobileMenu({ current }: { current: string }) {
                   );
                 })}
               </ul>
-              <div className="shrink-0 px-[max(20px,env(safe-area-inset-left))] pb-6">
-                <Link href="/contact" onClick={() => setOpen(false)} className="menu-cta">
+              <div className="menu-item shrink-0 px-[max(20px,env(safe-area-inset-left))] pb-6" style={{ ["--i" as string]: NAV.length }}>
+                <Link href="/contact" onClick={close} className="menu-cta">
                   Get in Touch
                 </Link>
               </div>
