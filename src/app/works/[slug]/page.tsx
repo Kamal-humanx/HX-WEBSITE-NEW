@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { CaseReveal } from "@/components/CaseReveal";
+import { FootTone } from "@/components/FootTone";
 import { ArrowLink } from "@/components/ui";
 import { CASE_STUDIES, caseStudy, isVideo, type Block, type Img, type Media, type Testimonial, type Vid } from "@/content/caseStudies";
 import { ORG_ID, TWITTER_HANDLE, absoluteUrl } from "@/lib/seo";
@@ -783,7 +784,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   return (
     <div className={`case-page bg-[var(--c-bg)] ${FG}`} style={themeVars} data-mode={t.mode}>
       <Header current="/works" theme={dark ? "dark" : "light"} />
-      <main id="main">
+      {/* main paints the case's colours itself: as the footer nears, FootTone swaps its theme variables
+          for the footer's night and white (globals.css), and the whole page eases over with it */}
+      <main id="main" className={`bg-[var(--c-bg)] ${FG}`}>
         {/* ---------- Intro ---------- */}
         <section aria-labelledby="case-title" className="container-page pt-[clamp(16px,2vw,40px)]">
           {/* Breadcrumb trail — the same Home › Work › project path as the BreadcrumbList data below,
@@ -878,8 +881,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           return (
             <section key={ch.id} id={ch.id} aria-labelledby={`${ch.id}-title`} className="container-page mt-[clamp(72px,8vw,160px)]">
               <div className={`grid gap-[clamp(20px,3vw,64px)] border-t ${LINE} pt-[clamp(24px,2.6vw,48px)] lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)]`}>
-                {/* chapter number: holds beside the chapter while it scrolls */}
-                <p aria-hidden="true" className={`font-mono text-sm ${BODY} lg:sticky lg:top-[calc(var(--header-h)+24px)] lg:self-start`}>
+                {/* chapter number: holds beside the chapter while it scrolls — above the header's glass
+                    band (z-40 > the header's z-30), so its progressive blur never softens it */}
+                <p aria-hidden="true" className={`font-mono text-sm ${BODY} lg:sticky lg:top-[calc(var(--header-h)+24px)] lg:z-40 lg:self-start`}>
                   <span className={INK}>{pad(n)}</span>
                   <span className="mx-2 opacity-40">/</span>
                   {pad(numbered)}
@@ -923,6 +927,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </main>
       <Footer />
       <CaseReveal />
+      <FootTone />
       <JsonLd
         data={[
           {

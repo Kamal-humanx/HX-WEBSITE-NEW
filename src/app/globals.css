@@ -540,6 +540,32 @@
 }
 
 /* Project pages: a soft glow of the case's brand colour (hero panel, testimonial) */
+/* Case pages into the footer (FootTone.tsx): with the footer within reach, main's theme variables
+   become the footer's night and white, and — registered as colours — they ease over, so every
+   piece painted from them (ground, text, rules, chapter numbers) changes together, in place. */
+@property --c-bg { syntax: "<color>"; inherits: true; initial-value: #fff; }
+@property --c-fg { syntax: "<color>"; inherits: true; initial-value: #323232; }
+@property --c-body { syntax: "<color>"; inherits: true; initial-value: #5a5a5a; }
+@property --c-muted { syntax: "<color>"; inherits: true; initial-value: #8a8a8a; }
+@property --c-ink { syntax: "<color>"; inherits: true; initial-value: #323232; }
+@property --c-line { syntax: "<color>"; inherits: true; initial-value: rgba(0, 0, 0, 0.1); }
+.case-page > main {
+  transition:
+    --c-bg 0.9s ease,
+    --c-fg 0.9s ease,
+    --c-body 0.9s ease,
+    --c-muted 0.9s ease,
+    --c-ink 0.9s ease,
+    --c-line 0.9s ease;
+}
+.case-page[data-foot="on"] > main {
+  --c-bg: var(--color-night);
+  --c-fg: #fff;
+  --c-body: rgba(255, 255, 255, 0.72);
+  --c-muted: rgba(255, 255, 255, 0.5);
+  --c-ink: #fff;
+  --c-line: rgba(255, 255, 255, 0.16);
+}
 .case-glow {
   background: radial-gradient(70% 85% at 50% 115%, color-mix(in srgb, var(--c-accent) 30%, transparent), transparent 72%);
 }
