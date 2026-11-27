@@ -78,12 +78,12 @@ export default function ContactPage() {
                 <div className="absolute inset-0 lg:inset-auto lg:left-1/2 lg:top-1/2 lg:aspect-[1845/843] lg:w-[max(100cqw,calc(100cqh*1845/843))] lg:-translate-x-1/2 lg:-translate-y-1/2">
                   <Image src="/images/contact/map-2.webp" alt="Map of Goregaon East, Mumbai, showing the HumanX studio off the Western Express Highway, opposite Oberoi Commerz and Morgan Stanley, near Aarey Metro" fill sizes="(min-width: 1024px) 140vw, 96vw" className="object-cover" />
                   <div aria-hidden="true" className="absolute inset-0 bg-black/20" />
-                  <span aria-hidden="true" className="absolute left-[48.8%] top-[44.1%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
+                  <span aria-hidden="true" className="absolute left-[26.6%] top-[44.1%] size-[clamp(60px,9.9vw,182px)] -translate-x-1/2 -translate-y-1/2">
                     {[1, 0.81, 0.66, 0.47, 0.24].map((s) => (
                       <span key={s} className="absolute inset-0 m-auto rounded-full border border-accent/40 bg-accent/10" style={{ width: `${s * 100}%`, height: `${s * 100}%` }} />
                     ))}
                   </span>
-                  <Image src="/images/contact/pin-2.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[48.8%] top-[43.9%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
+                  <Image src="/images/contact/pin-2.png" alt="" aria-hidden="true" width={75} height={84} className="absolute left-[26.6%] top-[43.9%] w-[clamp(36px,4vw,75px)] -translate-x-1/2 -translate-y-full" />
                 </div>
                 <a
                   href={MAPS_URL}

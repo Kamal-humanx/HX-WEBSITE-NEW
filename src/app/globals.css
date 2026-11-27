@@ -922,6 +922,11 @@
    movement and line draws (no opacity tricks); off for reduced motion. */
 /* the boxes let their contents draw past their edges, so nothing is cropped mid-move */
 .pr-i { overflow: visible; }
+/* the taller boxes (circles, bolt) sit so their artwork's centre lands where the others' does,
+   0.37em above the baseline, level with the keyword's capitals (measured; the utility classes on
+   these two were losing to the shared ones) */
+.pr-i[data-kind="co"],
+.pr-i[data-kind="bolt"] { vertical-align: -0.22em; }
 .pr-i .lp {
   transform-box: fill-box;
   transform-origin: center;
